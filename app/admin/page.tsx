@@ -184,7 +184,7 @@ export default async function AdminDashboard() {
           <CardContent>
             {upcomingMatches.length > 0 ? (
               <div className="space-y-4">
-                {upcomingMatches.map((match) => (
+                {upcomingMatches.map((match: any) => (
                   <Link
                     key={match.id}
                     href={`/admin/matches/${match.id}`}

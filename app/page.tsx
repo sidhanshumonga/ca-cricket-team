@@ -151,7 +151,7 @@ export default async function Home() {
                   Recent Matches
                 </h2>
                 <div className="space-y-3">
-                  {completedMatches.map((match) => (
+                  {completedMatches.map((match: any) => (
                     <Card
                       key={match.id}
                       className="hover:shadow-md transition-shadow"

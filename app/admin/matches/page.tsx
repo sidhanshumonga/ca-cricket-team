@@ -73,7 +73,7 @@ export default async function MatchesPage() {
             </CardContent>
           </Card>
         ) : (
-          matches.map((match) => (
+          matches.map((match: any) => (
             <Card key={match.id}>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -116,7 +116,7 @@ export default async function MatchesPage() {
                     <div className="text-xl font-bold text-green-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "AVAILABLE",
+                          (a: any) => a.status.toUpperCase() === "AVAILABLE",
                         ).length
                       }
                     </div>
@@ -128,7 +128,7 @@ export default async function MatchesPage() {
                     <div className="text-xl font-bold text-yellow-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "MAYBE",
+                          (a: any) => a.status.toUpperCase() === "MAYBE",
                         ).length
                       }
                     </div>
@@ -138,7 +138,7 @@ export default async function MatchesPage() {
                     <div className="text-xl font-bold text-red-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "UNAVAILABLE",
+                          (a: any) => a.status.toUpperCase() === "UNAVAILABLE",
                         ).length
                       }
                     </div>
@@ -155,7 +155,7 @@ export default async function MatchesPage() {
                       Team Selected ({match.team.length})
                     </p>
                     <div className="flex flex-wrap gap-1">
-                      {match.team.slice(0, 5).map((selection) => (
+                      {match.team.slice(0, 5).map((selection: any) => (
                         <span
                           key={selection.id}
                           className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded"
@@ -224,7 +224,7 @@ export default async function MatchesPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                matches.map((match) => (
+                matches.map((match: any) => (
                   <TableRow key={match.id}>
                     <TableCell>
                       <div className="flex flex-col">

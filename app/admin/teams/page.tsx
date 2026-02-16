@@ -96,7 +96,7 @@ export default async function TeamsPage() {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {matches.map((match) => (
+          {matches.map((match: any) => (
             <Card key={match.id}>
               <CardHeader>
                 <CardTitle className="text-lg">vs {match.opponent}</CardTitle>
@@ -117,7 +117,7 @@ export default async function TeamsPage() {
                     <div className="text-2xl font-bold text-green-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "AVAILABLE",
+                          (a: any) => a.status.toUpperCase() === "AVAILABLE",
                         ).length
                       }
                     </div>
@@ -129,7 +129,7 @@ export default async function TeamsPage() {
                     <div className="text-2xl font-bold text-yellow-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "MAYBE",
+                          (a: any) => a.status.toUpperCase() === "MAYBE",
                         ).length
                       }
                     </div>
@@ -139,7 +139,7 @@ export default async function TeamsPage() {
                     <div className="text-2xl font-bold text-red-600">
                       {
                         match.availability.filter(
-                          (a) => a.status.toUpperCase() === "UNAVAILABLE",
+                          (a: any) => a.status.toUpperCase() === "UNAVAILABLE",
                         ).length
                       }
                     </div>
@@ -156,7 +156,7 @@ export default async function TeamsPage() {
                       Selected Players ({match.team.length})
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {match.team.map((selection) => (
+                      {match.team.map((selection: any) => (
                         <span
                           key={selection.id}
                           className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"
