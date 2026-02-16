@@ -38,7 +38,7 @@ export default function PlayersPage() {
   }, []);
 
   const handleEdit = (playerId: string) => {
-    const player = players.find((p) => p.id === playerId);
+    const player = players.find((p: any) => p.id === playerId);
     if (player) {
       setEditingPlayer(player);
       setEditSheetOpen(true);
@@ -61,7 +61,7 @@ export default function PlayersPage() {
             </CardContent>
           </Card>
         ) : (
-          players.map((player) => (
+          players.map((player: any) => (
             <Card key={player.id} className="p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
@@ -142,7 +142,7 @@ export default function PlayersPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                players.map((player) => (
+                players.map((player: any) => (
                   <TableRow key={player.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">

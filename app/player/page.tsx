@@ -54,7 +54,7 @@ export default function PlayerLogin() {
                   <SelectValue placeholder="Choose your name" />
                 </SelectTrigger>
                 <SelectContent>
-                  {players.map((player) => (
+                  {players.map((player: any) => (
                     <SelectItem key={player.id} value={player.id}>
                       {player.name} - {player.role}
                     </SelectItem>

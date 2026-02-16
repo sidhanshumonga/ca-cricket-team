@@ -168,7 +168,7 @@ export default function FieldingViewPage({
       }
 
       // Draw player positions
-      currentSetup.positions.forEach((position) => {
+      currentSetup.positions.forEach((position: any) => {
         const x = (position.xCoordinate / 100) * size;
         const y = (position.yCoordinate / 100) * size;
 
@@ -352,7 +352,7 @@ export default function FieldingViewPage({
       return;
     }
 
-    const positionData = currentSetup.positions.map((p) => ({
+    const positionData = currentSetup.positions.map((p: any) => ({
       name: p.positionName,
       x: Math.round(p.xCoordinate * 10) / 10,
       y: Math.round(p.yCoordinate * 10) / 10,
@@ -366,7 +366,9 @@ export default function FieldingViewPage({
 
     if (!currentSetup || !fieldRef.current) return;
 
-    const position = currentSetup.positions.find((p) => p.id === active.id);
+    const position = currentSetup.positions.find(
+      (p: any) => p.id === active.id,
+    );
     if (!position) return;
 
     // Get field dimensions
@@ -392,7 +394,7 @@ export default function FieldingViewPage({
         // Update local state
         setCurrentSetup({
           ...currentSetup,
-          positions: currentSetup.positions.map((p) =>
+          positions: currentSetup.positions.map((p: any) =>
             p.id === position.id
               ? { ...p, xCoordinate: newX, yCoordinate: newY }
               : p,
@@ -477,7 +479,7 @@ export default function FieldingViewPage({
                   <div className="absolute inset-0">
                     <CricketGround className="w-full h-full" />
                   </div>
-                  {currentSetup.positions.map((position) => (
+                  {currentSetup.positions.map((position: any) => (
                     <DraggablePlayer key={position.id} position={position} />
                   ))}
                 </div>
@@ -527,7 +529,7 @@ export default function FieldingViewPage({
                     <SelectValue placeholder="Select bowler" />
                   </SelectTrigger>
                   <SelectContent>
-                    {bowlers.map((bowler) => (
+                    {bowlers.map((bowler: any) => (
                       <SelectItem key={bowler.id} value={bowler.id}>
                         {bowler.name}
                       </SelectItem>
@@ -686,7 +688,7 @@ export default function FieldingViewPage({
                   </div>
 
                   {/* Player positions */}
-                  {currentSetup.positions.map((position) => (
+                  {currentSetup.positions.map((position: any) => (
                     <DraggablePlayer key={position.id} position={position} />
                   ))}
                 </div>
@@ -703,7 +705,7 @@ export default function FieldingViewPage({
             </CardHeader>
             <CardContent>
               <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-                {currentSetup.positions.map((position) => (
+                {currentSetup.positions.map((position: any) => (
                   <div
                     key={position.id}
                     className="flex items-center justify-between p-2 border rounded"

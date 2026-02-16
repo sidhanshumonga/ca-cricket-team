@@ -210,7 +210,7 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
   };
 
   const removeFromTeam = (playerId: string) => {
-    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
+    setSelectedPlayers(selectedPlayers.filter((p: any) => p.id !== playerId));
   };
 
   const addSubstitute = (player: Player) => {
@@ -222,11 +222,11 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
   };
 
   const removeSubstitute = (playerId: string) => {
-    setSubstitutes(substitutes.filter((p) => p.id !== playerId));
+    setSubstitutes(substitutes.filter((p: any) => p.id !== playerId));
   };
 
   const getAvailabilityStatus = (playerId: string) => {
-    const avail = availability.find((a) => a.player.id === playerId);
+    const avail = availability.find((a: any) => a.player.id === playerId);
     return avail?.status.toUpperCase() || "NOT_RESPONDED";
   };
 
@@ -261,12 +261,13 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
   };
 
   const availablePlayers = allPlayers.filter(
-    (p) => getAvailabilityStatus(p.id) === "AVAILABLE",
+    (p: any) => getAvailabilityStatus(p.id) === "AVAILABLE",
   );
 
   const canFinalize =
-    availablePlayers.filter((p) => selectedPlayers.some((sp) => sp.id === p.id))
-      .length >= 8;
+    availablePlayers.filter((p: any) =>
+      selectedPlayers.some((sp: any) => sp.id === p.id),
+    ).length >= 8;
 
   const handleFinalize = async () => {
     if (!canFinalize) {
@@ -277,12 +278,14 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
     try {
       const { saveTeamSelection } = await import("@/app/actions/team");
 
-      const selectedPlayersData = selectedPlayers.map((player, index) => ({
-        id: player.id,
-        battingOrder: index + 1,
-      }));
+      const selectedPlayersData = selectedPlayers.map(
+        (player: any, index: number) => ({
+          id: player.id,
+          battingOrder: index + 1,
+        }),
+      );
 
-      const substitutesData = substitutes.map((player) => ({
+      const substitutesData = substitutes.map((player: any) => ({
         id: player.id,
       }));
 
@@ -339,8 +342,8 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
           <p className="text-xs text-yellow-800">
             Need 8 available players • Currently:{" "}
             {
-              availablePlayers.filter((p) =>
-                selectedPlayers.some((sp) => sp.id === p.id),
+              availablePlayers.filter((p: any) =>
+                selectedPlayers.some((sp: any) => sp.id === p.id),
               ).length
             }{" "}
             available
@@ -377,13 +380,13 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
             </CardHeader>
             <CardContent>
               <div className="space-y-2 pb-20">
-                {allPlayers.map((player) => {
+                {allPlayers.map((player: any) => {
                   const status = getAvailabilityStatus(player.id);
                   const isSelected = selectedPlayers.some(
-                    (p) => p.id === player.id,
+                    (p: any) => p.id === player.id,
                   );
                   const isSubstitute = substitutes.some(
-                    (p) => p.id === player.id,
+                    (p: any) => p.id === player.id,
                   );
                   const isUnavailable = status === "UNAVAILABLE";
 
@@ -500,11 +503,11 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
                     onDragEnd={handleDragEnd}
                   >
                     <SortableContext
-                      items={selectedPlayers.map((p) => p.id)}
+                      items={selectedPlayers.map((p: any) => p.id)}
                       strategy={verticalListSortingStrategy}
                     >
                       <div className="space-y-2">
-                        {selectedPlayers.map((player, index) => (
+                        {selectedPlayers.map((player: any, index: number) => (
                           <div
                             key={player.id}
                             className="flex items-center gap-2"
@@ -534,7 +537,7 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {substitutes.map((player) => (
+                    {substitutes.map((player: any) => (
                       <SortablePlayer
                         key={player.id}
                         player={player}
@@ -592,11 +595,11 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
                   onDragEnd={handleDragEnd}
                 >
                   <SortableContext
-                    items={selectedPlayers.map((p) => p.id)}
+                    items={selectedPlayers.map((p: any) => p.id)}
                     strategy={verticalListSortingStrategy}
                   >
                     <div className="space-y-2">
-                      {selectedPlayers.map((player, index) => (
+                      {selectedPlayers.map((player: any, index: number) => (
                         <div
                           key={player.id}
                           className="flex items-center gap-2"
@@ -634,7 +637,7 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {substitutes.map((player) => (
+                  {substitutes.map((player: any) => (
                     <SortablePlayer
                       key={player.id}
                       player={player}
@@ -672,13 +675,13 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {allPlayers.map((player) => {
+              {allPlayers.map((player: any) => {
                 const status = getAvailabilityStatus(player.id);
                 const isSelected = selectedPlayers.some(
-                  (p) => p.id === player.id,
+                  (p: any) => p.id === player.id,
                 );
                 const isSubstitute = substitutes.some(
-                  (p) => p.id === player.id,
+                  (p: any) => p.id === player.id,
                 );
                 const isUnavailable = status === "UNAVAILABLE";
 

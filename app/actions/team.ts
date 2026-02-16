@@ -91,13 +91,13 @@ export async function saveTeamSelection(
 
         // Create new team selections
         const teamSelections = [
-            ...selectedPlayers.map((player) => ({
+            ...selectedPlayers.map((player: any) => ({
                 matchId,
                 playerId: player.id,
                 battingOrder: player.battingOrder,
                 isSubstitute: false,
             })),
-            ...substitutes.map((player, index) => ({
+            ...substitutes.map((player: any, index: number) => ({
                 matchId,
                 playerId: player.id,
                 battingOrder: selectedPlayers.length + index + 1,

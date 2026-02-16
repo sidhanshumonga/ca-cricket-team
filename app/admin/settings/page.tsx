@@ -43,7 +43,7 @@ export default async function SettingsPage() {
                 No seasons found. Create one to get started.
               </p>
             ) : (
-              seasons.map((season) => (
+              seasons.map((season: any) => (
                 <div
                   key={season.id}
                   className="p-3 rounded-lg border space-y-2"
@@ -103,7 +103,7 @@ export default async function SettingsPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                seasons.map((season) => (
+                seasons.map((season: any) => (
                   <TableRow key={season.id}>
                     <TableCell className="font-medium">{season.name}</TableCell>
                     <TableCell>
