@@ -181,7 +181,7 @@ export async function generateFieldingSetup(
 
     // Step 1: Assign wicketkeeper role to wicketkeeper position
     const wicketkeeper = match.team.find(
-      (s) => s.player.role === "Wicketkeeper" || s.player.secondaryRole === "Wicketkeeper"
+      (s: any) => s.player.role === "Wicketkeeper" || s.player.secondaryRole === "Wicketkeeper"
     );
     if (wicketkeeper && fieldingPositions["Wicketkeeper"]) {
       const coords = fieldingPositions["Wicketkeeper"];
@@ -197,7 +197,7 @@ export async function generateFieldingSetup(
 
     // Step 2: Assign selected bowler to bowler position
     if (bowlerId && fieldingPositions["Bowler"]) {
-      const bowlerSelection = match.team.find((s) => s.player.id === bowlerId);
+      const bowlerSelection = match.team.find((s: any) => s.player.id === bowlerId);
       if (bowlerSelection) {
         const coords = fieldingPositions["Bowler"];
         positions.push({
