@@ -1,11 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import sys
 import os
 
-# Add parent directory to path to import scraper
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from scripts.scrape_scorecard import scrape
+# Import scraper from local file
+from scraper import scrape
 
 app = Flask(__name__)
 CORS(app)

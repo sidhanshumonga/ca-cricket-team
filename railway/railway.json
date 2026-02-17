@@ -4,7 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "playwright install chromium && playwright install-deps && gunicorn main:app",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
