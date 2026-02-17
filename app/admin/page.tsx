@@ -12,6 +12,9 @@ import { firestore, COLLECTIONS } from "@/lib/db";
 import { countDocs, queryDocs, toDate } from "@/lib/firestore-helpers";
 import { format } from "date-fns";
 
+// Disable caching to always fetch fresh data
+export const revalidate = 0;
+
 async function getDashboardData() {
   const playerCount = await countDocs(COLLECTIONS.PLAYERS);
   const activeSeasons = await queryDocs(
