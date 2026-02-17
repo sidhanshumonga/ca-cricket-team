@@ -11,15 +11,41 @@ import { Calendar, Trophy, Shield, CheckCircle2, Info } from "lucide-react";
 import { getActiveSeason } from "./actions/season";
 import { getCompletedMatches } from "./actions/match";
 import { format } from "date-fns";
-import { MarkAvailabilityDialog } from "@/components/mark-availability-dialog";
 import { Badge } from "@/components/ui/badge";
+import { toDate } from "@/lib/firestore-helpers";
 
 export default async function Home() {
   const activeSeason = await getActiveSeason();
   const completedMatches = await getCompletedMatches(5);
 
+  // Get upcoming matches to determine what action to show
+  const { getMatches } = await import("./actions/match");
+  const allMatches = activeSeason ? await getMatches(activeSeason.id) : [];
+  const upcomingMatches = allMatches.filter(
+    (m: any) => toDate(m.date) > new Date() && m.status !== "Completed",
+  );
+  const nextMatch = upcomingMatches[0];
+
   const seasonStarted =
-    activeSeason && new Date() >= new Date(activeSeason.startDate);
+    activeSeason && new Date() >= toDate(activeSeason.startDate);
+
+  // Determine what availability action to show
+  const now = new Date();
+  const daysUntilSeasonStart = activeSeason
+    ? Math.ceil(
+        (toDate(activeSeason.startDate).getTime() - now.getTime()) /
+          (1000 * 60 * 60 * 24),
+      )
+    : 0;
+  const daysUntilNextMatch = nextMatch
+    ? Math.ceil(
+        (toDate(nextMatch.date).getTime() - now.getTime()) /
+          (1000 * 60 * 60 * 24),
+      )
+    : Infinity;
+
+  const showSeasonAvailability = daysUntilSeasonStart > 10;
+  const showMatchAvailability = daysUntilNextMatch <= 7;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -51,8 +77,8 @@ export default async function Home() {
                       {activeSeason.name}
                     </CardTitle>
                     <CardDescription className="text-base">
-                      {format(new Date(activeSeason.startDate), "MMM d, yyyy")}{" "}
-                      - {format(new Date(activeSeason.endDate), "MMM d, yyyy")}
+                      {format(toDate(activeSeason.startDate), "MMM d, yyyy")} -{" "}
+                      {format(toDate(activeSeason.endDate), "MMM d, yyyy")}
                     </CardDescription>
                   </div>
                   <div
@@ -66,16 +92,49 @@ export default async function Home() {
                   </div>
                 </div>
               </CardHeader>
-              {!seasonStarted && (
-                <CardContent>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="text-sm text-blue-900 mb-3">
-                      Mark your availability for the upcoming season
-                    </p>
-                    <MarkAvailabilityDialog seasonId={activeSeason.id} />
-                  </div>
-                </CardContent>
-              )}
+              <CardContent>
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+                  {showSeasonAvailability && !seasonStarted ? (
+                    <>
+                      <p className="text-sm font-medium mb-2">
+                        Season starts in {daysUntilSeasonStart} days
+                      </p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Players can now mark their availability for the season
+                      </p>
+                    </>
+                  ) : showMatchAvailability && nextMatch ? (
+                    <>
+                      <p className="text-sm font-medium mb-2">
+                        Next match in {daysUntilNextMatch} days
+                      </p>
+                      <p className="text-sm text-muted-foreground mb-1">
+                        <span className="font-semibold">
+                          vs {nextMatch.opponent}
+                        </span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        {format(
+                          toDate(nextMatch.date),
+                          "EEEE, MMM d 'at' h:mm a",
+                        )}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium mb-2">
+                        Season in progress
+                      </p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        View upcoming matches and mark your availability
+                      </p>
+                    </>
+                  )}
+                  <Link href="/player">
+                    <Button className="w-full">Player Portal</Button>
+                  </Link>
+                </div>
+              </CardContent>
             </Card>
 
             <Card className="mb-6">
@@ -168,7 +227,7 @@ export default async function Home() {
                           </div>
                           <div className="text-right">
                             <p className="text-sm font-medium text-gray-900">
-                              {format(new Date(match.date), "MMM d")}
+                              {format(toDate(match.date), "MMM d")}
                             </p>
                             <p className="text-xs text-gray-500">
                               {match.type}
@@ -181,26 +240,6 @@ export default async function Home() {
                 </div>
               </div>
             )}
-
-            <Card className="border-dashed">
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Links</CardTitle>
-              </CardHeader>
-              <CardContent className="flex gap-3">
-                <Link href="/player" className="flex-1">
-                  <Button variant="outline" className="w-full gap-2">
-                    <Calendar className="h-4 w-4" />
-                    View Matches
-                  </Button>
-                </Link>
-                <Link href="/admin/login" className="flex-1">
-                  <Button variant="outline" className="w-full gap-2">
-                    <Shield className="h-4 w-4" />
-                    Admin Panel
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
           </>
         ) : (
           <div className="text-center py-12 space-y-6">

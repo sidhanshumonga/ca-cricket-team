@@ -29,7 +29,9 @@ interface MarkAvailabilityDialogProps {
   seasonId: string;
 }
 
-export function MarkAvailabilityDialog({ seasonId }: MarkAvailabilityDialogProps) {
+export function MarkAvailabilityDialog({
+  seasonId,
+}: MarkAvailabilityDialogProps) {
   const [open, setOpen] = useState(false);
   const [players, setPlayers] = useState<any[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState("");
@@ -49,7 +51,13 @@ export function MarkAvailabilityDialog({ seasonId }: MarkAvailabilityDialogProps
 
     setLoading(true);
     try {
-      await markSeasonAvailability(selectedPlayer, seasonId, status, undefined, notes);
+      await markSeasonAvailability(
+        selectedPlayer,
+        seasonId,
+        status,
+        undefined,
+        notes,
+      );
       setSuccess(true);
       setTimeout(() => {
         setOpen(false);
@@ -81,7 +89,9 @@ export function MarkAvailabilityDialog({ seasonId }: MarkAvailabilityDialogProps
         {success ? (
           <div className="flex flex-col items-center justify-center py-8">
             <CheckCircle2 className="h-16 w-16 text-green-600 mb-4" />
-            <p className="text-lg font-semibold text-green-700">Availability Marked!</p>
+            <p className="text-lg font-semibold text-green-700">
+              Availability Marked!
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -106,20 +116,29 @@ export function MarkAvailabilityDialog({ seasonId }: MarkAvailabilityDialogProps
               <RadioGroup value={status} onValueChange={setStatus}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="AVAILABLE" id="available" />
-                  <Label htmlFor="available" className="font-normal cursor-pointer">
+                  <Label
+                    htmlFor="available"
+                    className="font-normal cursor-pointer"
+                  >
                     ✅ Available for entire season
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="UNAVAILABLE" id="unavailable" />
-                  <Label htmlFor="unavailable" className="font-normal cursor-pointer">
+                  <Label
+                    htmlFor="unavailable"
+                    className="font-normal cursor-pointer"
+                  >
                     ❌ Not available
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="PARTIAL" id="partial" />
-                  <Label htmlFor="partial" className="font-normal cursor-pointer">
-                    ❓ Partially available
+                  <RadioGroupItem value="BACKUP" id="backup" />
+                  <Label
+                    htmlFor="backup"
+                    className="font-normal cursor-pointer"
+                  >
+                    👤 Available as backup
                   </Label>
                 </div>
               </RadioGroup>

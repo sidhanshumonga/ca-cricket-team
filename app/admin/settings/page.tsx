@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { toDate } from "@/lib/firestore-helpers";
 
 export default async function SettingsPage() {
   const seasons = await getSeasons();
@@ -59,11 +60,11 @@ export default async function SettingsPage() {
                   <div className="text-sm text-muted-foreground space-y-1">
                     <p>
                       <span className="font-medium">Start:</span>{" "}
-                      {format(season.startDate, "MMM d, yyyy")}
+                      {format(toDate(season.startDate), "MMM d, yyyy")}
                     </p>
                     <p>
                       <span className="font-medium">End:</span>{" "}
-                      {format(season.endDate, "MMM d, yyyy")}
+                      {format(toDate(season.endDate), "MMM d, yyyy")}
                     </p>
                   </div>
                 </div>
@@ -107,10 +108,10 @@ export default async function SettingsPage() {
                   <TableRow key={season.id}>
                     <TableCell className="font-medium">{season.name}</TableCell>
                     <TableCell>
-                      {format(season.startDate, "MMM d, yyyy")}
+                      {format(toDate(season.startDate), "MMM d, yyyy")}
                     </TableCell>
                     <TableCell>
-                      {format(season.endDate, "MMM d, yyyy")}
+                      {format(toDate(season.endDate), "MMM d, yyyy")}
                     </TableCell>
                     <TableCell>
                       {season.isActive ? (

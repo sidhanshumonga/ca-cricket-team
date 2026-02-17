@@ -106,8 +106,8 @@ export default function MatchDetailPage({
   const unavailablePlayers = match.availability.filter(
     (a: any) => a.status.toUpperCase() === "UNAVAILABLE",
   );
-  const maybeAvailable = match.availability.filter(
-    (a: any) => a.status.toUpperCase() === "MAYBE",
+  const backupPlayers = match.availability.filter(
+    (a: any) => a.status.toUpperCase() === "BACKUP",
   );
 
   return (
@@ -186,9 +186,9 @@ export default function MatchDetailPage({
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm">Maybe</span>
-              <span className="font-bold text-yellow-600">
-                {maybeAvailable.length}
+              <span className="text-sm">Backup</span>
+              <span className="font-bold text-blue-600">
+                {backupPlayers.length}
               </span>
             </div>
             <div className="flex items-center justify-between">

@@ -239,9 +239,9 @@ export default function TeamSelectionPage({ params }: TeamSelectionPageProps) {
             title="Available"
           />
         );
-      case "MAYBE":
+      case "BACKUP":
         return (
-          <div className="h-2 w-2 rounded-full bg-yellow-600" title="Maybe" />
+          <div className="h-2 w-2 rounded-full bg-blue-600" title="Backup" />
         );
       case "UNAVAILABLE":
         return (

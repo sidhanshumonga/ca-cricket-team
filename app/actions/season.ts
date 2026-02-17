@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { createDoc, getAllDocs, deleteDoc, queryDocs, toDate, serializeDoc } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 export async function createSeason(formData: FormData) {
@@ -8,33 +9,34 @@ export async function createSeason(formData: FormData) {
     const startDate = new Date(formData.get("startDate") as string);
     const endDate = new Date(formData.get("endDate") as string);
 
-    await prisma.season.create({
-        data: {
-            name,
-            startDate,
-            endDate,
-        },
+    await createDoc(COLLECTIONS.SEASONS, {
+        name,
+        startDate,
+        endDate,
+        isActive: true,
     });
 
     revalidatePath("/admin/settings");
 }
 
 export async function getSeasons() {
-    return await prisma.season.findMany({
-        orderBy: { startDate: "desc" },
+    const seasons = await getAllDocs(COLLECTIONS.SEASONS);
+    // Sort by startDate descending and serialize
+    const sorted = seasons.sort((a: any, b: any) => {
+        const dateA = toDate(a.startDate);
+        const dateB = toDate(b.startDate);
+        return dateB.getTime() - dateA.getTime();
     });
+    return sorted.map(serializeDoc);
 }
 
 export async function getActiveSeason() {
-    return await prisma.season.findFirst({
-        where: { isActive: true },
-    });
+    const seasons = await queryDocs(COLLECTIONS.SEASONS, 'isActive', '==', true);
+    return seasons.length > 0 ? serializeDoc(seasons[0]) : null;
 }
 
 export async function deleteSeason(id: string) {
-    await prisma.season.delete({
-        where: { id },
-    });
+    await deleteDoc(COLLECTIONS.SEASONS, id);
     revalidatePath("/admin/settings");
 }
 
@@ -45,36 +47,60 @@ export async function markSeasonAvailability(
     unavailableDates?: string,
     notes?: string
 ) {
-    await prisma.seasonAvailability.upsert({
-        where: {
-            playerId_seasonId: {
-                playerId,
-                seasonId,
-            },
-        },
-        update: {
-            status,
-            unavailableDates: unavailableDates || null,
-            notes: notes || null,
-        },
-        create: {
-            playerId,
-            seasonId,
-            status,
-            unavailableDates: unavailableDates || null,
-            notes: notes || null,
-        },
-    });
+    // Check if record exists
+    const existing = await firestore
+        .collection(COLLECTIONS.SEASON_AVAILABILITY)
+        .where('playerId', '==', playerId)
+        .where('seasonId', '==', seasonId)
+        .get();
+
+    const data = {
+        playerId,
+        seasonId,
+        status,
+        unavailableDates: unavailableDates || null,
+        notes: notes || null,
+    };
+
+    if (!existing.empty) {
+        // Update existing
+        const docId = existing.docs[0].id;
+        await firestore.collection(COLLECTIONS.SEASON_AVAILABILITY).doc(docId).update({
+            ...data,
+            updatedAt: new Date(),
+        });
+    } else {
+        // Create new
+        await createDoc(COLLECTIONS.SEASON_AVAILABILITY, data);
+    }
+
     revalidatePath("/");
 }
 
 export async function getSeasonAvailability(playerId: string, seasonId: string) {
-    return await prisma.seasonAvailability.findUnique({
-        where: {
-            playerId_seasonId: {
-                playerId,
-                seasonId,
-            },
-        },
+    const results = await firestore
+        .collection(COLLECTIONS.SEASON_AVAILABILITY)
+        .where('playerId', '==', playerId)
+        .where('seasonId', '==', seasonId)
+        .get();
+
+    if (results.empty) return null;
+
+    const doc = results.docs[0];
+    return serializeDoc({ id: doc.id, ...doc.data() });
+}
+
+export async function getAllSeasonAvailability(seasonId: string) {
+    const results = await firestore
+        .collection(COLLECTIONS.SEASON_AVAILABILITY)
+        .where('seasonId', '==', seasonId)
+        .get();
+
+    const availabilityMap: Record<string, any> = {};
+    results.docs.forEach(doc => {
+        const data: any = { id: doc.id, ...doc.data() };
+        availabilityMap[data.playerId] = serializeDoc(data);
     });
+
+    return availabilityMap;
 }

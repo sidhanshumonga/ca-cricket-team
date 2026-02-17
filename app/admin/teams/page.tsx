@@ -8,36 +8,69 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowLeft, Users } from "lucide-react";
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { queryDocs, getDocById, toDate } from "@/lib/firestore-helpers";
 
 async function getTeamsData() {
-  const activeSeason = await prisma.season.findFirst({
-    where: { isActive: true },
-  });
+  const activeSeasons = await queryDocs(
+    COLLECTIONS.SEASONS,
+    "isActive",
+    "==",
+    true,
+  );
+  if (activeSeasons.length === 0) return { matches: [], activeSeason: null };
 
-  if (!activeSeason) return { matches: [], activeSeason: null };
+  const activeSeason = activeSeasons[0];
+  const allMatches = await queryDocs(
+    COLLECTIONS.MATCHES,
+    "seasonId",
+    "==",
+    activeSeason.id,
+  );
 
-  const matches = await prisma.match.findMany({
-    where: {
-      seasonId: activeSeason.id,
-      date: { gte: new Date() },
-    },
-    orderBy: { date: "asc" },
-    include: {
-      team: {
-        include: {
-          player: true,
-        },
-      },
-      availability: {
-        include: {
-          player: true,
-        },
-      },
-    },
-  });
+  const now = new Date();
+  const upcomingMatches = allMatches.filter((m: any) => toDate(m.date) >= now);
 
-  return { matches, activeSeason };
+  // Enrich with team and availability data
+  const matches = await Promise.all(
+    upcomingMatches.map(async (match: any) => {
+      const teamSelections = await queryDocs(
+        COLLECTIONS.TEAM_SELECTIONS,
+        "matchId",
+        "==",
+        match.id,
+      );
+      const availability = await queryDocs(
+        COLLECTIONS.AVAILABILITY,
+        "matchId",
+        "==",
+        match.id,
+      );
+
+      const team = await Promise.all(
+        teamSelections.map(async (sel: any) => {
+          const player = await getDocById(COLLECTIONS.PLAYERS, sel.playerId);
+          return { ...sel, player };
+        }),
+      );
+
+      const enrichedAvailability = await Promise.all(
+        availability.map(async (avail: any) => {
+          const player = await getDocById(COLLECTIONS.PLAYERS, avail.playerId);
+          return { ...avail, player };
+        }),
+      );
+
+      return { ...match, team, availability: enrichedAvailability };
+    }),
+  );
+
+  return {
+    matches: matches.sort(
+      (a: any, b: any) => toDate(a.date).getTime() - toDate(b.date).getTime(),
+    ),
+    activeSeason,
+  };
 }
 
 export default async function TeamsPage() {
@@ -101,7 +134,7 @@ export default async function TeamsPage() {
               <CardHeader>
                 <CardTitle className="text-lg">vs {match.opponent}</CardTitle>
                 <CardDescription>
-                  {new Date(match.date).toLocaleDateString("en-US", {
+                  {toDate(match.date).toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
                     month: "long",
@@ -126,14 +159,14 @@ export default async function TeamsPage() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-600">
+                    <div className="text-2xl font-bold text-blue-600">
                       {
                         match.availability.filter(
-                          (a: any) => a.status.toUpperCase() === "MAYBE",
+                          (a: any) => a.status.toUpperCase() === "BACKUP",
                         ).length
                       }
                     </div>
-                    <div className="text-xs text-muted-foreground">Maybe</div>
+                    <div className="text-xs text-muted-foreground">Backup</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-red-600">

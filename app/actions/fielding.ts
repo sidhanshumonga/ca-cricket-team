@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { getDocById, queryDocs, createDoc, updateDoc, deleteDoc, getAllDocs } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 // Fielding position presets - manually created by user for accurate positioning
@@ -8,65 +9,64 @@ import { revalidatePath } from "next/cache";
 
 const POWERPLAY_RHB_POSITIONS: Record<string, { x: number; y: number }> = {
   "Bowler": { x: 49.1, y: 74.2 },
-  "Short Mid-on": { x: 66.3, y: 54.9 },        // was Point
-  "Long-on": { x: 68.7, y: 89.5 },             // was Mid-off
-  "Deep Square Leg": { x: 93.5, y: 45.3 },     // was Cover
-  "Mid-off": { x: 36.3, y: 66.6 },             // was Mid-wicket
-  "Short Leg": { x: 65.5, y: 34.9 },           // was Mid-on
+  "Short Mid-on": { x: 66.3, y: 54.9 },
+  "Long-on": { x: 68.7, y: 89.5 },
+  "Deep Square Leg": { x: 93.5, y: 45.3 },
+  "Mid-off": { x: 36.3, y: 66.6 },
+  "Short Leg": { x: 65.5, y: 34.9 },
   "Wicketkeeper": { x: 50, y: 32 },
-  "Short Cover": { x: 37.8, y: 49.8 },         // was Square Leg
-  "Point": { x: 32.4, y: 37.9 },               // was Short Leg
-  "Short Third Man": { x: 42.7, y: 27.9 },     // was Silly Point
-  "Deep Cover": { x: 7.3, y: 47.9 },           // was Fine Leg
+  "Short Cover": { x: 37.8, y: 49.8 },
+  "Point": { x: 32.4, y: 37.9 },
+  "Short Third Man": { x: 42.7, y: 27.9 },
+  "Deep Cover": { x: 7.3, y: 47.9 },
   "Silly Mid-off": { x: 65, y: 32.3 },
 };
 
 const NORMAL_RHB_POSITIONS: Record<string, { x: number; y: number }> = {
   "Bowler": { x: 49.1, y: 74.2 },
-  "Deep Mid-wicket": { x: 88.3, y: 67.8 },     // was Point
-  "Long-on": { x: 70.3, y: 86.5 },             // was Mid-off
-  "Deep Square Leg": { x: 92.1, y: 42.2 },     // was Cover
-  "Mid-off": { x: 35.3, y: 70.9 },             // was Mid-wicket
-  "Short Leg": { x: 65.5, y: 34.9 },           // was Mid-on
+  "Deep Mid-wicket": { x: 88.3, y: 67.8 },
+  "Long-on": { x: 70.3, y: 86.5 },
+  "Deep Square Leg": { x: 92.1, y: 42.2 },
+  "Mid-off": { x: 35.3, y: 70.9 },
+  "Short Leg": { x: 65.5, y: 34.9 },
   "Wicketkeeper": { x: 50, y: 32 },
-  "Short Cover": { x: 37.8, y: 49.8 },         // was Square Leg
-  "Point": { x: 32.4, y: 37.9 },               // was Short Leg
-  "Third Man": { x: 43.2, y: 10.8 },           // was Silly Point
-  "Deep Cover": { x: 7.7, y: 50.8 },           // was Fine Leg
+  "Short Cover": { x: 37.8, y: 49.8 },
+  "Point": { x: 32.4, y: 37.9 },
+  "Third Man": { x: 43.2, y: 10.8 },
+  "Deep Cover": { x: 7.7, y: 50.8 },
   "Silly Mid-off": { x: 65, y: 32.3 },
 };
 
 const POWERPLAY_LHB_POSITIONS: Record<string, { x: number; y: number }> = {
   "Bowler": { x: 49.1, y: 74.2 },
-  "Short Cover": { x: 64.5, y: 50.9 },         // was Point
+  "Short Cover": { x: 64.5, y: 50.9 },
   "Mid-off": { x: 64.6, y: 69.9 },
-  "Deep Cover": { x: 90, y: 47.5 },            // was Cover
+  "Deep Cover": { x: 90, y: 47.5 },
   "Mid-wicket": { x: 19, y: 80.1 },
-  "Point": { x: 70.5, y: 38.9 },               // was Mid-on
+  "Point": { x: 70.5, y: 38.9 },
   "Wicketkeeper": { x: 50, y: 32 },
-  "Short Mid-wicket": { x: 33.5, y: 55.7 },    // was Square Leg
+  "Short Mid-wicket": { x: 33.5, y: 55.7 },
   "Short Leg": { x: 34.6, y: 33.5 },
-  "Short Third Man": { x: 58.8, y: 28.5 },     // was Silly Point
-  "Deep Square Leg": { x: 7, y: 45.3 },        // was Fine Leg
+  "Short Third Man": { x: 58.8, y: 28.5 },
+  "Deep Square Leg": { x: 7, y: 45.3 },
   "Silly Mid-off": { x: 69.4, y: 36.9 },
 };
 
 const NORMAL_LHB_POSITIONS: Record<string, { x: number; y: number }> = {
   "Bowler": { x: 49.1, y: 74.2 },
-  "Short Cover": { x: 69.7, y: 54.7 },         // was Point
+  "Short Cover": { x: 69.7, y: 54.7 },
   "Mid-off": { x: 64.6, y: 69.9 },
-  "Deep Cover": { x: 90, y: 47.5 },            // was Cover
-  "Long-on": { x: 32.8, y: 86.7 },             // was Mid-wicket
-  "Point": { x: 70.5, y: 38.9 },               // was Mid-on
+  "Deep Cover": { x: 90, y: 47.5 },
+  "Long-on": { x: 32.8, y: 86.7 },
+  "Point": { x: 70.5, y: 38.9 },
   "Wicketkeeper": { x: 50, y: 32 },
-  "Mid-wicket": { x: 9.2, y: 64.9 },           // was Square Leg
+  "Mid-wicket": { x: 9.2, y: 64.9 },
   "Short Leg": { x: 37.8, y: 31.4 },
-  "Third Man": { x: 59, y: 10.2 },             // was Silly Point
-  "Deep Square Leg": { x: 9.4, y: 34.3 },      // was Fine Leg
+  "Third Man": { x: 59, y: 10.2 },
+  "Deep Square Leg": { x: 9.4, y: 34.3 },
   "Silly Mid-off": { x: 68.6, y: 37.2 },
 };
 
-// Helper function to get positions based on powerplay and batsman type
 function getFieldingPositions(isPowerplay: boolean, batsmanType: string) {
   if (isPowerplay && batsmanType === "RHB") return POWERPLAY_RHB_POSITIONS;
   if (isPowerplay && batsmanType === "LHB") return POWERPLAY_LHB_POSITIONS;
@@ -81,30 +81,33 @@ export async function getFieldingSetup(
   isPowerplay: boolean
 ) {
   try {
-    const setup = await prisma.fieldingSetup.findFirst({
-      where: {
-        matchId,
-        bowlerId,
-        batsmanType,
-        isPowerplay,
-      },
-      include: {
-        positions: {
-          include: {
-            player: {
-              select: {
-                id: true,
-                name: true,
-                role: true,
-                defaultFieldingPosition: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const setups = await firestore
+      .collection(COLLECTIONS.FIELDING_SETUPS)
+      .where('matchId', '==', matchId)
+      .where('bowlerId', '==', bowlerId)
+      .where('batsmanType', '==', batsmanType)
+      .where('isPowerplay', '==', isPowerplay)
+      .get();
 
-    return { success: true, setup };
+    if (setups.empty) {
+      return { success: true, setup: null };
+    }
+
+    const setupDoc = setups.docs[0];
+    const setup = { id: setupDoc.id, ...setupDoc.data() };
+
+    // Get positions for this setup
+    const positions = await queryDocs(COLLECTIONS.FIELDING_POSITIONS, 'setupId', '==', setup.id);
+    
+    // Enrich with player data
+    const enrichedPositions = await Promise.all(
+      positions.map(async (pos: any) => {
+        const player = await getDocById(COLLECTIONS.PLAYERS, pos.playerId);
+        return { ...pos, player };
+      })
+    );
+
+    return { success: true, setup: { ...setup, positions: enrichedPositions } };
   } catch (error) {
     console.error("Failed to get fielding setup:", error);
     return { success: false, error: "Failed to get fielding setup" };
@@ -120,50 +123,49 @@ export async function generateFieldingSetup(
 ) {
   try {
     // Get the team for this match
-    const match = await prisma.match.findUnique({
-      where: { id: matchId },
-      include: {
-        team: {
-          where: { isSubstitute: false },
-          include: {
-            player: {
-              select: {
-                id: true,
-                name: true,
-                role: true,
-                secondaryRole: true,
-                defaultFieldingPosition: true,
-              },
-            },
-          },
-          orderBy: { battingOrder: "asc" },
-        },
-      },
-    });
+    const match = await getDocById(COLLECTIONS.MATCHES, matchId);
+    if (!match) {
+      return { success: false, error: "Match not found" };
+    }
 
-    if (!match || match.team.length === 0) {
+    // Get team selections
+    const allTeamSelections = await queryDocs(COLLECTIONS.TEAM_SELECTIONS, 'matchId', '==', matchId);
+    const teamSelections = allTeamSelections
+      .filter((s: any) => !s.isSubstitute)
+      .sort((a: any, b: any) => (a.battingOrder || 999) - (b.battingOrder || 999));
+
+    if (teamSelections.length === 0) {
       return { success: false, error: "No team selected for this match" };
     }
 
+    // Enrich with player data
+    const team = await Promise.all(
+      teamSelections.map(async (selection: any) => {
+        const player = await getDocById(COLLECTIONS.PLAYERS, selection.playerId);
+        return { ...selection, player };
+      })
+    );
+
     // Delete existing setup if any
-    await prisma.fieldingSetup.deleteMany({
-      where: {
-        matchId,
-        bowlerId: bowlerId || null,
-        batsmanType,
-        isPowerplay,
-      },
-    });
+    const existingSetups = await firestore
+      .collection(COLLECTIONS.FIELDING_SETUPS)
+      .where('matchId', '==', matchId)
+      .where('bowlerId', '==', bowlerId || null)
+      .where('batsmanType', '==', batsmanType)
+      .where('isPowerplay', '==', isPowerplay)
+      .get();
+
+    await Promise.all(
+      existingSetups.docs.map(doc => doc.ref.delete())
+    );
 
     // Create new setup
-    const setup = await prisma.fieldingSetup.create({
-      data: {
-        matchId,
-        bowlerId,
-        batsmanType,
-        isPowerplay,
-        name,
-      },
+    const setup = await createDoc(COLLECTIONS.FIELDING_SETUPS, {
+      matchId,
+      bowlerId: bowlerId || null,
+      batsmanType,
+      isPowerplay,
+      name: name || null,
     });
 
     // Assign positions to players
@@ -176,11 +178,10 @@ export async function generateFieldingSetup(
       yCoordinate: number;
     }> = [];
 
-    // Get appropriate positions based on powerplay and batsman type
     const fieldingPositions = getFieldingPositions(isPowerplay, batsmanType);
 
-    // Step 1: Assign wicketkeeper role to wicketkeeper position
-    const wicketkeeper = match.team.find(
+    // Step 1: Assign wicketkeeper
+    const wicketkeeper = team.find(
       (s: any) => s.player.role === "Wicketkeeper" || s.player.secondaryRole === "Wicketkeeper"
     );
     if (wicketkeeper && fieldingPositions["Wicketkeeper"]) {
@@ -195,9 +196,9 @@ export async function generateFieldingSetup(
       usedPositions.add("Wicketkeeper");
     }
 
-    // Step 2: Assign selected bowler to bowler position
+    // Step 2: Assign bowler
     if (bowlerId && fieldingPositions["Bowler"]) {
-      const bowlerSelection = match.team.find((s: any) => s.player.id === bowlerId);
+      const bowlerSelection = team.find((s: any) => s.player.id === bowlerId);
       if (bowlerSelection) {
         const coords = fieldingPositions["Bowler"];
         positions.push({
@@ -211,26 +212,23 @@ export async function generateFieldingSetup(
       }
     }
 
-    // Step 3: Assign remaining players by their fielding preferences
-    for (const selection of match.team) {
+    // Step 3: Assign remaining players
+    for (const selection of team) {
       const player = selection.player;
 
-      // Skip if already assigned
       if (positions.find(p => p.playerId === player.id)) {
         continue;
       }
 
       let positionName: string;
-      let coords = { x: 50, y: 50 }; // Default center
+      let coords = { x: 50, y: 50 };
 
-      // Try to use player's preferred position if available
       if (player.defaultFieldingPosition &&
         fieldingPositions[player.defaultFieldingPosition] &&
         !usedPositions.has(player.defaultFieldingPosition)) {
         positionName = player.defaultFieldingPosition;
         coords = fieldingPositions[positionName];
       } else {
-        // Assign based on role to available positions
         positionName = assignPositionByRole(player.role, usedPositions, isPowerplay, batsmanType);
         coords = fieldingPositions[positionName] || coords;
       }
@@ -246,9 +244,9 @@ export async function generateFieldingSetup(
     }
 
     // Create all positions
-    await prisma.fieldingPosition.createMany({
-      data: positions,
-    });
+    await Promise.all(
+      positions.map(pos => createDoc(COLLECTIONS.FIELDING_POSITIONS, pos))
+    );
 
     revalidatePath(`/admin/matches/${matchId}`);
 
@@ -257,34 +255,6 @@ export async function generateFieldingSetup(
     console.error("Failed to generate fielding setup:", error);
     return { success: false, error: "Failed to generate fielding setup" };
   }
-}
-
-function findAlternativePosition(
-  originalPosition: string,
-  usedPositions: Set<string>,
-  role: string,
-  isPowerplay: boolean,
-  batsmanType: string
-): string {
-  // Map of positions to their alternatives
-  const alternatives: Record<string, string[]> = {
-    "Point": ["Cover Point", "Backward Point"],
-    "Cover": ["Cover Point", "Mid-off"],
-    "Mid-off": ["Cover", "Mid-on"],
-    "Mid-on": ["Mid-wicket", "Mid-off"],
-    "Square Leg": ["Backward Square Leg", "Mid-wicket"],
-    "Wicketkeeper": ["Short Leg", "Silly Point"],
-  };
-
-  const alts = alternatives[originalPosition] || [];
-  for (const alt of alts) {
-    if (!usedPositions.has(alt)) {
-      return alt;
-    }
-  }
-
-  // If no alternative found, assign based on role
-  return assignPositionByRole(role, usedPositions, isPowerplay, batsmanType);
 }
 
 function assignPositionByRole(role: string, usedPositions: Set<string>, isPowerplay: boolean, batsmanType: string): string {
@@ -304,14 +274,13 @@ function assignPositionByRole(role: string, usedPositions: Set<string>, isPowerp
     }
   }
 
-  // Fallback to any unused position
   for (const pos of Object.keys(fieldingPositions)) {
     if (!usedPositions.has(pos)) {
       return pos;
     }
   }
 
-  return "Point"; // Ultimate fallback
+  return "Point";
 }
 
 export async function updateFieldingPosition(
@@ -321,13 +290,10 @@ export async function updateFieldingPosition(
   positionName?: string
 ) {
   try {
-    await prisma.fieldingPosition.update({
-      where: { id: positionId },
-      data: {
-        xCoordinate,
-        yCoordinate,
-        ...(positionName && { positionName }),
-      },
+    await updateDoc(COLLECTIONS.FIELDING_POSITIONS, positionId, {
+      xCoordinate,
+      yCoordinate,
+      ...(positionName && { positionName }),
     });
 
     return { success: true };
@@ -339,9 +305,14 @@ export async function updateFieldingPosition(
 
 export async function deleteFieldingSetup(setupId: string) {
   try {
-    await prisma.fieldingSetup.delete({
-      where: { id: setupId },
-    });
+    // Delete all positions first
+    const positions = await queryDocs(COLLECTIONS.FIELDING_POSITIONS, 'setupId', '==', setupId);
+    await Promise.all(
+      positions.map((pos: any) => deleteDoc(COLLECTIONS.FIELDING_POSITIONS, pos.id))
+    );
+
+    // Delete setup
+    await deleteDoc(COLLECTIONS.FIELDING_SETUPS, setupId);
 
     return { success: true };
   } catch (error) {
@@ -352,25 +323,23 @@ export async function deleteFieldingSetup(setupId: string) {
 
 export async function getMatchFieldingSetups(matchId: string) {
   try {
-    const setups = await prisma.fieldingSetup.findMany({
-      where: { matchId },
-      include: {
-        positions: {
-          include: {
-            player: {
-              select: {
-                id: true,
-                name: true,
-                role: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const setups = await queryDocs(COLLECTIONS.FIELDING_SETUPS, 'matchId', '==', matchId);
+    
+    // Enrich with positions and player data
+    const enrichedSetups = await Promise.all(
+      setups.map(async (setup: any) => {
+        const positions = await queryDocs(COLLECTIONS.FIELDING_POSITIONS, 'setupId', '==', setup.id);
+        const enrichedPositions = await Promise.all(
+          positions.map(async (pos: any) => {
+            const player = await getDocById(COLLECTIONS.PLAYERS, pos.playerId);
+            return { ...pos, player };
+          })
+        );
+        return { ...setup, positions: enrichedPositions };
+      })
+    );
 
-    return { success: true, setups };
+    return { success: true, setups: enrichedSetups };
   } catch (error) {
     console.error("Failed to get fielding setups:", error);
     return { success: false, error: "Failed to get setups" };

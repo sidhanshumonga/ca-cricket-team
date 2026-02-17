@@ -20,33 +20,63 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Plus, MapPin, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { queryDocs, getDocById, toDate } from "@/lib/firestore-helpers";
 
 async function getMatchesWithDetails() {
-  const activeSeason = await prisma.season.findFirst({
-    where: { isActive: true },
-  });
+  const activeSeasons = await queryDocs(
+    COLLECTIONS.SEASONS,
+    "isActive",
+    "==",
+    true,
+  );
+  if (activeSeasons.length === 0) return [];
 
-  if (!activeSeason) return [];
+  const activeSeason = activeSeasons[0];
+  const matches = await queryDocs(
+    COLLECTIONS.MATCHES,
+    "seasonId",
+    "==",
+    activeSeason.id,
+  );
 
-  return await prisma.match.findMany({
-    where: {
-      seasonId: activeSeason.id,
-    },
-    orderBy: { date: "asc" },
-    include: {
-      team: {
-        include: {
-          player: true,
-        },
-      },
-      availability: {
-        include: {
-          player: true,
-        },
-      },
-    },
-  });
+  // Enrich with team and availability data
+  const enrichedMatches = await Promise.all(
+    matches.map(async (match: any) => {
+      const teamSelections = await queryDocs(
+        COLLECTIONS.TEAM_SELECTIONS,
+        "matchId",
+        "==",
+        match.id,
+      );
+      const availability = await queryDocs(
+        COLLECTIONS.AVAILABILITY,
+        "matchId",
+        "==",
+        match.id,
+      );
+
+      const team = await Promise.all(
+        teamSelections.map(async (sel: any) => {
+          const player = await getDocById(COLLECTIONS.PLAYERS, sel.playerId);
+          return { ...sel, player };
+        }),
+      );
+
+      const enrichedAvailability = await Promise.all(
+        availability.map(async (avail: any) => {
+          const player = await getDocById(COLLECTIONS.PLAYERS, avail.playerId);
+          return { ...avail, player };
+        }),
+      );
+
+      return { ...match, team, availability: enrichedAvailability };
+    }),
+  );
+
+  return enrichedMatches.sort(
+    (a: any, b: any) => toDate(a.date).getTime() - toDate(b.date).getTime(),
+  );
 }
 
 export default async function MatchesPage() {
@@ -98,11 +128,13 @@ export default async function MatchesPage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    <span>{format(match.date, "EEEE, MMM d, yyyy")}</span>
+                    <span>
+                      {format(toDate(match.date), "EEEE, MMM d, yyyy")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    <span>{format(match.date, "h:mm a")}</span>
+                    <span>{format(toDate(match.date), "h:mm a")}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <MapPin className="h-4 w-4" />
@@ -125,14 +157,14 @@ export default async function MatchesPage() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-yellow-600">
+                    <div className="text-xl font-bold text-blue-600">
                       {
                         match.availability.filter(
-                          (a: any) => a.status.toUpperCase() === "MAYBE",
+                          (a: any) => a.status.toUpperCase() === "BACKUP",
                         ).length
                       }
                     </div>
-                    <div className="text-xs text-muted-foreground">Maybe</div>
+                    <div className="text-xs text-muted-foreground">Backup</div>
                   </div>
                   <div className="text-center">
                     <div className="text-xl font-bold text-red-600">
@@ -230,11 +262,11 @@ export default async function MatchesPage() {
                       <div className="flex flex-col">
                         <span className="font-medium flex items-center gap-2">
                           <Calendar className="h-3 w-3" />
-                          {format(match.date, "MMM d, yyyy")}
+                          {format(toDate(match.date), "MMM d, yyyy")}
                         </span>
                         <span className="text-xs text-muted-foreground flex items-center gap-2">
                           <Clock className="h-3 w-3" />
-                          {format(match.date, "h:mm a")}
+                          {format(toDate(match.date), "h:mm a")}
                         </span>
                       </div>
                     </TableCell>

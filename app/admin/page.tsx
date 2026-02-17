@@ -8,50 +8,52 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Calendar, Users, Plus, ArrowRight, ChevronRight } from "lucide-react";
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { countDocs, queryDocs, toDate } from "@/lib/firestore-helpers";
 import { format } from "date-fns";
 
 async function getDashboardData() {
-  const [
-    playerCount,
-    activeSeason,
-    upcomingMatches,
-    seasonAvailability,
-    leagueMatchesLeft,
-  ] = await Promise.all([
-    prisma.player.count(),
-    prisma.season.findFirst({ where: { isActive: true } }),
-    prisma.match.findMany({
-      where: {
-        date: { gte: new Date() },
-        status: "Scheduled",
-      },
-      orderBy: { date: "asc" },
-      take: 5,
-    }),
-    prisma.season.findFirst({
-      where: { isActive: true },
-      include: {
-        seasonAvailability: true,
-        _count: {
-          select: { seasonAvailability: true },
-        },
-      },
-    }),
-    prisma.match.count({
-      where: {
-        date: { gte: new Date() },
-        status: "Scheduled",
-        type: "League",
-      },
-    }),
-  ]);
+  const playerCount = await countDocs(COLLECTIONS.PLAYERS);
+  const activeSeasons = await queryDocs(
+    COLLECTIONS.SEASONS,
+    "isActive",
+    "==",
+    true,
+  );
+  const activeSeason = activeSeasons.length > 0 ? activeSeasons[0] : null;
+
+  const allMatches = await firestore.collection(COLLECTIONS.MATCHES).get();
+  const matches = allMatches.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  const now = new Date();
+  const upcomingMatches = matches
+    .filter((m: any) => toDate(m.date) >= now && m.status === "Scheduled")
+    .sort(
+      (a: any, b: any) => toDate(a.date).getTime() - toDate(b.date).getTime(),
+    )
+    .slice(0, 5);
+
+  const leagueMatchesLeft = matches.filter(
+    (m: any) =>
+      toDate(m.date) >= now && m.status === "Scheduled" && m.type === "League",
+  ).length;
+
+  const seasonAvailabilityDocs = activeSeason
+    ? await queryDocs(
+        COLLECTIONS.SEASON_AVAILABILITY,
+        "seasonId",
+        "==",
+        activeSeason.id,
+      )
+    : [];
 
   return {
     playerCount,
     activeSeason,
     upcomingMatches,
-    seasonAvailability,
+    seasonAvailability: activeSeason
+      ? { _count: { seasonAvailability: seasonAvailabilityDocs.length } }
+      : null,
     leagueMatchesLeft,
   };
 }
@@ -72,7 +74,7 @@ export default async function AdminDashboard() {
         )
       : 0;
 
-  const nextMatch = upcomingMatches[0];
+  const nextMatch = upcomingMatches[0] as any;
 
   return (
     <div className="flex flex-col gap-4">
@@ -134,7 +136,7 @@ export default async function AdminDashboard() {
             {nextMatch ? (
               <>
                 <div className="text-2xl font-bold">
-                  {format(new Date(nextMatch.date), "MMM d")}
+                  {format(toDate(nextMatch.date), "MMM d")}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   vs {nextMatch.opponent}
@@ -193,10 +195,10 @@ export default async function AdminDashboard() {
                     <div className="flex items-center gap-4">
                       <div className="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-primary/10">
                         <span className="text-xs font-medium text-primary">
-                          {format(new Date(match.date), "MMM")}
+                          {format(toDate(match.date), "MMM")}
                         </span>
                         <span className="text-lg font-bold text-primary">
-                          {format(new Date(match.date), "d")}
+                          {format(toDate(match.date), "d")}
                         </span>
                       </div>
                       <div>
@@ -225,36 +227,40 @@ export default async function AdminDashboard() {
           </CardContent>
         </Card>
         <Card className="hidden lg:block lg:col-span-3">
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>Common tasks for team management.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4">
+          <CardContent className="space-y-3">
             <Link
               href="/admin/players"
-              className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors"
+              className="flex items-center gap-3 rounded-lg border p-4 hover:bg-muted/50 transition-colors group"
             >
-              <Users className="h-5 w-5 text-primary" />
-              <div className="flex-1">
-                <p className="text-sm font-medium">Manage Roster</p>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold mb-0.5">Manage Roster</p>
                 <p className="text-xs text-muted-foreground">
                   Add or edit players
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
             </Link>
             <Link
               href="/admin/matches"
-              className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors"
+              className="flex items-center gap-3 rounded-lg border p-4 hover:bg-muted/50 transition-colors group"
             >
-              <Calendar className="h-5 w-5 text-primary" />
-              <div className="flex-1">
-                <p className="text-sm font-medium">Manage Matches</p>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Calendar className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold mb-0.5">Manage Matches</p>
                 <p className="text-xs text-muted-foreground">
                   Schedule & select teams
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
             </Link>
           </CardContent>
         </Card>

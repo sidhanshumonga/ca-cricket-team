@@ -1,31 +1,29 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { createDoc, queryDocs, deleteDoc, toDate, serializeDoc } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 export async function createMatch(formData: FormData) {
     const dateStr = formData.get("date") as string;
-    const timeStr = formData.get("time") as string; // Reporting time
+    const timeStr = formData.get("time") as string;
     const opponent = formData.get("opponent") as string;
     const location = formData.get("location") as string;
     const type = formData.get("type") as string;
     const seasonId = formData.get("seasonId") as string;
 
-    // Combine date and time for the actual match datetime if needed, 
-    // currently schema has `date DateTime` and no separate time field.
-    // Let's assume `date` stores the full DateTime.
     const dateTime = new Date(`${dateStr}T${timeStr}`);
 
     try {
-        await prisma.match.create({
-            data: {
-                date: dateTime,
-                opponent,
-                location,
-                type,
-                seasonId,
-                status: "Scheduled",
-            },
+        await createDoc(COLLECTIONS.MATCHES, {
+            date: dateTime,
+            opponent,
+            location,
+            type,
+            seasonId,
+            status: "Scheduled",
+            isLocked: false,
+            reportingTime: null,
         });
         revalidatePath("/admin/matches");
         return { success: true };
@@ -37,25 +35,23 @@ export async function createMatch(formData: FormData) {
 
 export async function getMatches(seasonId?: string) {
     if (!seasonId) {
-        // If no season ID provided, get matches for the active season
-        const activeSeason = await prisma.season.findFirst({
-            where: { isActive: true },
-        });
-        if (!activeSeason) return [];
-        seasonId = activeSeason.id;
+        const activeSeasons = await queryDocs(COLLECTIONS.SEASONS, 'isActive', '==', true);
+        if (activeSeasons.length === 0) return [];
+        seasonId = activeSeasons[0].id;
     }
 
-    return await prisma.match.findMany({
-        where: { seasonId },
-        orderBy: { date: "asc" },
+    const matches = await queryDocs(COLLECTIONS.MATCHES, 'seasonId', '==', seasonId);
+    const sorted = matches.sort((a: any, b: any) => {
+        const dateA = toDate(a.date);
+        const dateB = toDate(b.date);
+        return dateA.getTime() - dateB.getTime();
     });
+    return sorted.map(serializeDoc);
 }
 
 export async function deleteMatch(id: string) {
     try {
-        await prisma.match.delete({
-            where: { id },
-        });
+        await deleteDoc(COLLECTIONS.MATCHES, id);
         revalidatePath("/admin/matches");
         return { success: true };
     } catch (error) {
@@ -64,18 +60,24 @@ export async function deleteMatch(id: string) {
 }
 
 export async function getCompletedMatches(limit: number = 5) {
-    const activeSeason = await prisma.season.findFirst({
-        where: { isActive: true },
-    });
+    const activeSeasons = await queryDocs(COLLECTIONS.SEASONS, 'isActive', '==', true);
+    if (activeSeasons.length === 0) return [];
 
-    if (!activeSeason) return [];
+    const allMatches = await firestore
+        .collection(COLLECTIONS.MATCHES)
+        .where('seasonId', '==', activeSeasons[0].id)
+        .where('status', '==', 'Completed')
+        .get();
 
-    return await prisma.match.findMany({
-        where: {
-            seasonId: activeSeason.id,
-            status: "Completed",
-        },
-        orderBy: { date: "desc" },
-        take: limit,
-    });
+    const matches = allMatches.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    const sorted = matches
+        .sort((a: any, b: any) => {
+            const dateA = toDate(a.date);
+            const dateB = toDate(b.date);
+            return dateB.getTime() - dateA.getTime();
+        })
+        .slice(0, limit);
+
+    return sorted.map(serializeDoc);
 }

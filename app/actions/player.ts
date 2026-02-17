@@ -1,6 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { firestore, COLLECTIONS } from "@/lib/db";
+import { createDoc, getAllDocs, updateDoc, deleteDoc, serializeDoc } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 export async function createPlayer(formData: FormData) {
@@ -16,19 +17,17 @@ export async function createPlayer(formData: FormData) {
     const isViceCaptain = formData.get("isViceCaptain") === "on";
 
     try {
-        await prisma.player.create({
-            data: {
-                name,
-                role,
-                secondaryRole: secondaryRole || null,
-                battingStyle: battingStyle || null,
-                bowlingStyle: bowlingStyle || null,
-                battingPosition: battingPosition || null,
-                defaultFieldingPosition: defaultFieldingPosition || null,
-                isCaptain,
-                isViceCaptain,
-                notes: notes || null,
-            },
+        await createDoc(COLLECTIONS.PLAYERS, {
+            name,
+            role,
+            secondaryRole: secondaryRole || null,
+            battingStyle: battingStyle || null,
+            bowlingStyle: bowlingStyle || null,
+            battingPosition: battingPosition || null,
+            defaultFieldingPosition: defaultFieldingPosition || null,
+            isCaptain,
+            isViceCaptain,
+            notes: notes || null,
         });
         revalidatePath("/admin/players");
         return { success: true };
@@ -39,22 +38,15 @@ export async function createPlayer(formData: FormData) {
 }
 
 export async function getPlayers() {
-    return await prisma.player.findMany({
-        select: {
-            id: true,
-            name: true,
-            role: true,
-            secondaryRole: true,
-            battingStyle: true,
-            bowlingStyle: true,
-            battingPosition: true,
-            defaultFieldingPosition: true,
-            isCaptain: true,
-            isViceCaptain: true,
-            notes: true,
-        },
-        orderBy: { name: "asc" },
-    });
+    try {
+        const players = await getAllDocs(COLLECTIONS.PLAYERS);
+        // Sort by name and serialize for client components
+        const sorted = players.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        return sorted.map(serializeDoc);
+    } catch (error) {
+        console.error("Failed to get players:", error);
+        return [];
+    }
 }
 
 export async function updatePlayer(id: string, formData: FormData) {
@@ -70,20 +62,17 @@ export async function updatePlayer(id: string, formData: FormData) {
     const isViceCaptain = formData.get("isViceCaptain") === "on";
 
     try {
-        await prisma.player.update({
-            where: { id },
-            data: {
-                name,
-                role,
-                secondaryRole: secondaryRole || null,
-                battingStyle: battingStyle || null,
-                bowlingStyle: bowlingStyle || null,
-                battingPosition: battingPosition || null,
-                defaultFieldingPosition: defaultFieldingPosition || null,
-                isCaptain,
-                isViceCaptain,
-                notes: notes || null,
-            },
+        await updateDoc(COLLECTIONS.PLAYERS, id, {
+            name,
+            role,
+            secondaryRole: secondaryRole || null,
+            battingStyle: battingStyle || null,
+            bowlingStyle: bowlingStyle || null,
+            battingPosition: battingPosition || null,
+            defaultFieldingPosition: defaultFieldingPosition || null,
+            isCaptain,
+            isViceCaptain,
+            notes: notes || null,
         });
         revalidatePath("/admin/players");
         return { success: true };
@@ -95,9 +84,7 @@ export async function updatePlayer(id: string, formData: FormData) {
 
 export async function deletePlayer(id: string) {
     try {
-        await prisma.player.delete({
-            where: { id },
-        });
+        await deleteDoc(COLLECTIONS.PLAYERS, id);
         revalidatePath("/admin/players");
         return { success: true };
     } catch (error) {
