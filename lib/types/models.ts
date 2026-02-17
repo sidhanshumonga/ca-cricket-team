@@ -94,3 +94,51 @@ export interface FieldingPosition {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Scorecard {
+  id: string;
+  matchId: string;
+  teamBattingFirst: string; // "us" or "opponent"
+  ourScore?: number | null;
+  ourWickets?: number | null;
+  ourOvers?: number | null;
+  opponentScore?: number | null;
+  opponentWickets?: number | null;
+  opponentOvers?: number | null;
+  result?: string | null; // "Won", "Lost", "Tied", "No Result"
+  resultMargin?: string | null; // "by 5 wickets", "by 20 runs"
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface BattingPerformance {
+  id: string;
+  scorecardId: string;
+  playerId: string;
+  runs: number;
+  ballsFaced?: number | null;
+  fours?: number | null;
+  sixes?: number | null;
+  strikeRate?: number | null;
+  howOut?: string | null; // "bowled", "caught", "lbw", "run out", "not out"
+  bowlerName?: string | null; // bowler who got the wicket
+  fielderName?: string | null; // fielder who caught/ran out
+  battingPosition: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface BowlingPerformance {
+  id: string;
+  scorecardId: string;
+  playerId: string;
+  overs: number;
+  maidens?: number | null;
+  runs: number;
+  wickets: number;
+  economy?: number | null;
+  wides?: number | null;
+  noBalls?: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

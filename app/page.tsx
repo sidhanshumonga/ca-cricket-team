@@ -205,37 +205,46 @@ export default async function Home() {
 
             {completedMatches.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
-                  Recent Matches
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    Recent Matches
+                  </h2>
+                  <Link href="/team/matches">
+                    <Button variant="outline" size="sm">
+                      View All
+                    </Button>
+                  </Link>
+                </div>
                 <div className="space-y-3">
                   {completedMatches.map((match: any) => (
-                    <Card
+                    <Link
                       key={match.id}
-                      className="hover:shadow-md transition-shadow"
+                      href={`/team/matches/${match.id}/scorecard`}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <p className="font-semibold text-lg">
-                              vs {match.opponent}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {match.location}
-                            </p>
+                      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <p className="font-semibold text-lg">
+                                vs {match.opponent}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {match.location}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-gray-900">
+                                {format(toDate(match.date), "MMM d")}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {match.type}
+                              </p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-sm font-medium text-gray-900">
-                              {format(toDate(match.date), "MMM d")}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {match.type}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </Link>
                   ))}
                 </div>
               </div>

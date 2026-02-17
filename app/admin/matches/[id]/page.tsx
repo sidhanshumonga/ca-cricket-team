@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Users, Calendar, MapPin, Copy, Share2 } from "lucide-react";
+import { ScorecardActions } from "@/components/scorecard-actions";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -160,7 +161,7 @@ export default function MatchDetailPage({
               <span className="font-medium">Status:</span>{" "}
               <span
                 className={
-                  match.status === "Completed"
+                  match.status?.toUpperCase() === "COMPLETED"
                     ? "text-green-600"
                     : "text-blue-600"
                 }
@@ -168,6 +169,11 @@ export default function MatchDetailPage({
                 {match.status}
               </span>
             </div>
+            {match.status?.toUpperCase() === "COMPLETED" && (
+              <div className="pt-4 mt-4 border-t">
+                <ScorecardActions matchId={matchId} />
+              </div>
+            )}
           </CardContent>
         </Card>
 

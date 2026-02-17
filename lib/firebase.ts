@@ -35,4 +35,7 @@ export const COLLECTIONS = {
   SEASON_AVAILABILITY: 'seasonAvailability',
   FIELDING_SETUPS: 'fieldingSetups',
   FIELDING_POSITIONS: 'fieldingPositions',
+  SCORECARDS: 'scorecards',
+  BATTING_PERFORMANCES: 'battingPerformances',
+  BOWLING_PERFORMANCES: 'bowlingPerformances',
 } as const;

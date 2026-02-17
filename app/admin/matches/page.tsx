@@ -80,7 +80,16 @@ async function getMatchesWithDetails() {
 }
 
 export default async function MatchesPage() {
-  const matches = await getMatchesWithDetails();
+  const allMatches = await getMatchesWithDetails();
+
+  // Separate upcoming and completed matches
+  const now = new Date();
+  const upcomingMatches = allMatches.filter(
+    (m: any) => m.status !== "Completed" && toDate(m.date) >= now,
+  );
+  const completedMatches = allMatches.filter(
+    (m: any) => m.status === "Completed",
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -96,14 +105,14 @@ export default async function MatchesPage() {
 
       {/* Mobile View - Card Layout */}
       <div className="md:hidden space-y-4">
-        {matches.length === 0 ? (
+        {upcomingMatches.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12 text-muted-foreground">
-              No matches scheduled. Add your first match.
+              No upcoming matches scheduled. Add your first match.
             </CardContent>
           </Card>
         ) : (
-          matches.map((match: any) => (
+          upcomingMatches.map((match: any) => (
             <Card key={match.id}>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -246,17 +255,17 @@ export default async function MatchesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {matches.length === 0 ? (
+              {upcomingMatches.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={6}
                     className="text-center py-8 text-muted-foreground"
                   >
-                    No matches scheduled. Add your first match.
+                    No upcoming matches scheduled. Add your first match.
                   </TableCell>
                 </TableRow>
               ) : (
-                matches.map((match: any) => (
+                upcomingMatches.map((match: any) => (
                   <TableRow key={match.id}>
                     <TableCell>
                       <div className="flex flex-col">
@@ -321,6 +330,72 @@ export default async function MatchesPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Completed Matches Section */}
+      {completedMatches.length > 0 && (
+        <Card className="hidden md:block">
+          <CardHeader>
+            <CardTitle>Completed Matches</CardTitle>
+            <CardDescription>
+              View past match results and scorecards.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Opponent</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {completedMatches.map((match: any) => (
+                  <TableRow key={match.id}>
+                    <TableCell>
+                      <div className="flex flex-col">
+                        <span className="font-medium flex items-center gap-2">
+                          <Calendar className="h-3 w-3" />
+                          {format(toDate(match.date), "MMM d, yyyy")}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-semibold">
+                      {match.opponent}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="h-3 w-3" />
+                        {match.location}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{match.type}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Link href={`/admin/matches/${match.id}`}>
+                          <Button variant="ghost" size="sm">
+                            View Details
+                          </Button>
+                        </Link>
+                        <Link href={`/admin/matches/${match.id}/scorecard`}>
+                          <Button variant="outline" size="sm">
+                            Scorecard
+                          </Button>
+                        </Link>
+                        <DeleteMatchButton id={match.id} />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
