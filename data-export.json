@@ -1,0 +1,1982 @@
+{
+  "players": [
+    {
+      "id": "cmlpiso2c0001ga9kemybrba7",
+      "name": "Akshay",
+      "role": "Batsman",
+      "secondaryRole": "Wicketkeeper",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Wicketkeeper",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2d0002ga9kiurhtwe8",
+      "name": "Akshesh",
+      "role": "Bowler",
+      "secondaryRole": "Batsman",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": null,
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2e0003ga9k5wj3ckt4",
+      "name": "Ankit",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": "Right-handed",
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Mid-off",
+      "isCaptain": true,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2e0004ga9kw8jvgngf",
+      "name": "Chirag",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Point",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2f0005ga9kpis2h0k0",
+      "name": "Devang",
+      "role": "Bowler",
+      "secondaryRole": "Batsman",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Deep Cover",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2f0006ga9k5rp7vd6b",
+      "name": "Hardik",
+      "role": "All-rounder",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": null,
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2g0007ga9kw658eero",
+      "name": "Jalpen",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Cover",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2h0008ga9k8hem4ug4",
+      "name": "Kartik",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Leg",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2h0009ga9kxehu1y18",
+      "name": "Lajju",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Deep Mid-wicket",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2i000aga9k5vnefgmu",
+      "name": "Meet",
+      "role": "Bowler",
+      "secondaryRole": "Batsman",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Third Man",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2i000bga9k9q2etxp0",
+      "name": "Niranjan",
+      "role": "Batsman",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Third Man",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2j000cga9kg6wvxl2n",
+      "name": "Nitin",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": null,
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2j000dga9kvzqpbkuk",
+      "name": "Parth",
+      "role": "Batsman",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Mid-on",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2k000ega9kuwio60si",
+      "name": "Rajat",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Deep Mid-wicket",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2k000fga9k0jxi5y6m",
+      "name": "Ronak old",
+      "role": "Batsman",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": null,
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2k000gga9kbnncw2ft",
+      "name": "Ronak new",
+      "role": "All-rounder",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Mid-wicket",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2l000hga9kh3lpobpc",
+      "name": "Saahil",
+      "role": "Bowler",
+      "secondaryRole": "Batsman",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Third Man",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2l000iga9k6a7qcbvy",
+      "name": "Shivam",
+      "role": "Batsman",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Deep Cover",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2m000jga9kj0ksgc8n",
+      "name": "Sid",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Long-on",
+      "isCaptain": false,
+      "isViceCaptain": true,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2m000kga9kf3nj4p6w",
+      "name": "Tarun",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Short Leg",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpiso2n000lga9kezbsuchy",
+      "name": "Vishal",
+      "role": "Batsman",
+      "secondaryRole": "Bowler",
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Mid-off",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpvcf0o0001h39khb9kn3sm",
+      "name": "Ronak B",
+      "role": "Batsman",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Long Off",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    },
+    {
+      "id": "cmlpvcf0p0002h39k4seacolw",
+      "name": "Ronak",
+      "role": "All-rounder",
+      "secondaryRole": null,
+      "battingStyle": null,
+      "bowlingStyle": null,
+      "battingPosition": null,
+      "defaultFieldingPosition": "Mid-off",
+      "isCaptain": false,
+      "isViceCaptain": false,
+      "notes": null
+    }
+  ],
+  "seasons": [
+    {
+      "id": "cmlpiso270000ga9k5gjru070",
+      "name": "Mega Bash 2026",
+      "startDate": "2026-03-14T00:00:00.000Z",
+      "endDate": "2026-07-18T00:00:00.000Z",
+      "isActive": true
+    },
+    {
+      "id": "cmlpvc4690000e29kk45zovpo",
+      "name": "Mega Bash 2026",
+      "startDate": "2026-03-14T00:00:00.000Z",
+      "endDate": "2026-07-18T00:00:00.000Z",
+      "isActive": true
+    },
+    {
+      "id": "cmlpvcf090000h39kf2ikt5iz",
+      "name": "Mega Bash 2026",
+      "startDate": "2026-03-14T00:00:00.000Z",
+      "endDate": "2026-07-18T00:00:00.000Z",
+      "isActive": true
+    }
+  ],
+  "matches": [
+    {
+      "id": "cmlpiso2o000mga9k99saj3jf",
+      "date": "2026-06-27T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Quarter Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpiso270000ga9k5gjru070",
+      "status": "Scheduled",
+      "isLocked": false
+    },
+    {
+      "id": "cmlpiso2p000nga9kz0pubsu4",
+      "date": "2026-07-11T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Semi Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpiso270000ga9k5gjru070",
+      "status": "Scheduled",
+      "isLocked": false
+    },
+    {
+      "id": "cmlpiso2p000oga9kme1szoop",
+      "date": "2026-07-18T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpiso270000ga9k5gjru070",
+      "status": "Scheduled",
+      "isLocked": false
+    },
+    {
+      "id": "cmlpvcf0r0003h39kt7qrhzop",
+      "date": "2026-06-27T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Quarter Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpvcf090000h39kf2ikt5iz",
+      "status": "Scheduled",
+      "isLocked": false
+    },
+    {
+      "id": "cmlpvcf0s0004h39kear9vmnw",
+      "date": "2026-07-11T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Semi Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpvcf090000h39kf2ikt5iz",
+      "status": "Scheduled",
+      "isLocked": false
+    },
+    {
+      "id": "cmlpvcf0s0005h39kz5qnq7wz",
+      "date": "2026-07-18T14:00:00.000Z",
+      "opponent": "TBD",
+      "location": "TBD",
+      "type": "Final",
+      "reportingTime": "9:00 AM",
+      "seasonId": "cmlpvcf090000h39kf2ikt5iz",
+      "status": "Scheduled",
+      "isLocked": false
+    }
+  ],
+  "availability": [],
+  "teamSelections": [
+    {
+      "id": "cmlpj41qp0000wv9kmrisub8b",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "role": null,
+      "battingOrder": 1,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0001wv9k40a6tmlq",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "role": null,
+      "battingOrder": 2,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0002wv9kw1q3zom8",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "role": null,
+      "battingOrder": 3,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0003wv9ka2v8iw55",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "role": null,
+      "battingOrder": 4,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0004wv9ki0q6fg5q",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "role": null,
+      "battingOrder": 5,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0005wv9kfde03srh",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "role": null,
+      "battingOrder": 6,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0006wv9kshq94b5x",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "role": null,
+      "battingOrder": 7,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0007wv9k6ipvi5kw",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "role": null,
+      "battingOrder": 8,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0008wv9ktwijqs5i",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "role": null,
+      "battingOrder": 9,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp0009wv9k80kt6mo2",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "role": null,
+      "battingOrder": 10,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    },
+    {
+      "id": "cmlpj41qp000awv9kec9zlsk4",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "role": null,
+      "battingOrder": 11,
+      "bowlingOrder": null,
+      "isSubstitute": false
+    }
+  ],
+  "seasonAvailability": [],
+  "fieldingSetups": [
+    {
+      "id": "cmlpj4feh000bwv9k47jrbsbf",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2i000aga9k5vnefgmu",
+      "batsmanType": "RHB",
+      "isPowerplay": false,
+      "name": "Custom - RHB - Regular",
+      "createdAt": "2026-02-16T18:50:12.857Z",
+      "updatedAt": "2026-02-16T18:50:12.857Z"
+    },
+    {
+      "id": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": null,
+      "batsmanType": "RHB",
+      "isPowerplay": true,
+      "name": "Default - RHB - Powerplay",
+      "createdAt": "2026-02-16T18:51:44.306Z",
+      "updatedAt": "2026-02-16T18:51:44.306Z"
+    },
+    {
+      "id": "cmlpjerm4004pwv9kfpaw032l",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": null,
+      "batsmanType": "LHB",
+      "isPowerplay": false,
+      "name": "Default - LHB - Regular",
+      "createdAt": "2026-02-16T18:58:15.244Z",
+      "updatedAt": "2026-02-16T18:58:15.244Z"
+    },
+    {
+      "id": "cmlpk6yma009pwv9kgfwty0hv",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": null,
+      "batsmanType": "RHB",
+      "isPowerplay": false,
+      "name": "Default - RHB - Regular",
+      "createdAt": "2026-02-16T19:20:10.690Z",
+      "updatedAt": "2026-02-16T19:20:10.690Z"
+    },
+    {
+      "id": "cmlpkkpjk00adwv9kk5jdu48i",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "batsmanType": "RHB",
+      "isPowerplay": true,
+      "name": "Custom - RHB - Powerplay",
+      "createdAt": "2026-02-16T19:30:52.112Z",
+      "updatedAt": "2026-02-16T19:30:52.112Z"
+    },
+    {
+      "id": "cmlpkkud900apwv9khlsvl3y6",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2i000aga9k5vnefgmu",
+      "batsmanType": "RHB",
+      "isPowerplay": true,
+      "name": "Custom - RHB - Powerplay",
+      "createdAt": "2026-02-16T19:30:58.365Z",
+      "updatedAt": "2026-02-16T19:30:58.365Z"
+    },
+    {
+      "id": "cmlpktjgy00bpwv9kp3k93itt",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "batsmanType": "LHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2f0005ga9kpis2h0k0 - LHB - Regular",
+      "createdAt": "2026-02-16T19:37:44.146Z",
+      "updatedAt": "2026-02-16T19:37:44.146Z"
+    },
+    {
+      "id": "cmlpktuoo00c1wv9kiyc97ehb",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "batsmanType": "RHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2f0005ga9kpis2h0k0 - RHB - Regular",
+      "createdAt": "2026-02-16T19:37:58.680Z",
+      "updatedAt": "2026-02-16T19:37:58.680Z"
+    },
+    {
+      "id": "cmlpl88fd00hpwv9ketf57ixw",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "batsmanType": "LHB",
+      "isPowerplay": true,
+      "name": "cmlpiso2d0002ga9kiurhtwe8 - LHB - Powerplay",
+      "createdAt": "2026-02-16T19:49:09.673Z",
+      "updatedAt": "2026-02-16T19:49:09.673Z"
+    },
+    {
+      "id": "cmlplas9600ldwv9kpwvqczgd",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "batsmanType": "LHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2d0002ga9kiurhtwe8 - LHB - Regular",
+      "createdAt": "2026-02-16T19:51:08.682Z",
+      "updatedAt": "2026-02-16T19:51:08.682Z"
+    },
+    {
+      "id": "cmlplkfv900n1wv9kwb2a4z36",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "batsmanType": "RHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2f0006ga9k5rp7vd6b - RHB - Regular",
+      "createdAt": "2026-02-16T19:58:39.188Z",
+      "updatedAt": "2026-02-16T19:58:39.188Z"
+    },
+    {
+      "id": "cmlplko4000ndwv9kti1neit4",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "batsmanType": "RHB",
+      "isPowerplay": true,
+      "name": "cmlpiso2f0006ga9k5rp7vd6b - RHB - Powerplay",
+      "createdAt": "2026-02-16T19:58:49.872Z",
+      "updatedAt": "2026-02-16T19:58:49.872Z"
+    },
+    {
+      "id": "cmlplpx1y00o1wv9katinl5ol",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "batsmanType": "LHB",
+      "isPowerplay": true,
+      "name": "cmlpiso2f0006ga9k5rp7vd6b - LHB - Powerplay",
+      "createdAt": "2026-02-16T20:02:54.742Z",
+      "updatedAt": "2026-02-16T20:02:54.742Z"
+    },
+    {
+      "id": "cmlplseb400opwv9k4l3v2z07",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "batsmanType": "LHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2f0006ga9k5rp7vd6b - LHB - Regular",
+      "createdAt": "2026-02-16T20:04:50.416Z",
+      "updatedAt": "2026-02-16T20:04:50.416Z"
+    },
+    {
+      "id": "cmlpvkmse006os79knk94150q",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "batsmanType": "RHB",
+      "isPowerplay": false,
+      "name": "cmlpiso2d0002ga9kiurhtwe8 - RHB - Regular",
+      "createdAt": "2026-02-17T00:38:44.318Z",
+      "updatedAt": "2026-02-17T00:38:44.318Z"
+    },
+    {
+      "id": "cmlpvkws60070s79kn1lpxg0f",
+      "matchId": "cmlpiso2o000mga9k99saj3jf",
+      "bowlerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "batsmanType": "RHB",
+      "isPowerplay": true,
+      "name": "cmlpiso2d0002ga9kiurhtwe8 - RHB - Powerplay",
+      "createdAt": "2026-02-17T00:38:57.270Z",
+      "updatedAt": "2026-02-17T00:38:57.270Z"
+    }
+  ],
+  "fieldingPositions": [
+    {
+      "id": "cmlpj6dyq002ewv9kyby045iq",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 75,
+      "yCoordinate": 50
+    },
+    {
+      "id": "cmlpj6dyq002fwv9kskiwvx51",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 55,
+      "yCoordinate": 30
+    },
+    {
+      "id": "cmlpj6dyq002gwv9kmcnytvqp",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 65,
+      "yCoordinate": 40
+    },
+    {
+      "id": "cmlpj6dyq002hwv9kdv5sd02h",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 40,
+      "yCoordinate": 40
+    },
+    {
+      "id": "cmlpj6dyq002iwv9k254ufdqr",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-on",
+      "xCoordinate": 45,
+      "yCoordinate": 30
+    },
+    {
+      "id": "cmlpj6dyq002jwv9k6ldfwtux",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "First Slip",
+      "xCoordinate": 85,
+      "yCoordinate": 45
+    },
+    {
+      "id": "cmlpj6dyq002kwv9k161t0ger",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 25,
+      "yCoordinate": 50
+    },
+    {
+      "id": "cmlpj6dyq002lwv9k02z5q92o",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Second Slip",
+      "xCoordinate": 88,
+      "yCoordinate": 48
+    },
+    {
+      "id": "cmlpj6dyq002mwv9ki1dkzsj5",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Third Slip",
+      "xCoordinate": 91,
+      "yCoordinate": 51
+    },
+    {
+      "id": "cmlpj6dyr002nwv9k5hozkaav",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 10,
+      "yCoordinate": 70
+    },
+    {
+      "id": "cmlpj6dyr002owv9k969vq7cm",
+      "setupId": "cmlpj6dyq002dwv9kbd0xlwp6",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Gully",
+      "xCoordinate": 82,
+      "yCoordinate": 42
+    },
+    {
+      "id": "cmlpjerm6004qwv9k1q1b2q9l",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 70,
+      "yCoordinate": 50
+    },
+    {
+      "id": "cmlpjerm6004rwv9ke65v7rk6",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 52,
+      "yCoordinate": 65
+    },
+    {
+      "id": "cmlpjerm6004swv9k9bsodfi1",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 60,
+      "yCoordinate": 58
+    },
+    {
+      "id": "cmlpjerm6004twv9kumtkahyh",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 40,
+      "yCoordinate": 58
+    },
+    {
+      "id": "cmlpjerm6004uwv9k5vv5ukxn",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-on",
+      "xCoordinate": 48,
+      "yCoordinate": 65
+    },
+    {
+      "id": "cmlpjerm6004vwv9kikiuslfb",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 85
+    },
+    {
+      "id": "cmlpjerm6004wwv9kcro53h79",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 30,
+      "yCoordinate": 50
+    },
+    {
+      "id": "cmlpjerm6004xwv9kv89ajgw3",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "First Slip",
+      "xCoordinate": 75,
+      "yCoordinate": 60
+    },
+    {
+      "id": "cmlpjerm6004ywv9koumerhqi",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Second Slip",
+      "xCoordinate": 78,
+      "yCoordinate": 58
+    },
+    {
+      "id": "cmlpjerm6004zwv9kercxnv4h",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 20,
+      "yCoordinate": 25
+    },
+    {
+      "id": "cmlpjerm60050wv9koolavybu",
+      "setupId": "cmlpjerm4004pwv9kfpaw032l",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Third Slip",
+      "xCoordinate": 81,
+      "yCoordinate": 56
+    },
+    {
+      "id": "cmlpk6ymd009qwv9kwbm4rxfj",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 69.659218275076,
+      "yCoordinate": 54.692842895136785
+    },
+    {
+      "id": "cmlpk6ymd009rwv9kh60y1io6",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.59847549392096,
+      "yCoordinate": 69.86165463525836
+    },
+    {
+      "id": "cmlpk6ymd009swv9kts99yajw",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 90.01569623860183,
+      "yCoordinate": 47.48456496960486
+    },
+    {
+      "id": "cmlpk6ymd009twv9kp3nzs6q7",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 32.848333016717326,
+      "yCoordinate": 86.69904065349543
+    },
+    {
+      "id": "cmlpk6ymd009uwv9knvjdyhr2",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-on",
+      "xCoordinate": 49.09299012158055,
+      "yCoordinate": 74.19236797112463
+    },
+    {
+      "id": "cmlpk6ymd009vwv9k5w84gy34",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpk6ymd009wwv9kdqoheix4",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 9.18766622340425,
+      "yCoordinate": 64.88708681610942
+    },
+    {
+      "id": "cmlpk6ymd009xwv9k3l4fg8aq",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Leg",
+      "xCoordinate": 37.813473594224924,
+      "yCoordinate": 31.412637727963528
+    },
+    {
+      "id": "cmlpk6ymd009ywv9kujfvhq9g",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Silly Point",
+      "xCoordinate": 58.965947948328264,
+      "yCoordinate": 10.150289703647413
+    },
+    {
+      "id": "cmlpk6ymd009zwv9kpibu6o03",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 9.396110372340422,
+      "yCoordinate": 34.2935742781155
+    },
+    {
+      "id": "cmlpk6ymd00a0wv9kqjau3bk7",
+      "setupId": "cmlpk6yma009pwv9kgfwty0hv",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Mid-off",
+      "xCoordinate": 68.56800911854103,
+      "yCoordinate": 37.21910619300912
+    },
+    {
+      "id": "cmlpkkpjm00aewv9k31hvizxm",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 66.3,
+      "yCoordinate": 54.9
+    },
+    {
+      "id": "cmlpkkpjm00afwv9kcv3gbgxn",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 68.7,
+      "yCoordinate": 89.5
+    },
+    {
+      "id": "cmlpkkpjm00agwv9k68r1ydze",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 93.5,
+      "yCoordinate": 45.3
+    },
+    {
+      "id": "cmlpkkpjm00ahwv9kru8ay50d",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 36.3,
+      "yCoordinate": 66.6
+    },
+    {
+      "id": "cmlpkkpjm00aiwv9k7nyelyd9",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-on",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpkkpjm00ajwv9k03xeqc4b",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpkkpjm00akwv9k4w8pthpz",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlpkkpjm00alwv9k3f8oy41o",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Leg",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlpkkpjm00amwv9kpv1azxia",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Silly Point",
+      "xCoordinate": 42.7,
+      "yCoordinate": 27.9
+    },
+    {
+      "id": "cmlpkkpjm00anwv9k3adbber7",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 7.3,
+      "yCoordinate": 47.9
+    },
+    {
+      "id": "cmlpkkpjm00aowv9kru6t9mbp",
+      "setupId": "cmlpkkpjk00adwv9kk5jdu48i",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Mid-off",
+      "xCoordinate": 65,
+      "yCoordinate": 32.3
+    },
+    {
+      "id": "cmlpkkudc00aqwv9ktjinis8a",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 66.3,
+      "yCoordinate": 54.9
+    },
+    {
+      "id": "cmlpkkudc00arwv9k82lukhkx",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 68.7,
+      "yCoordinate": 89.5
+    },
+    {
+      "id": "cmlpkkudc00aswv9kzkq64ns0",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 93.5,
+      "yCoordinate": 45.3
+    },
+    {
+      "id": "cmlpkkudc00atwv9kbg0l7nkd",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 36.3,
+      "yCoordinate": 66.6
+    },
+    {
+      "id": "cmlpkkudc00auwv9ka3so2gim",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-on",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpkkudc00avwv9k9aa41m7z",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpkkudc00awwv9ky77w1mdn",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlpkkudc00axwv9k1zerxisb",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Leg",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlpkkudc00aywv9kw21tzt60",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Silly Point",
+      "xCoordinate": 42.7,
+      "yCoordinate": 27.9
+    },
+    {
+      "id": "cmlpkkudc00azwv9ke43l3oyv",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 7.3,
+      "yCoordinate": 47.9
+    },
+    {
+      "id": "cmlpkkudc00b0wv9kbo7uwkcb",
+      "setupId": "cmlpkkud900apwv9khlsvl3y6",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Mid-off",
+      "xCoordinate": 65,
+      "yCoordinate": 32.3
+    },
+    {
+      "id": "cmlpktjh200bqwv9kik0u88i7",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Bowler",
+      "xCoordinate": 50,
+      "yCoordinate": 68
+    },
+    {
+      "id": "cmlpktjh200brwv9k4nxwdjn9",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 69.7,
+      "yCoordinate": 54.7
+    },
+    {
+      "id": "cmlpktjh200bswv9kt4e9jrb8",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.6,
+      "yCoordinate": 69.9
+    },
+    {
+      "id": "cmlpktjh200btwv9k3dz5xvnn",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 90,
+      "yCoordinate": 47.5
+    },
+    {
+      "id": "cmlpktjh200buwv9k65t73ta6",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 32.8,
+      "yCoordinate": 86.7
+    },
+    {
+      "id": "cmlpktjh200bvwv9k7zo86w3h",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Mid-on",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpktjh200bwwv9kr8hls0bh",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 9.2,
+      "yCoordinate": 64.9
+    },
+    {
+      "id": "cmlpktjh200bxwv9kvuybasoz",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpktjh200bywv9kecsw188r",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 31.4
+    },
+    {
+      "id": "cmlpktjh200bzwv9k1hjxa8u2",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 9.4,
+      "yCoordinate": 34.3
+    },
+    {
+      "id": "cmlpktjh200c0wv9kpzhbhyee",
+      "setupId": "cmlpktjgy00bpwv9kp3k93itt",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Point",
+      "xCoordinate": 59,
+      "yCoordinate": 10.2
+    },
+    {
+      "id": "cmlpktuop00c2wv9kydf9suud",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Bowler",
+      "xCoordinate": 50,
+      "yCoordinate": 68
+    },
+    {
+      "id": "cmlpktuop00c3wv9kx5bgvp5l",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 88.3,
+      "yCoordinate": 67.8
+    },
+    {
+      "id": "cmlpktuop00c4wv9kfxlz6d35",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 70.3,
+      "yCoordinate": 86.5
+    },
+    {
+      "id": "cmlpktuop00c5wv9kzseohmw2",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 92.1,
+      "yCoordinate": 42.2
+    },
+    {
+      "id": "cmlpktuop00c6wv9kw8wq3f9o",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 35.3,
+      "yCoordinate": 70.9
+    },
+    {
+      "id": "cmlpktuop00c7wv9k5jxwphw3",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Mid-on",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpktuop00c8wv9kbu30p2gq",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlpktuop00c9wv9kozxtj4z0",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpktuop00cawv9kyt6a4ja5",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlpktuop00cbwv9ki5cetfky",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 7.7,
+      "yCoordinate": 50.8
+    },
+    {
+      "id": "cmlpktuop00ccwv9knv6izeo7",
+      "setupId": "cmlpktuoo00c1wv9kiyc97ehb",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Point",
+      "xCoordinate": 43.2,
+      "yCoordinate": 10.8
+    },
+    {
+      "id": "cmlpl88fe00hqwv9kg86prpy7",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpl88fe00hrwv9k85l0bw3s",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 64.5,
+      "yCoordinate": 50.9
+    },
+    {
+      "id": "cmlpl88fe00hswv9ktmh1k73a",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 90,
+      "yCoordinate": 47.5
+    },
+    {
+      "id": "cmlpl88fe00htwv9kozdhy9ct",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 19,
+      "yCoordinate": 80.1
+    },
+    {
+      "id": "cmlpl88fe00huwv9kh91fkzxf",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.6,
+      "yCoordinate": 69.9
+    },
+    {
+      "id": "cmlpl88fe00hvwv9k5k9915j7",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Mid-on",
+      "xCoordinate": 70.5,
+      "yCoordinate": 38.9
+    },
+    {
+      "id": "cmlpl88fe00hwwv9kg2u3vozr",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 33.5,
+      "yCoordinate": 55.7
+    },
+    {
+      "id": "cmlpl88fe00hxwv9kzbqia85j",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpl88fe00hywv9k5r96hbmc",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 34.6,
+      "yCoordinate": 33.5
+    },
+    {
+      "id": "cmlpl88fe00hzwv9kvk82ef01",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 7,
+      "yCoordinate": 45.3
+    },
+    {
+      "id": "cmlpl88fe00i0wv9k6bf1110o",
+      "setupId": "cmlpl88fd00hpwv9ketf57ixw",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Point",
+      "xCoordinate": 58.8,
+      "yCoordinate": 28.5
+    },
+    {
+      "id": "cmlplas9900lewv9k97257p6y",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlplas9900lfwv9kcgnvmvk8",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 69.7,
+      "yCoordinate": 54.7
+    },
+    {
+      "id": "cmlplas9900lgwv9k94gpe1mw",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Cover",
+      "xCoordinate": 90,
+      "yCoordinate": 47.5
+    },
+    {
+      "id": "cmlplas9900lhwv9k8jzbnfme",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 32.8,
+      "yCoordinate": 86.7
+    },
+    {
+      "id": "cmlplas9900liwv9kw5v3kdrf",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.6,
+      "yCoordinate": 69.9
+    },
+    {
+      "id": "cmlplas9900ljwv9kp3d195cb",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Mid-on",
+      "xCoordinate": 70.5,
+      "yCoordinate": 38.9
+    },
+    {
+      "id": "cmlplas9900lkwv9kw7pmmlna",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Square Leg",
+      "xCoordinate": 9.2,
+      "yCoordinate": 64.9
+    },
+    {
+      "id": "cmlplas9900llwv9kyu1fan9p",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlplas9900lmwv9kxu0jubad",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 31.4
+    },
+    {
+      "id": "cmlplas9900lnwv9ki7ctkkbu",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Fine Leg",
+      "xCoordinate": 9.4,
+      "yCoordinate": 34.3
+    },
+    {
+      "id": "cmlplas9900lowv9kuj64faou",
+      "setupId": "cmlplas9600ldwv9kpwvqczgd",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Silly Point",
+      "xCoordinate": 59,
+      "yCoordinate": 10.2
+    },
+    {
+      "id": "cmlplkfvi00n2wv9ko6i43wqq",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlplkfvi00n3wv9kfdo6xmaz",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlplkfvi00n4wv9k10p1sp39",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 35.3,
+      "yCoordinate": 70.9
+    },
+    {
+      "id": "cmlplkfvi00n5wv9kzyszcswh",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Deep Mid-wicket",
+      "xCoordinate": 88.3,
+      "yCoordinate": 67.8
+    },
+    {
+      "id": "cmlplkfvi00n6wv9kde1ndhgi",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Long-on",
+      "xCoordinate": 70.3,
+      "yCoordinate": 86.5
+    },
+    {
+      "id": "cmlplkfvi00n7wv9k85ghnt64",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep Square Leg",
+      "xCoordinate": 92.1,
+      "yCoordinate": 42.2
+    },
+    {
+      "id": "cmlplkfvi00n8wv9kkh6hb4vj",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Short Leg",
+      "xCoordinate": 65.5,
+      "yCoordinate": 34.9
+    },
+    {
+      "id": "cmlplkfvi00n9wv9kty5xmf7v",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlplkfvi00nawv9k4qfmc72r",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Cover",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlplkfvi00nbwv9khxmgg04j",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Third Man",
+      "xCoordinate": 43.2,
+      "yCoordinate": 10.8
+    },
+    {
+      "id": "cmlplkfvi00ncwv9kx89wbt6t",
+      "setupId": "cmlplkfv900n1wv9kwb2a4z36",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 7.7,
+      "yCoordinate": 50.8
+    },
+    {
+      "id": "cmlplko4200newv9knfr9qhd5",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlplko4200nfwv9k6e3aae3k",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlplko4200ngwv9kxf4af9ur",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 36.3,
+      "yCoordinate": 66.6
+    },
+    {
+      "id": "cmlplko4200nhwv9ke1e89e2z",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Short Mid-on",
+      "xCoordinate": 66.3,
+      "yCoordinate": 54.9
+    },
+    {
+      "id": "cmlplko4200niwv9ky7d6bpxn",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Long-on",
+      "xCoordinate": 68.7,
+      "yCoordinate": 89.5
+    },
+    {
+      "id": "cmlplko4200njwv9ky8kxn801",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep square-leg",
+      "xCoordinate": 93.5,
+      "yCoordinate": 45.3
+    },
+    {
+      "id": "cmlplko4200nkwv9kdlta9ap3",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Short fine-leg",
+      "xCoordinate": 65.5,
+      "yCoordinate": 34.9
+    },
+    {
+      "id": "cmlplko4200nlwv9kggxiecev",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlplko4200nmwv9kjd3cw2w9",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Cover",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlplko4200nnwv9ki588z3qy",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Short Third Man",
+      "xCoordinate": 42.7,
+      "yCoordinate": 27.9
+    },
+    {
+      "id": "cmlplko4200nowv9kbtlikup7",
+      "setupId": "cmlplko4000ndwv9kti1neit4",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 7.3,
+      "yCoordinate": 47.9
+    },
+    {
+      "id": "cmlplpx2300o2wv9keqy06v60",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlplpx2300o3wv9ksb5rjepa",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 70.5,
+      "yCoordinate": 38.9
+    },
+    {
+      "id": "cmlplpx2300o4wv9kr1erlyd7",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.6,
+      "yCoordinate": 69.9
+    },
+    {
+      "id": "cmlplpx2300o5wv9k5x2ohs6a",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 19,
+      "yCoordinate": 80.1
+    },
+    {
+      "id": "cmlplpx2300o6wv9kckce7hcl",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Short Cover",
+      "xCoordinate": 64.5,
+      "yCoordinate": 50.9
+    },
+    {
+      "id": "cmlplpx2300o7wv9k62thbcig",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 90,
+      "yCoordinate": 47.5
+    },
+    {
+      "id": "cmlplpx2300o8wv9kpvs8dbhs",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlplpx2300o9wv9kz1oc3jz7",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Mid-wicket",
+      "xCoordinate": 33.5,
+      "yCoordinate": 55.7
+    },
+    {
+      "id": "cmlplpx2300oawv9kaw044mwc",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 34.6,
+      "yCoordinate": 33.5
+    },
+    {
+      "id": "cmlplpx2300obwv9kf8ymvo2r",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Short Third Man",
+      "xCoordinate": 58.8,
+      "yCoordinate": 28.5
+    },
+    {
+      "id": "cmlplpx2300ocwv9ke8tf9up7",
+      "setupId": "cmlplpx1y00o1wv9katinl5ol",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Deep Square Leg",
+      "xCoordinate": 7,
+      "yCoordinate": 45.3
+    },
+    {
+      "id": "cmlplseb700oqwv9keadol7qh",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlplseb700orwv9kr3xzqgyj",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Point",
+      "xCoordinate": 70.5,
+      "yCoordinate": 38.9
+    },
+    {
+      "id": "cmlplseb700oswv9kui2j67ex",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Mid-off",
+      "xCoordinate": 64.6,
+      "yCoordinate": 69.9
+    },
+    {
+      "id": "cmlplseb700otwv9kjzvfsfuf",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Mid-wicket",
+      "xCoordinate": 9.2,
+      "yCoordinate": 64.9
+    },
+    {
+      "id": "cmlplseb700ouwv9k30vwoafi",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Short Cover",
+      "xCoordinate": 69.7,
+      "yCoordinate": 54.7
+    },
+    {
+      "id": "cmlplseb700ovwv9kkhf8yblm",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 90,
+      "yCoordinate": 47.5
+    },
+    {
+      "id": "cmlplseb700owwv9kqfkurv9v",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Long-on",
+      "xCoordinate": 32.8,
+      "yCoordinate": 86.7
+    },
+    {
+      "id": "cmlplseb700oxwv9kqe0b63ck",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlplseb700oywv9kje4b6vei",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Short Leg",
+      "xCoordinate": 37.8,
+      "yCoordinate": 31.4
+    },
+    {
+      "id": "cmlplseb700ozwv9knp8q47km",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Third Man",
+      "xCoordinate": 59,
+      "yCoordinate": 10.2
+    },
+    {
+      "id": "cmlplseb700p0wv9k7st62qr3",
+      "setupId": "cmlplseb400opwv9k4l3v2z07",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Deep Square Leg",
+      "xCoordinate": 9.4,
+      "yCoordinate": 34.3
+    },
+    {
+      "id": "cmlpvkmsg006ps79kdt12uuva",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpvkmsg006qs79k2sqaflua",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpvkmsg006rs79kj1be4pue",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Mid-off",
+      "xCoordinate": 35.3,
+      "yCoordinate": 70.9
+    },
+    {
+      "id": "cmlpvkmsg006ss79k9r09p3po",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Point",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlpvkmsg006ts79k17qnld6e",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 7.7,
+      "yCoordinate": 50.8
+    },
+    {
+      "id": "cmlpvkmsg006us79km8vltt1o",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Deep Mid-wicket",
+      "xCoordinate": 88.3,
+      "yCoordinate": 67.8
+    },
+    {
+      "id": "cmlpvkmsg006vs79khr4m9jbf",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Short Cover",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlpvkmsg006ws79kjkwo30b6",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Leg",
+      "xCoordinate": 65.5,
+      "yCoordinate": 34.9
+    },
+    {
+      "id": "cmlpvkmsg006xs79kdgju8m9a",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Long-on",
+      "xCoordinate": 70.3,
+      "yCoordinate": 86.5
+    },
+    {
+      "id": "cmlpvkmsg006ys79kix1eur50",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Deep Square Leg",
+      "xCoordinate": 92.1,
+      "yCoordinate": 42.2
+    },
+    {
+      "id": "cmlpvkmsg006zs79kd9jmgx8z",
+      "setupId": "cmlpvkmse006os79knk94150q",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Third Man",
+      "xCoordinate": 43.2,
+      "yCoordinate": 10.8
+    },
+    {
+      "id": "cmlpvkws90071s79ktvktk55z",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2c0001ga9kemybrba7",
+      "positionName": "Wicketkeeper",
+      "xCoordinate": 50,
+      "yCoordinate": 32
+    },
+    {
+      "id": "cmlpvkws90072s79krvod9zau",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2d0002ga9kiurhtwe8",
+      "positionName": "Bowler",
+      "xCoordinate": 49.1,
+      "yCoordinate": 74.2
+    },
+    {
+      "id": "cmlpvkws90073s79k8c12bmgu",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2e0003ga9k5wj3ckt4",
+      "positionName": "Mid-off",
+      "xCoordinate": 36.3,
+      "yCoordinate": 66.6
+    },
+    {
+      "id": "cmlpvkws90074s79ktuk1kicc",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2e0004ga9kw8jvgngf",
+      "positionName": "Point",
+      "xCoordinate": 32.4,
+      "yCoordinate": 37.9
+    },
+    {
+      "id": "cmlpvkws90075s79kwulimf88",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2f0005ga9kpis2h0k0",
+      "positionName": "Deep Cover",
+      "xCoordinate": 7.3,
+      "yCoordinate": 47.9
+    },
+    {
+      "id": "cmlpvkws90076s79kkzu3zpch",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2f0006ga9k5rp7vd6b",
+      "positionName": "Short Mid-on",
+      "xCoordinate": 66.3,
+      "yCoordinate": 54.9
+    },
+    {
+      "id": "cmlpvkws90077s79kk8oabjsn",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2g0007ga9kw658eero",
+      "positionName": "Short Cover",
+      "xCoordinate": 37.8,
+      "yCoordinate": 49.8
+    },
+    {
+      "id": "cmlpvkws90078s79ka8k5vrx9",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2h0008ga9k8hem4ug4",
+      "positionName": "Short Leg",
+      "xCoordinate": 65.5,
+      "yCoordinate": 34.9
+    },
+    {
+      "id": "cmlpvkws90079s79kgvi8qrpq",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2h0009ga9kxehu1y18",
+      "positionName": "Long-on",
+      "xCoordinate": 68.7,
+      "yCoordinate": 89.5
+    },
+    {
+      "id": "cmlpvkws9007as79k9gb5n6dc",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2i000aga9k5vnefgmu",
+      "positionName": "Short Third Man",
+      "xCoordinate": 42.7,
+      "yCoordinate": 27.9
+    },
+    {
+      "id": "cmlpvkws9007bs79k8zltum9r",
+      "setupId": "cmlpvkws60070s79kn1lpxg0f",
+      "playerId": "cmlpiso2i000bga9k9q2etxp0",
+      "positionName": "Deep Square Leg",
+      "xCoordinate": 93.5,
+      "yCoordinate": 45.3
+    }
+  ],
+  "exportedAt": "2026-02-17T00:42:17.437Z"
+}

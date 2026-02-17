@@ -10,6 +10,7 @@ export async function createPlayer(formData: FormData) {
     const battingStyle = formData.get("battingStyle") as string;
     const bowlingStyle = formData.get("bowlingStyle") as string;
     const battingPosition = formData.get("battingPosition") as string;
+    const defaultFieldingPosition = formData.get("defaultFieldingPosition") as string;
     const notes = formData.get("notes") as string;
     const isCaptain = formData.get("isCaptain") === "on";
     const isViceCaptain = formData.get("isViceCaptain") === "on";
@@ -23,6 +24,7 @@ export async function createPlayer(formData: FormData) {
                 battingStyle: battingStyle || null,
                 bowlingStyle: bowlingStyle || null,
                 battingPosition: battingPosition || null,
+                defaultFieldingPosition: defaultFieldingPosition || null,
                 isCaptain,
                 isViceCaptain,
                 notes: notes || null,
@@ -46,6 +48,7 @@ export async function getPlayers() {
             battingStyle: true,
             bowlingStyle: true,
             battingPosition: true,
+            defaultFieldingPosition: true,
             isCaptain: true,
             isViceCaptain: true,
             notes: true,
@@ -61,6 +64,7 @@ export async function updatePlayer(id: string, formData: FormData) {
     const battingStyle = formData.get("battingStyle") as string;
     const bowlingStyle = formData.get("bowlingStyle") as string;
     const battingPosition = formData.get("battingPosition") as string;
+    const defaultFieldingPosition = formData.get("defaultFieldingPosition") as string;
     const notes = formData.get("notes") as string;
     const isCaptain = formData.get("isCaptain") === "on";
     const isViceCaptain = formData.get("isViceCaptain") === "on";
@@ -75,6 +79,7 @@ export async function updatePlayer(id: string, formData: FormData) {
                 battingStyle: battingStyle || null,
                 bowlingStyle: bowlingStyle || null,
                 battingPosition: battingPosition || null,
+                defaultFieldingPosition: defaultFieldingPosition || null,
                 isCaptain,
                 isViceCaptain,
                 notes: notes || null,

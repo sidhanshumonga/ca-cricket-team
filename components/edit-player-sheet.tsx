@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { FIELDING_POSITIONS } from "@/lib/types/fielding";
 
 const ROLES = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"];
 const BATTING_STYLES = ["Right-handed", "Left-handed"];
@@ -46,6 +47,7 @@ interface EditPlayerSheetProps {
     battingStyle: string | null;
     bowlingStyle: string | null;
     battingPosition: string | null;
+    defaultFieldingPosition: string | null;
     isCaptain: boolean;
     isViceCaptain: boolean;
     notes: string | null;
@@ -113,7 +115,10 @@ export function EditPlayerSheet({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="secondaryRole">Secondary Role (Optional)</Label>
-            <Select name="secondaryRole" defaultValue={player.secondaryRole || undefined}>
+            <Select
+              name="secondaryRole"
+              defaultValue={player.secondaryRole || undefined}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select role" />
               </SelectTrigger>
@@ -128,7 +133,10 @@ export function EditPlayerSheet({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="battingStyle">Batting Style (Optional)</Label>
-            <Select name="battingStyle" defaultValue={player.battingStyle || undefined}>
+            <Select
+              name="battingStyle"
+              defaultValue={player.battingStyle || undefined}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select batting style" />
               </SelectTrigger>
@@ -143,7 +151,10 @@ export function EditPlayerSheet({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="bowlingStyle">Bowling Style (Optional)</Label>
-            <Select name="bowlingStyle" defaultValue={player.bowlingStyle || undefined}>
+            <Select
+              name="bowlingStyle"
+              defaultValue={player.bowlingStyle || undefined}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select bowling style" />
               </SelectTrigger>
@@ -158,12 +169,35 @@ export function EditPlayerSheet({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="battingPosition">Batting Position (Optional)</Label>
-            <Select name="battingPosition" defaultValue={player.battingPosition || undefined}>
+            <Select
+              name="battingPosition"
+              defaultValue={player.battingPosition || undefined}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select position" />
               </SelectTrigger>
               <SelectContent>
                 {BATTING_POSITIONS.map((position) => (
+                  <SelectItem key={position} value={position}>
+                    {position}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="defaultFieldingPosition">
+              Default Fielding Position (Optional)
+            </Label>
+            <Select
+              name="defaultFieldingPosition"
+              defaultValue={player.defaultFieldingPosition || undefined}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select fielding position" />
+              </SelectTrigger>
+              <SelectContent>
+                {FIELDING_POSITIONS.map((position) => (
                   <SelectItem key={position} value={position}>
                     {position}
                   </SelectItem>
@@ -201,7 +235,10 @@ export function EditPlayerSheet({
                 className="h-4 w-4 rounded border-gray-300"
                 defaultChecked={player.isViceCaptain}
               />
-              <Label htmlFor="isViceCaptain" className="font-normal cursor-pointer">
+              <Label
+                htmlFor="isViceCaptain"
+                className="font-normal cursor-pointer"
+              >
                 Vice-Captain
               </Label>
             </div>

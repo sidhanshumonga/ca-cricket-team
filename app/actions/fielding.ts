@@ -10,9 +10,9 @@ const POWERPLAY_RHB_POSITIONS: Record<string, { x: number; y: number }> = {
   "Bowler": { x: 49.1, y: 74.2 },
   "Short Mid-on": { x: 66.3, y: 54.9 },        // was Point
   "Long-on": { x: 68.7, y: 89.5 },             // was Mid-off
-  "Deep square-leg": { x: 93.5, y: 45.3 },     // was Cover
+  "Deep Square Leg": { x: 93.5, y: 45.3 },     // was Cover
   "Mid-off": { x: 36.3, y: 66.6 },             // was Mid-wicket
-  "Short fine-leg": { x: 65.5, y: 34.9 },           // was Mid-on
+  "Short Leg": { x: 65.5, y: 34.9 },           // was Mid-on
   "Wicketkeeper": { x: 50, y: 32 },
   "Short Cover": { x: 37.8, y: 49.8 },         // was Square Leg
   "Point": { x: 32.4, y: 37.9 },               // was Short Leg

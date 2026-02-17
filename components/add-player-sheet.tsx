@@ -24,6 +24,7 @@ import {
 import { Plus } from "lucide-react";
 import { useTransition, useState } from "react";
 import { toast } from "sonner";
+import { FIELDING_POSITIONS } from "@/lib/types/fielding";
 
 const ROLES = ["Batsman", "Bowler", "All-rounder", "Wicketkeeper"];
 const BATTING_STYLES = ["Right-handed", "Left-handed"];
@@ -143,6 +144,23 @@ export function AddPlayerSheet() {
               </SelectTrigger>
               <SelectContent>
                 {BATTING_POSITIONS.map((position) => (
+                  <SelectItem key={position} value={position}>
+                    {position}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="defaultFieldingPosition">
+              Default Fielding Position (Optional)
+            </Label>
+            <Select name="defaultFieldingPosition">
+              <SelectTrigger>
+                <SelectValue placeholder="Select fielding position" />
+              </SelectTrigger>
+              <SelectContent>
+                {FIELDING_POSITIONS.map((position) => (
                   <SelectItem key={position} value={position}>
                     {position}
                   </SelectItem>

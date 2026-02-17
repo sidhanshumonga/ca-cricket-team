@@ -21,41 +21,45 @@ async function main() {
     });
     console.log("Created season:", season.name);
 
-    // Clear existing players
-    await prisma.player.deleteMany({});
-    console.log("Cleared existing players");
-
-    // Create Cary Avengers roster
+    // Create Cary Avengers roster (skip if already exists)
     const players = [
-        { name: "Akshay", role: "Batsman", secondaryRole: "Wicketkeeper" },
-        { name: "Akshesh", role: "Bowler", secondaryRole: "Batsman" },
-        { name: "Ankit", role: "Batsman", secondaryRole: "Bowler", isCaptain: true },
-        { name: "Chirag", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Devang", role: "Bowler", secondaryRole: "Batsman" },
-        { name: "Hardik", role: "All-rounder" },
-        { name: "Jalpen", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Kartik", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Lajju", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Meet", role: "Bowler", secondaryRole: "Batsman" },
-        { name: "Niranjan", role: "Batsman" },
-        { name: "Nitin", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Parth", role: "Batsman" },
-        { name: "Rajat", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Ronak old", role: "Batsman" },
-        { name: "Ronak new", role: "All-rounder" },
-        { name: "Saahil", role: "Bowler", secondaryRole: "Batsman" },
-        { name: "Shivam", role: "Batsman" },
-        { name: "Sid", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Tarun", role: "Batsman", secondaryRole: "Bowler" },
-        { name: "Vishal", role: "Batsman", secondaryRole: "Bowler" },
+        { name: "Akshay", role: "Batsman", secondaryRole: "Wicketkeeper", defaultFieldingPosition: "Wicketkeeper" },
+        { name: "Akshesh", role: "Bowler", secondaryRole: "Batsman", defaultFieldingPosition: "Extra Cover" },
+        { name: "Ankit", role: "Batsman", secondaryRole: "Bowler", isCaptain: true, defaultFieldingPosition: "Deep Square Leg" },
+        { name: "Chirag", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Point" },
+        { name: "Devang", role: "Bowler", secondaryRole: "Batsman", defaultFieldingPosition: "Mid Off" },
+        { name: "Hardik", role: "All-rounder", defaultFieldingPosition: "Long On" },
+        { name: "Jalpen", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Short Cover" },
+        { name: "Kartik", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Mid Wicket" },
+        { name: "Lajju", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Fine Leg" },
+        { name: "Meet", role: "Bowler", secondaryRole: "Batsman", defaultFieldingPosition: "Third Man" },
+        { name: "Niranjan", role: "Batsman", defaultFieldingPosition: "Slip" },
+        { name: "Nitin", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Gully" },
+        { name: "Parth", role: "Batsman", defaultFieldingPosition: "Cover Point" },
+        { name: "Rajat", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Deep Mid Wicket" },
+        { name: "Ronak B", role: "Batsman", defaultFieldingPosition: "Long Off" },
+        { name: "Ronak", role: "All-rounder", defaultFieldingPosition: "Deep Square Leg" },
+        { name: "Saahil", role: "Bowler", secondaryRole: "Batsman", defaultFieldingPosition: "Short Fine Leg" },
+        { name: "Shivam", role: "Batsman", defaultFieldingPosition: "Deep Cover" },
+        { name: "Sid", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Deep Mid Wicket" },
+        { name: "Tarun", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Backward Point" },
+        { name: "Vishal", role: "Batsman", secondaryRole: "Bowler", defaultFieldingPosition: "Short Third Man" },
     ];
 
+    let createdCount = 0;
     for (const playerData of players) {
-        await prisma.player.create({
-            data: playerData,
+        const existing = await prisma.player.findFirst({
+            where: { name: playerData.name }
         });
+
+        if (!existing) {
+            await prisma.player.create({
+                data: playerData,
+            });
+            createdCount++;
+        }
     }
-    console.log(`Created ${players.length} players`);
+    console.log(`Created ${createdCount} new players (${players.length - createdCount} already existed)`);
 
     // Create playoff matches (conditional)
     const playoffMatches = [
