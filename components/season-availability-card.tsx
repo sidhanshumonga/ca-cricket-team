@@ -79,14 +79,14 @@ export function SeasonAvailabilityCard({
 
   return (
     <Card className="border-2 border-primary/20">
-      <CardHeader>
-        <div className="flex items-center justify-between">
+      <CardHeader className="pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            Season Availability
+            <Calendar className="h-5 w-5 flex-shrink-0" />
+            <span>Season Availability</span>
           </CardTitle>
           {availability && !isEditing ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {getStatusBadge(availability.status)}
               <Button
                 variant="ghost"
@@ -99,7 +99,9 @@ export function SeasonAvailabilityCard({
               </Button>
             </div>
           ) : (
-            <Badge variant="outline">Not Marked</Badge>
+            <Badge variant="outline" className="w-fit">
+              Not Marked
+            </Badge>
           )}
         </div>
       </CardHeader>
@@ -120,7 +122,7 @@ export function SeasonAvailabilityCard({
                 disabled={loading}
               >
                 <Check className="h-5 w-5" />
-                <span className="text-xs">Available</span>
+                <span className="text-xs font-medium">Available</span>
               </Button>
               <Button
                 variant={status === "BACKUP" ? "default" : "outline"}
@@ -132,7 +134,7 @@ export function SeasonAvailabilityCard({
                 disabled={loading}
               >
                 <UserPlus className="h-5 w-5" />
-                <span className="text-xs">Backup</span>
+                <span className="text-xs font-medium">Backup</span>
               </Button>
               <Button
                 variant={status === "UNAVAILABLE" ? "default" : "outline"}
@@ -144,7 +146,7 @@ export function SeasonAvailabilityCard({
                 disabled={loading}
               >
                 <X className="h-5 w-5" />
-                <span className="text-xs">Unavailable</span>
+                <span className="text-xs font-medium">Unavailable</span>
               </Button>
             </div>
             <Textarea
@@ -152,7 +154,7 @@ export function SeasonAvailabilityCard({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
-              className="text-sm"
+              className="text-sm resize-none"
             />
             {availability && (
               <Button
@@ -170,14 +172,18 @@ export function SeasonAvailabilityCard({
             )}
           </div>
         ) : (
-          <div className="space-y-2 text-sm">
-            <p className="text-muted-foreground">
-              <span className="font-medium">Season:</span> {season.name}
-            </p>
+          <div className="space-y-3 text-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+              <span className="font-medium text-foreground">Season:</span>
+              <span className="text-muted-foreground">{season.name}</span>
+            </div>
             {availability.notes && (
-              <p className="text-muted-foreground">
-                <span className="font-medium">Note:</span> {availability.notes}
-              </p>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-foreground">Note:</span>
+                <p className="text-muted-foreground leading-relaxed">
+                  {availability.notes}
+                </p>
+              </div>
             )}
           </div>
         )}
