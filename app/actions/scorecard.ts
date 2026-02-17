@@ -37,6 +37,10 @@ interface ScrapedScorecardData {
   result?: string;
   resultMargin?: string;
   teamBattingFirst?: string;
+  opponent?: string;
+  matchDate?: string;
+  location?: string;
+  manOfMatch?: string;
   ourBatting: ScrapedBattingData[];
   ourBowling: ScrapedBowlingData[];
   opponentBatting: ScrapedBattingData[];
