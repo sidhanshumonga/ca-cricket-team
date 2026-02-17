@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+// Force dynamic rendering - don't try to build this at compile time
+export const dynamic = 'force-dynamic';
+
 // This endpoint should be protected and only run once
 export async function POST(request: Request) {
   try {

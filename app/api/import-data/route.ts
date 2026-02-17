@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+// Force dynamic rendering - don't try to build this at compile time
+export const dynamic = 'force-dynamic';
+
 // This endpoint imports data from the exported JSON
 // Should be protected and only run once to initialize production
 export async function POST(request: Request) {
@@ -19,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     // Import in correct order (respecting foreign keys)
-    
+
     // 1. Seasons (no dependencies)
     console.log("Importing seasons...");
     for (const season of data.seasons) {
