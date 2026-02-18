@@ -1,37 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, User, LogOut } from "lucide-react";
+import { Shield, LogOut, Menu, User, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function PlayerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Check if player is selected on mount
-    const savedPlayer = localStorage.getItem("selectedPlayer");
-    if (savedPlayer) {
-      setSelectedPlayer(savedPlayer);
-    }
-
-    // Listen for localStorage changes (cross-tab)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "selectedPlayer") {
-        setSelectedPlayer(e.newValue);
-      }
-    };
-
-    // Listen for custom events (same-tab navigation)
-    const handlePlayerSelected = (e: any) => {
-      setSelectedPlayer(e.detail);
-    };
-
-    // Parse player session from localStorage
     const getPlayerFromSession = () => {
       const sessionData = localStorage.getItem("selectedPlayer");
       if (sessionData) {
@@ -42,6 +29,18 @@ export default function PlayerLayout({
         }
       }
       return null;
+    };
+
+    setSelectedPlayer(getPlayerFromSession());
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "selectedPlayer") {
+        setSelectedPlayer(getPlayerFromSession());
+      }
+    };
+
+    const handlePlayerSelected = () => {
+      setSelectedPlayer(getPlayerFromSession());
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -59,45 +58,134 @@ export default function PlayerLayout({
   const handleLogout = () => {
     localStorage.removeItem("selectedPlayer");
     setSelectedPlayer(null);
-    window.location.href = "/player";
+    router.push("/player");
   };
 
+  const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
+    <nav className="grid gap-2 p-4">
+      {selectedPlayer && (
+        <Link
+          href={`/player/${selectedPlayer.id}`}
+          onClick={onNavigate}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+            pathname === `/player/${selectedPlayer.id}`
+              ? "bg-accent text-accent-foreground"
+              : "text-muted-foreground",
+          )}
+        >
+          <LayoutDashboard className="h-4 w-4" />
+          Dashboard
+        </Link>
+      )}
+      {selectedPlayer && (
+        <Link
+          href={`/player/${selectedPlayer.id}/profile`}
+          onClick={onNavigate}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+            pathname === `/player/${selectedPlayer.id}/profile`
+              ? "bg-accent text-accent-foreground"
+              : "text-muted-foreground",
+          )}
+        >
+          <User className="h-4 w-4" />
+          My Profile
+        </Link>
+      )}
+    </nav>
+  );
+
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div>
-              <span className="text-xl font-bold block">Cary Avengers</span>
-              <span className="text-xs text-gray-600">Division 8</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/admin/login">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Shield className="h-4 w-4" />
-                Admin
-              </Button>
+    <div className="grid h-screen w-full overflow-hidden md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      {/* Desktop Sidebar */}
+      <div className="hidden border-r bg-muted/40 md:block">
+        <div className="flex h-full max-h-screen flex-col gap-2">
+          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+            <Link href="/" className="flex items-center gap-2 font-semibold">
+              <Shield className="h-6 w-6" />
+              <span>Cary Avengers</span>
             </Link>
-            {selectedPlayer && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLogout}
-                className="gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            )}
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <NavLinks />
+          </div>
+          <div className="border-t p-4">
+            <Link
+              href="/admin/login"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+            >
+              <Shield className="h-4 w-4" />
+              Switch to Admin
+            </Link>
           </div>
         </div>
-      </header>
-      <main className="flex-1 p-4 md:p-6 lg:p-8">
-        <div className="mx-auto max-w-md md:max-w-2xl lg:max-w-4xl">
+      </div>
+
+      {/* Main area */}
+      <div className="flex min-h-0 flex-col">
+        {/* Header */}
+        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+          {/* Mobile hamburger */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
+              >
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="flex flex-col p-0">
+              <div className="flex items-center gap-2 px-6 py-4 border-b">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2 text-lg font-semibold"
+                  onClick={() => setOpen(false)}
+                >
+                  <Shield className="h-6 w-6" />
+                  <span>Cary Avengers</span>
+                </Link>
+              </div>
+              <nav className="flex-1 overflow-y-auto">
+                <NavLinks onNavigate={() => setOpen(false)} />
+              </nav>
+              <div className="border-t p-4">
+                <Link
+                  href="/admin/login"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                >
+                  <Shield className="h-4 w-4" />
+                  Switch to Admin
+                </Link>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <div className="w-full flex-1">
+            <span className="font-semibold text-lg">Player Dashboard</span>
+          </div>
+
+          {selectedPlayer && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          )}
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

@@ -86,7 +86,7 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid h-screen w-full overflow-hidden md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
@@ -98,9 +98,30 @@ export default function AdminLayout({
           <div className="flex-1">
             <AdminNav />
           </div>
+          <div className="border-t p-4">
+            {(() => {
+              const playerSession = localStorage.getItem("selectedPlayer");
+              const playerData = playerSession
+                ? JSON.parse(playerSession)
+                : null;
+              const href = playerData ? `/player/${playerData.id}` : "/player";
+              return (
+                <Link
+                  href={href}
+                  onClick={() => {
+                    localStorage.setItem("adminViewingPlayer", "true");
+                  }}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                >
+                  <Eye className="h-4 w-4" />
+                  View as Player
+                </Link>
+              );
+            })()}
+          </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex min-h-0 flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -127,52 +148,35 @@ export default function AdminLayout({
               <nav className="flex-1 overflow-y-auto">
                 <AdminNav onNavigate={() => setOpen(false)} />
               </nav>
+              <div className="border-t p-4">
+                {(() => {
+                  const playerSession = localStorage.getItem("selectedPlayer");
+                  const playerData = playerSession
+                    ? JSON.parse(playerSession)
+                    : null;
+                  const href = playerData
+                    ? `/player/${playerData.id}`
+                    : "/player";
+                  return (
+                    <Link
+                      href={href}
+                      onClick={() => {
+                        localStorage.setItem("adminViewingPlayer", "true");
+                        setOpen(false);
+                      }}
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                    >
+                      <Eye className="h-4 w-4" />
+                      View as Player
+                    </Link>
+                  );
+                })()}
+              </div>
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
             <span className="font-semibold text-lg">Admin Dashboard</span>
           </div>
-          {(() => {
-            const playerSession = localStorage.getItem("selectedPlayer");
-            const playerData = playerSession ? JSON.parse(playerSession) : null;
-
-            if (playerData) {
-              return (
-                <Link
-                  href={`/player/${playerData.id}`}
-                  onClick={() => {
-                    // Check if admin is viewing player (bypass redirect)
-                    const adminViewingPlayer =
-                      localStorage.getItem("adminViewingPlayer") === "true";
-
-                    // Allow admin to view player profiles if they have admin session
-                    const isAdminSession =
-                      !!localStorage.getItem("adminSession");
-                    console.log("Setting adminViewingPlayer flag to true");
-
-                    // Small delay to ensure flag is set before any redirect
-                    setTimeout(() => {
-                      console.log("Flag set, checking redirect logic...");
-                    }, 100);
-                  }}
-                >
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Eye className="h-4 w-4" />
-                    <span className="hidden sm:inline">View as Player</span>
-                  </Button>
-                </Link>
-              );
-            } else {
-              return (
-                <Link href="/player">
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Eye className="h-4 w-4" />
-                    <span className="hidden sm:inline">View as Player</span>
-                  </Button>
-                </Link>
-              );
-            }
-          })()}
           <Button
             variant="ghost"
             size="sm"
@@ -183,7 +187,7 @@ export default function AdminLayout({
             <span className="hidden sm:inline">Logout</span>
           </Button>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex-1 overflow-y-auto p-4 lg:gap-6 lg:p-6">
           {children}
         </main>
       </div>

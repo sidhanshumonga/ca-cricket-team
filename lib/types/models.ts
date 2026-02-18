@@ -22,6 +22,7 @@ export interface Player {
   isCaptain: boolean;
   isViceCaptain: boolean;
   notes?: string | null;
+  jerseyNumber?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { XIcon } from "lucide-react";
-import { Dialog as DialogPrimitive } from "radix-ui";
+import { Dialog as DialogPrimitive, VisuallyHidden } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,10 @@ function DialogContent({
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay />
+      <VisuallyHidden.Root asChild>
+        <DialogTitle />
+      </VisuallyHidden.Root>
+      <DialogPrimitive.Overlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(

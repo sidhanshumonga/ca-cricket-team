@@ -41,7 +41,7 @@ export async function getPlayers() {
     try {
         const players = await getAllDocs(COLLECTIONS.PLAYERS);
         // Sort by name and serialize for client components
-        const sorted = players.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        const sorted = players.sort((a: any, b: any) => (a.name || "").localeCompare(b.name || ""));
         return sorted.map(serializeDoc);
     } catch (error) {
         console.error("Failed to get players:", error);
