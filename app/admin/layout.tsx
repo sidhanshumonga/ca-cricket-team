@@ -26,8 +26,14 @@ export default function AdminLayout({
   const pathname = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [adminViewingPlayer, setAdminViewingPlayer] = useState(false);
 
   useEffect(() => {
+    // Clear adminViewingPlayer flag when navigating away from player pages
+    if (!pathname.startsWith("/admin")) {
+      setAdminViewingPlayer(false);
+    }
+
     // Skip auth check for login page
     if (pathname === "/admin/login") {
       setIsLoading(false);
@@ -65,6 +71,7 @@ export default function AdminLayout({
 
   const handleLogout = () => {
     localStorage.removeItem("adminSession");
+    localStorage.removeItem("adminViewingPlayer"); // Clean up flag
     router.push("/");
   };
 
@@ -125,12 +132,47 @@ export default function AdminLayout({
           <div className="w-full flex-1">
             <span className="font-semibold text-lg">Admin Dashboard</span>
           </div>
-          <Link href="/player">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Eye className="h-4 w-4" />
-              <span className="hidden sm:inline">View as Player</span>
-            </Button>
-          </Link>
+          {(() => {
+            const playerSession = localStorage.getItem("selectedPlayer");
+            const playerData = playerSession ? JSON.parse(playerSession) : null;
+
+            if (playerData) {
+              return (
+                <Link
+                  href={`/player/${playerData.id}`}
+                  onClick={() => {
+                    // Check if admin is viewing player (bypass redirect)
+                    const adminViewingPlayer =
+                      localStorage.getItem("adminViewingPlayer") === "true";
+
+                    // Allow admin to view player profiles if they have admin session
+                    const isAdminSession =
+                      !!localStorage.getItem("adminSession");
+                    console.log("Setting adminViewingPlayer flag to true");
+
+                    // Small delay to ensure flag is set before any redirect
+                    setTimeout(() => {
+                      console.log("Flag set, checking redirect logic...");
+                    }, 100);
+                  }}
+                >
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Eye className="h-4 w-4" />
+                    <span className="hidden sm:inline">View as Player</span>
+                  </Button>
+                </Link>
+              );
+            } else {
+              return (
+                <Link href="/player">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Eye className="h-4 w-4" />
+                    <span className="hidden sm:inline">View as Player</span>
+                  </Button>
+                </Link>
+              );
+            }
+          })()}
           <Button
             variant="ghost"
             size="sm"

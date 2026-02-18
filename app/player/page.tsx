@@ -2,25 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { getPlayers } from "@/app/actions/player";
 import { useRouter } from "next/navigation";
-import { Users, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function PlayerLogin() {
   const [players, setPlayers] = useState<any[]>([]);
@@ -29,6 +20,12 @@ export default function PlayerLogin() {
   const router = useRouter();
 
   useEffect(() => {
+    // Load selected player from localStorage on mount
+    const savedPlayer = localStorage.getItem("selectedPlayer");
+    if (savedPlayer) {
+      setSelectedPlayer(savedPlayer);
+    }
+
     getPlayers().then((data) => {
       setPlayers(data);
       setLoading(false);
@@ -38,7 +35,20 @@ export default function PlayerLogin() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (selectedPlayer) {
-      router.push(`/player/${selectedPlayer}`);
+      // Find full player object
+      const player = players.find((p) => p.id === selectedPlayer);
+
+      if (player) {
+        // Save full player object to localStorage
+        localStorage.setItem("selectedPlayer", JSON.stringify(player));
+
+        // Dispatch custom event to notify layout immediately
+        (window as any).dispatchEvent(
+          new CustomEvent("playerSelected", { detail: player }),
+        );
+
+        router.push(`/player/${selectedPlayer}`);
+      }
     }
   }
 

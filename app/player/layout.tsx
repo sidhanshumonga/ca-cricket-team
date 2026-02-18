@@ -1,12 +1,67 @@
+"use client";
+
 import Link from "next/link";
-import { Shield, User } from "lucide-react";
+import { Shield, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 export default function PlayerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check if player is selected on mount
+    const savedPlayer = localStorage.getItem("selectedPlayer");
+    if (savedPlayer) {
+      setSelectedPlayer(savedPlayer);
+    }
+
+    // Listen for localStorage changes (cross-tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "selectedPlayer") {
+        setSelectedPlayer(e.newValue);
+      }
+    };
+
+    // Listen for custom events (same-tab navigation)
+    const handlePlayerSelected = (e: any) => {
+      setSelectedPlayer(e.detail);
+    };
+
+    // Parse player session from localStorage
+    const getPlayerFromSession = () => {
+      const sessionData = localStorage.getItem("selectedPlayer");
+      if (sessionData) {
+        try {
+          return JSON.parse(sessionData);
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    (window as any).addEventListener("playerSelected", handlePlayerSelected);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      (window as any).removeEventListener(
+        "playerSelected",
+        handlePlayerSelected,
+      );
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("selectedPlayer");
+    setSelectedPlayer(null);
+    window.location.href = "/player";
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
@@ -17,12 +72,25 @@ export default function PlayerLayout({
               <span className="text-xs text-gray-600">Division 8</span>
             </div>
           </div>
-          <Link href="/admin/login">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Shield className="h-4 w-4" />
-              Admin
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/admin/login">
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Shield className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
+            {selectedPlayer && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            )}
+          </div>
         </div>
       </header>
       <main className="flex-1 p-4 md:p-6 lg:p-8">
