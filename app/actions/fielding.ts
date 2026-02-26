@@ -1,7 +1,7 @@
 "use server";
 
 import { firestore, COLLECTIONS } from "@/lib/db";
-import { getDocById, queryDocs, createDoc, updateDoc, deleteDoc, getAllDocs } from "@/lib/firestore-helpers";
+import { getDocById, queryDocs, createDoc, updateDoc, deleteDoc, getAllDocs, serializeDoc } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 // Fielding position presets - manually created by user for accurate positioning
@@ -98,7 +98,7 @@ export async function getFieldingSetup(
 
     // Get positions for this setup
     const positions = await queryDocs(COLLECTIONS.FIELDING_POSITIONS, 'setupId', '==', setup.id);
-    
+
     // Enrich with player data
     const enrichedPositions = await Promise.all(
       positions.map(async (pos: any) => {
@@ -107,7 +107,14 @@ export async function getFieldingSetup(
       })
     );
 
-    return { success: true, setup: { ...setup, positions: enrichedPositions } };
+    const serializedSetup = serializeDoc({
+      ...setup,
+      positions: enrichedPositions.map((pos: any) => serializeDoc({
+        ...pos,
+        player: pos.player ? serializeDoc(pos.player) : null,
+      })),
+    });
+    return { success: true, setup: serializedSetup };
   } catch (error) {
     console.error("Failed to get fielding setup:", error);
     return { success: false, error: "Failed to get fielding setup" };
@@ -324,7 +331,7 @@ export async function deleteFieldingSetup(setupId: string) {
 export async function getMatchFieldingSetups(matchId: string) {
   try {
     const setups = await queryDocs(COLLECTIONS.FIELDING_SETUPS, 'matchId', '==', matchId);
-    
+
     // Enrich with positions and player data
     const enrichedSetups = await Promise.all(
       setups.map(async (setup: any) => {

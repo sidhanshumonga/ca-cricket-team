@@ -270,13 +270,15 @@ export default function FieldingViewPage({
         return;
       }
 
-      // Get bowlers from the team
+      // Get bowlers from the team (primary or secondary role is Bowler/All-rounder)
+      const bowlerRoles = ["Bowler", "All-rounder"];
       const teamBowlers =
         result.currentTeam
           ?.filter(
             (t: any) =>
               !t.isSubstitute &&
-              (t.player.role === "Bowler" || t.player.role === "All-rounder"),
+              (bowlerRoles.includes(t.player.role) ||
+                bowlerRoles.includes(t.player.secondaryRole)),
           )
           .map((t: any) => t.player) || [];
 
@@ -292,15 +294,20 @@ export default function FieldingViewPage({
     }
   };
 
-  const loadFieldingSetup = async () => {
+  const loadFieldingSetup = async (
+    id?: string,
+    bowler?: string | null,
+    batType?: string,
+    powerplay?: boolean,
+  ) => {
+    const mid = id ?? matchId;
+    const bid = bowler !== undefined ? bowler : selectedBowler;
+    const bt = batType !== undefined ? batType : batsmanType;
+    const pp = powerplay !== undefined ? powerplay : isPowerplay;
+    if (!mid) return;
     try {
       const { getFieldingSetup } = await import("@/app/actions/fielding");
-      const result = await getFieldingSetup(
-        matchId,
-        selectedBowler,
-        batsmanType,
-        isPowerplay,
-      );
+      const result = await getFieldingSetup(mid, bid, bt, pp);
 
       if (result.success && result.setup) {
         setCurrentSetup(result.setup as any);
@@ -313,6 +320,10 @@ export default function FieldingViewPage({
   };
 
   const handleGenerate = async () => {
+    if (!matchId) {
+      toast.error("Match not loaded yet, please wait");
+      return;
+    }
     if (!selectedBowler) {
       toast.error("Please select a bowler");
       return;
@@ -330,12 +341,16 @@ export default function FieldingViewPage({
 
       if (result.success) {
         toast.success("Fielding setup generated!");
-        loadFieldingSetup();
+        await loadFieldingSetup(
+          matchId,
+          selectedBowler,
+          batsmanType,
+          isPowerplay,
+        );
       } else {
         toast.error(result.error || "Failed to generate setup");
       }
     } catch (error) {
-      console.error("Generate error:", error);
       toast.error("Failed to generate fielding setup");
     }
   };
@@ -404,7 +419,7 @@ export default function FieldingViewPage({
 
   useEffect(() => {
     if (matchId) {
-      loadFieldingSetup();
+      loadFieldingSetup(matchId, selectedBowler, batsmanType, isPowerplay);
     }
   }, [matchId, selectedBowler, batsmanType, isPowerplay]);
 
@@ -562,7 +577,11 @@ export default function FieldingViewPage({
               </div>
 
               <div className="flex items-end col-span-2 md:col-span-1">
-                <Button onClick={handleGenerate} className="w-full">
+                <Button
+                  type="button"
+                  onClick={handleGenerate}
+                  className="w-full"
+                >
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Generate
                 </Button>
