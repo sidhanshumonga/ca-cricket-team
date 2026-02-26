@@ -61,19 +61,24 @@ export async function updatePlayer(id: string, formData: FormData) {
     const isCaptain = formData.get("isCaptain") === "on";
     const isViceCaptain = formData.get("isViceCaptain") === "on";
 
+    const updateData: Record<string, any> = {};
+    if (name !== null) updateData.name = name;
+    if (role !== null) updateData.role = role;
+    if (secondaryRole !== null) updateData.secondaryRole = secondaryRole || null;
+    if (battingStyle !== null) updateData.battingStyle = battingStyle || null;
+    if (bowlingStyle !== null) updateData.bowlingStyle = bowlingStyle || null;
+    if (battingPosition !== null) updateData.battingPosition = battingPosition || null;
+    if (defaultFieldingPosition !== null) updateData.defaultFieldingPosition = defaultFieldingPosition || null;
+    if (notes !== null) updateData.notes = notes || null;
+    if (formData.get("isCaptain") !== null) updateData.isCaptain = isCaptain;
+    if (formData.get("isViceCaptain") !== null) updateData.isViceCaptain = isViceCaptain;
+    if (formData.has("jerseyNumber")) {
+        const jerseyNumberRaw = formData.get("jerseyNumber") as string;
+        updateData.jerseyNumber = jerseyNumberRaw === "" ? null : Number(jerseyNumberRaw);
+    }
+
     try {
-        await updateDoc(COLLECTIONS.PLAYERS, id, {
-            name,
-            role,
-            secondaryRole: secondaryRole || null,
-            battingStyle: battingStyle || null,
-            bowlingStyle: bowlingStyle || null,
-            battingPosition: battingPosition || null,
-            defaultFieldingPosition: defaultFieldingPosition || null,
-            isCaptain,
-            isViceCaptain,
-            notes: notes || null,
-        });
+        await updateDoc(COLLECTIONS.PLAYERS, id, updateData);
         revalidatePath("/admin/players");
         return { success: true };
     } catch (error) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -87,6 +87,21 @@ export function PlayerProfileEditSheet({
     notes: player.notes || "",
     jerseyNumber: player.jerseyNumber ?? undefined,
   });
+
+  useEffect(() => {
+    if (open) {
+      setFormData({
+        role: player.role || "",
+        secondaryRole: player.secondaryRole || "",
+        battingStyle: player.battingStyle || "",
+        bowlingStyle: player.bowlingStyle || "",
+        battingPosition: player.battingPosition || "",
+        defaultFieldingPosition: player.defaultFieldingPosition || "",
+        notes: player.notes || "",
+        jerseyNumber: player.jerseyNumber ?? undefined,
+      });
+    }
+  }, [open, player]);
 
   const set = (key: keyof Player) => (v: string) =>
     setFormData((prev) => ({ ...prev, [key]: v === NONE ? "" : v }));

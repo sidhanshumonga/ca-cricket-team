@@ -11,7 +11,8 @@ import {
 import { useState, useEffect } from "react";
 import { getPlayers } from "@/app/actions/player";
 import { useRouter } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function PlayerLogin() {
   const [players, setPlayers] = useState<any[]>([]);
@@ -54,7 +55,7 @@ export default function PlayerLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 -mt-40">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl space-y-4">
         <div className="text-center mb-6">
           <p className="text-lg text-muted-foreground">
             Select your name to continue
@@ -78,7 +79,7 @@ export default function PlayerLogin() {
               <SelectContent>
                 {players.map((player: any) => (
                   <SelectItem key={player.id} value={player.id}>
-                    {player.name} - {player.role}
+                    {player.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -94,6 +95,15 @@ export default function PlayerLogin() {
             </Button>
           </div>
         </form>
+        <div className="flex justify-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );

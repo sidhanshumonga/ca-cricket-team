@@ -23,12 +23,15 @@ export default async function PlayerProfilePage({
       <div className="relative">
         <div className="h-32 rounded-xl bg-gradient-to-r from-primary/20 via-primary/10 to-transparent" />
         <div className="flex flex-col sm:flex-row sm:items-end gap-4 px-2 -mt-16">
-          <div className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full border-4 border-background bg-muted shadow-sm">
-            <User className="h-14 w-14 text-muted-foreground" />
-            {player.jerseyNumber != null && (
-              <span className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold shadow">
-                {player.jerseyNumber}
-              </span>
+          <div className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full border-4 border-background bg-primary shadow-md overflow-hidden">
+            {player.jerseyNumber != null ? (
+              <div className="flex flex-col items-center gap-0 select-none">
+                <span className="text-5xl font-black text-primary-foreground leading-none tabular-nums">
+                  {player.jerseyNumber}
+                </span>
+              </div>
+            ) : (
+              <User className="h-14 w-14 text-primary-foreground/70" />
             )}
           </div>
           <div className="flex-1 space-y-1 pb-1">

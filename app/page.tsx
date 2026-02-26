@@ -151,7 +151,7 @@ export default async function Home() {
                     <p className="text-xs text-gray-600">Teams</p>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">12</p>
+                    <p className="text-2xl font-bold text-primary">13</p>
                     <p className="text-xs text-gray-600">League Games</p>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-3 text-center">

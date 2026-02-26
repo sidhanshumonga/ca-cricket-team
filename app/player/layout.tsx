@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Shield, LogOut, Menu, User, LayoutDashboard } from "lucide-react";
+import {
+  Shield,
+  LogOut,
+  Menu,
+  User,
+  LayoutDashboard,
+  ArrowLeft,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -60,6 +67,10 @@ export default function PlayerLayout({
     setSelectedPlayer(null);
     router.push("/player");
   };
+
+  if (pathname === "/player") {
+    return <>{children}</>;
+  }
 
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
     <nav className="grid gap-2 p-4">

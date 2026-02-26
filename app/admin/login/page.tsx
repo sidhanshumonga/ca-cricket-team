@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Shield } from "lucide-react";
+import { Shield, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { toast } from "sonner";
 
 const ADMIN_PASSWORD = "cabash26";
@@ -93,6 +94,12 @@ export default function AdminLoginPage() {
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Verifying..." : "Login"}
+            </Button>
+            <Button variant="ghost" className="w-full" asChild>
+              <Link href="/">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Home
+              </Link>
             </Button>
           </form>
         </CardContent>
