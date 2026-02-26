@@ -332,17 +332,10 @@ export async function getMatchFieldingSetups(matchId: string) {
   try {
     const setups = await queryDocs(COLLECTIONS.FIELDING_SETUPS, 'matchId', '==', matchId);
 
-    // Enrich with positions and player data
     const enrichedSetups = await Promise.all(
       setups.map(async (setup: any) => {
         const positions = await queryDocs(COLLECTIONS.FIELDING_POSITIONS, 'setupId', '==', setup.id);
-        const enrichedPositions = await Promise.all(
-          positions.map(async (pos: any) => {
-            const player = await getDocById(COLLECTIONS.PLAYERS, pos.playerId);
-            return { ...pos, player };
-          })
-        );
-        return { ...setup, positions: enrichedPositions };
+        return serializeDoc({ ...setup, positions: positions.map(serializeDoc) });
       })
     );
 

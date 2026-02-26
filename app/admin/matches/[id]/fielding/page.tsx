@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   ArrowLeft,
   RefreshCw,
@@ -119,12 +120,22 @@ export default function FieldingViewPage({
   const [matchId, setMatchId] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [bowlers, setBowlers] = useState<Player[]>([]);
-  const [selectedBowler, setSelectedBowler] = useState<string | null>(null);
-  const [batsmanType, setBatsmanType] = useState<string>("RHB");
-  const [isPowerplay, setIsPowerplay] = useState<boolean>(false);
+  const [filter, setFilter] = useState<{
+    bowlerId: string | null;
+    batsmanType: string;
+    isPowerplay: boolean;
+  }>({
+    bowlerId: null,
+    batsmanType: "RHB",
+    isPowerplay: false,
+  });
+  const selectedBowler = filter.bowlerId;
+  const batsmanType = filter.batsmanType;
+  const isPowerplay = filter.isPowerplay;
   const [currentSetup, setCurrentSetup] = useState<FieldingSetup | null>(null);
   const [draggingPlayer, setDraggingPlayer] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [allSetups, setAllSetups] = useState<any[]>([]);
   const fieldRef = React.useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
@@ -260,6 +271,14 @@ export default function FieldingViewPage({
     });
   }, [params]);
 
+  const loadAllSetups = async (id: string) => {
+    try {
+      const { getMatchFieldingSetups } = await import("@/app/actions/fielding");
+      const result = await getMatchFieldingSetups(id);
+      if (result.success) setAllSetups(result.setups ?? []);
+    } catch {}
+  };
+
   const loadMatchData = async (id: string) => {
     try {
       const { getMatchForTeamSelection } = await import("@/app/actions/team");
@@ -284,10 +303,13 @@ export default function FieldingViewPage({
 
       setBowlers(teamBowlers);
       // Set first bowler as default
-      if (teamBowlers.length > 0 && !selectedBowler) {
-        setSelectedBowler(teamBowlers[0].id);
+      if (teamBowlers.length > 0) {
+        setFilter((f) =>
+          f.bowlerId ? f : { ...f, bowlerId: teamBowlers[0].id },
+        );
       }
       setLoading(false);
+      loadAllSetups(id);
     } catch (error) {
       toast.error("Failed to load match data");
       setLoading(false);
@@ -341,12 +363,10 @@ export default function FieldingViewPage({
 
       if (result.success) {
         toast.success("Fielding setup generated!");
-        await loadFieldingSetup(
-          matchId,
-          selectedBowler,
-          batsmanType,
-          isPowerplay,
-        );
+        await Promise.all([
+          loadFieldingSetup(matchId, selectedBowler, batsmanType, isPowerplay),
+          loadAllSetups(matchId),
+        ]);
       } else {
         toast.error(result.error || "Failed to generate setup");
       }
@@ -419,9 +439,14 @@ export default function FieldingViewPage({
 
   useEffect(() => {
     if (matchId) {
-      loadFieldingSetup(matchId, selectedBowler, batsmanType, isPowerplay);
+      loadFieldingSetup(
+        matchId,
+        filter.bowlerId,
+        filter.batsmanType,
+        filter.isPowerplay,
+      );
     }
-  }, [matchId, selectedBowler, batsmanType, isPowerplay]);
+  }, [matchId, filter]);
 
   if (loading) {
     return (
@@ -499,7 +524,7 @@ export default function FieldingViewPage({
       )}
 
       {/* Normal view */}
-      <div className="container mx-auto py-4 md:py-6 px-2 md:px-4 space-y-4 md:space-y-6">
+      <div className="container mx-auto py-4 md:py-6 px-2 md:px-4 space-y-4 md:space-y-6 max-w-screen-xl">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
           <Link href={`/admin/matches/${matchId}`}>
             <Button variant="ghost" size="sm">
@@ -518,228 +543,290 @@ export default function FieldingViewPage({
         </div>
 
         {/* Setup Options */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Setup Options</CardTitle>
-            <CardDescription>
-              Generate fielding positions based on bowler, batsman type, and
-              match situation
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Bowler *</label>
-                <Select
-                  value={selectedBowler || undefined}
-                  onValueChange={setSelectedBowler}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select bowler" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {bowlers.map((bowler: any) => (
-                      <SelectItem key={bowler.id} value={bowler.id}>
-                        {bowler.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center rounded-lg border bg-card px-4 py-3">
+          <Select
+            value={selectedBowler || undefined}
+            onValueChange={(v) => setFilter((f) => ({ ...f, bowlerId: v }))}
+          >
+            <SelectTrigger className="sm:w-44">
+              <SelectValue placeholder="Select bowler" />
+            </SelectTrigger>
+            <SelectContent>
+              {bowlers.map((bowler: any) => (
+                <SelectItem key={bowler.id} value={bowler.id}>
+                  {bowler.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Batsman Type</label>
-                <Select value={batsmanType} onValueChange={setBatsmanType}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="RHB">Right-Hand Batsman</SelectItem>
-                    <SelectItem value="LHB">Left-Hand Batsman</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <Select
+            value={batsmanType}
+            onValueChange={(v) => setFilter((f) => ({ ...f, batsmanType: v }))}
+          >
+            <SelectTrigger className="sm:w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="RHB">Right-Hand Batsman</SelectItem>
+              <SelectItem value="LHB">Left-Hand Batsman</SelectItem>
+            </SelectContent>
+          </Select>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Match Situation</label>
-                <Select
-                  value={isPowerplay ? "powerplay" : "regular"}
-                  onValueChange={(v) => setIsPowerplay(v === "powerplay")}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="powerplay">Powerplay</SelectItem>
-                    <SelectItem value="regular">Regular Overs</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <Select
+            value={isPowerplay ? "powerplay" : "regular"}
+            onValueChange={(v) =>
+              setFilter((f) => ({ ...f, isPowerplay: v === "powerplay" }))
+            }
+          >
+            <SelectTrigger className="sm:w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="powerplay">Powerplay</SelectItem>
+              <SelectItem value="regular">Regular Overs</SelectItem>
+            </SelectContent>
+          </Select>
 
-              <div className="flex items-end col-span-2 md:col-span-1">
-                <Button
-                  type="button"
-                  onClick={handleGenerate}
-                  className="w-full"
-                >
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  Generate
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <Button
+            type="button"
+            onClick={handleGenerate}
+            className="w-full sm:w-auto sm:ml-auto shrink-0"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Generate
+          </Button>
+        </div>
 
-        {/* Fielding Ground */}
-        <Card className="md:max-w-2xl md:mx-auto">
-          <CardHeader className="p-3 md:p-6">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-base md:text-lg">
-                  Field Positions
-                </CardTitle>
-                <CardDescription className="hidden md:block text-xs md:text-sm">
-                  {currentSetup
-                    ? "Drag players to adjust positions"
-                    : "Generate a setup to start"}
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
-                {currentSetup && (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleSavePositions}
-                      className="hidden md:flex"
-                    >
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Positions
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleDownload}
-                      className="hidden md:flex"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleShare}
-                      className="hidden md:flex"
-                    >
-                      <Share2 className="h-4 w-4 mr-2" />
-                      Share
-                    </Button>
-                    {/* Mobile: Icon only buttons */}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleSavePositions}
-                      className="md:hidden p-2"
-                    >
-                      <Save className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleDownload}
-                      className="md:hidden p-2"
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleShare}
-                      className="md:hidden p-2"
-                    >
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setIsFullscreen(!isFullscreen)}
-                      className="md:hidden p-2"
-                    >
-                      {isFullscreen ? (
-                        <Minimize className="h-4 w-4" />
-                      ) : (
-                        <Maximize className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Badge variant="outline" className="hidden md:inline-flex">
-                      {currentSetup.positions.length} players
-                    </Badge>
-                  </>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {!currentSetup ? (
-              <div className="text-center py-20 text-muted-foreground">
-                <p className="mb-4">No fielding setup generated yet</p>
-                <p className="text-sm">
-                  Select options above and click Generate to create a fielding
-                  chart
-                </p>
-              </div>
-            ) : (
-              <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-                <div
-                  ref={fieldRef}
-                  className="relative w-full rounded-lg overflow-hidden"
-                  style={{ paddingBottom: "100%", backgroundColor: "#2d5016" }}
-                >
-                  {/* SVG Cricket ground - bowling end at bottom, batting at top */}
-                  <div className="absolute inset-0">
-                    <CricketGround className="w-full h-full" />
+        {/* Two-column layout: fielding ground + setups panel */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 items-start">
+          <div className="lg:col-span-2">
+            {/* Fielding Ground */}
+            <Card>
+              <CardHeader className="p-3 md:p-6">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base md:text-lg">
+                      Field Positions
+                    </CardTitle>
+                    <CardDescription className="hidden md:block text-xs md:text-sm">
+                      {currentSetup
+                        ? "Drag players to adjust positions"
+                        : "Generate a setup to start"}
+                    </CardDescription>
                   </div>
-
-                  {/* Player positions */}
-                  {currentSetup.positions.map((position: any) => (
-                    <DraggablePlayer key={position.id} position={position} />
-                  ))}
+                  <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+                    {currentSetup && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleSavePositions}
+                          className="hidden md:flex"
+                        >
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Positions
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleDownload}
+                          className="hidden md:flex"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleShare}
+                          className="hidden md:flex"
+                        >
+                          <Share2 className="h-4 w-4 mr-2" />
+                          Share
+                        </Button>
+                        {/* Mobile: Icon only buttons */}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleSavePositions}
+                          className="md:hidden p-2"
+                        >
+                          <Save className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleDownload}
+                          className="md:hidden p-2"
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleShare}
+                          className="md:hidden p-2"
+                        >
+                          <Share2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setIsFullscreen(!isFullscreen)}
+                          className="md:hidden p-2"
+                        >
+                          {isFullscreen ? (
+                            <Minimize className="h-4 w-4" />
+                          ) : (
+                            <Maximize className="h-4 w-4" />
+                          )}
+                        </Button>
+                        <Badge
+                          variant="outline"
+                          className="hidden md:inline-flex"
+                        >
+                          {currentSetup.positions.length} players
+                        </Badge>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </DndContext>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Position List - Hidden on mobile */}
-        {currentSetup && (
-          <Card className="hidden md:block">
-            <CardHeader>
-              <CardTitle>Position Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-                {currentSetup.positions.map((position: any) => (
-                  <div
-                    key={position.id}
-                    className="flex items-center justify-between p-2 border rounded"
-                  >
-                    <div>
-                      <p className="font-medium text-sm">
-                        {position.player.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {position.positionName}
-                      </p>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {position.player.role}
-                    </Badge>
+              </CardHeader>
+              <CardContent>
+                {!currentSetup ? (
+                  <div className="text-center py-20 text-muted-foreground">
+                    <p className="mb-4">No fielding setup generated yet</p>
+                    <p className="text-sm">
+                      Select options above and click Generate to create a
+                      fielding chart
+                    </p>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                ) : (
+                  <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+                    <div
+                      ref={fieldRef}
+                      className="relative w-full rounded-lg overflow-hidden"
+                      style={{
+                        paddingBottom: "100%",
+                        backgroundColor: "#2d5016",
+                      }}
+                    >
+                      {/* SVG Cricket ground - bowling end at bottom, batting at top */}
+                      <div className="absolute inset-0">
+                        <CricketGround className="w-full h-full" />
+                      </div>
+
+                      {/* Player positions */}
+                      {currentSetup.positions.map((position: any) => (
+                        <DraggablePlayer
+                          key={position.id}
+                          position={position}
+                        />
+                      ))}
+                    </div>
+                  </DndContext>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          {/* end left column */}
+
+          {/* Right panel: all generated setups */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Generated Setups</CardTitle>
+                <CardDescription>
+                  {allSetups.length} combo{allSetups.length !== 1 ? "s" : ""}{" "}
+                  saved
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-0">
+                {allSetups.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8 px-4">
+                    No setups yet. Generate one above.
+                  </p>
+                ) : (
+                  <Tabs defaultValue="powerplay" className="w-full">
+                    <TabsList className="w-full rounded-none border-b">
+                      <TabsTrigger value="powerplay" className="flex-1">
+                        Powerplay (
+                        {allSetups.filter((s: any) => s.isPowerplay).length})
+                      </TabsTrigger>
+                      <TabsTrigger value="regular" className="flex-1">
+                        Regular (
+                        {allSetups.filter((s: any) => !s.isPowerplay).length})
+                      </TabsTrigger>
+                    </TabsList>
+                    {(["powerplay", "regular"] as const).map((tab) => {
+                      const isPP = tab === "powerplay";
+                      const filtered = allSetups
+                        .filter((s: any) => s.isPowerplay === isPP)
+                        .sort((a: any, b: any) => {
+                          const aName =
+                            bowlers.find((p) => p.id === a.bowlerId)?.name ??
+                            "";
+                          const bName =
+                            bowlers.find((p) => p.id === b.bowlerId)?.name ??
+                            "";
+                          return aName.localeCompare(bName);
+                        });
+                      return (
+                        <TabsContent key={tab} value={tab} className="mt-0">
+                          {filtered.length === 0 ? (
+                            <p className="text-sm text-muted-foreground text-center py-6 px-4">
+                              No {tab} setups yet.
+                            </p>
+                          ) : (
+                            <div className="divide-y">
+                              {filtered.map((setup: any) => {
+                                const bowlerName =
+                                  bowlers.find((b) => b.id === setup.bowlerId)
+                                    ?.name ?? "Unknown";
+                                const isActive =
+                                  currentSetup &&
+                                  setup.bowlerId === selectedBowler &&
+                                  setup.batsmanType === batsmanType &&
+                                  setup.isPowerplay === isPowerplay;
+                                return (
+                                  <button
+                                    key={setup.id}
+                                    type="button"
+                                    onClick={() =>
+                                      setFilter({
+                                        bowlerId: setup.bowlerId,
+                                        batsmanType: setup.batsmanType,
+                                        isPowerplay: setup.isPowerplay,
+                                      })
+                                    }
+                                    className={`w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors ${isActive ? "bg-muted" : ""}`}
+                                  >
+                                    <p className="text-sm font-medium">
+                                      {bowlerName}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {setup.batsmanType === "RHB"
+                                        ? "Right-hand"
+                                        : "Left-hand"}{" "}
+                                      · {setup.positions?.length ?? 0} positions
+                                    </p>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </TabsContent>
+                      );
+                    })}
+                  </Tabs>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          {/* end right column */}
+        </div>
+        {/* end grid */}
       </div>
     </>
   );
