@@ -12,10 +12,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Users, Calendar, MapPin, Copy, Share2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Users,
+  Calendar,
+  MapPin,
+  Copy,
+  Share2,
+  Clock,
+} from "lucide-react";
 import { ScorecardActions } from "@/components/scorecard-actions";
+import { EditMatchDialog } from "@/components/edit-match-dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
+
+function fmt12(t: string) {
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
+}
 
 function generateTeamText(match: any) {
   const playingXI = match.team.filter((t: any) => !t.isSubstitute);
@@ -119,12 +135,13 @@ export default function MatchDetailPage({
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <div>
+        <div className="flex-1">
           <h1 className="text-lg font-semibold md:text-2xl">
             vs {match.opponent}
           </h1>
           <p className="text-sm text-muted-foreground">{match.season.name}</p>
         </div>
+        <EditMatchDialog match={match} onUpdated={() => loadMatch(matchId)} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -151,10 +168,10 @@ export default function MatchDetailPage({
             <div className="text-sm">
               <span className="font-medium">Type:</span> {match.type}
             </div>
-            {match.reportingTime && (
-              <div className="text-sm">
-                <span className="font-medium">Reporting Time:</span>{" "}
-                {match.reportingTime}
+            {match.matchTime && (
+              <div className="flex items-center gap-2 text-sm">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span>Match starts at {fmt12(match.matchTime)}</span>
               </div>
             )}
             <div className="text-sm">

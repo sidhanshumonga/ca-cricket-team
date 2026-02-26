@@ -1,5 +1,6 @@
 import { getMatches } from "@/app/actions/match";
 import { DeleteMatchButton } from "@/components/delete-match-button";
+import { EditMatchDialog } from "@/components/edit-match-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,7 +22,19 @@ import { format } from "date-fns";
 import { Plus, MapPin, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 import { firestore, COLLECTIONS } from "@/lib/db";
-import { queryDocs, getDocById, toDate } from "@/lib/firestore-helpers";
+import {
+  queryDocs,
+  getDocById,
+  toDate,
+  serializeDoc,
+} from "@/lib/firestore-helpers";
+
+function fmt12(t: string) {
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
+}
 
 async function getMatchesWithDetails() {
   const activeSeasons = await queryDocs(
@@ -70,7 +83,11 @@ async function getMatchesWithDetails() {
         }),
       );
 
-      return { ...match, team, availability: enrichedAvailability };
+      return serializeDoc({
+        ...match,
+        team,
+        availability: enrichedAvailability,
+      });
     }),
   );
 
@@ -143,7 +160,18 @@ export default async function MatchesPage() {
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    <span>{format(toDate(match.date), "h:mm a")}</span>
+                    <span>
+                      {match.reportingTime && (
+                        <span>
+                          <span className="font-medium">Report:</span>{" "}
+                          {fmt12(match.reportingTime)} ·{" "}
+                        </span>
+                      )}
+                      <span className="font-medium">Match:</span>{" "}
+                      {match.matchTime
+                        ? fmt12(match.matchTime)
+                        : format(toDate(match.date), "h:mm a")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <MapPin className="h-4 w-4" />
@@ -213,7 +241,7 @@ export default async function MatchesPage() {
                   </div>
                 )}
 
-                <div className="flex gap-2 pt-2 border-t">
+                <div className="flex gap-2 pt-2 border-t flex-wrap">
                   <Link href={`/admin/matches/${match.id}`} className="flex-1">
                     <Button variant="outline" size="sm" className="w-full">
                       View Details
@@ -228,6 +256,7 @@ export default async function MatchesPage() {
                       {match.team.length > 0 ? "View Team" : "Select Team"}
                     </Button>
                   </Link>
+                  <EditMatchDialog match={match} />
                   <DeleteMatchButton id={match.id} />
                 </div>
               </CardContent>
@@ -275,7 +304,11 @@ export default async function MatchesPage() {
                         </span>
                         <span className="text-xs text-muted-foreground flex items-center gap-2">
                           <Clock className="h-3 w-3" />
-                          {format(toDate(match.date), "h:mm a")}
+                          {match.reportingTime &&
+                            `Report: ${match.reportingTime} · `}
+                          Match:{" "}
+                          {match.matchTime ||
+                            format(toDate(match.date), "HH:mm")}
                         </span>
                       </div>
                     </TableCell>
@@ -320,6 +353,7 @@ export default async function MatchesPage() {
                               : "Select Team"}
                           </Button>
                         </Link>
+                        <EditMatchDialog match={match} />
                         <DeleteMatchButton id={match.id} />
                       </div>
                     </TableCell>

@@ -5,7 +5,13 @@ import { SeasonAvailabilityCard } from "@/components/season-availability-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Trophy } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Trophy,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Player } from "@/lib/types/models";
@@ -29,17 +35,67 @@ export function PlayerDashboardClient({
   );
   const completedMatches = allMatches
     .filter((m: any) => m.status === "Completed")
-    .slice(0, 5); // Show last 5 completed matches
+    .slice(0, 5);
+
+  // Next match context banner
+  const nextMatch = upcomingMatches[0] ?? null;
+  const nextMatchAvailability = nextMatch?.myAvailability ?? null;
+  const nextMatchDate = nextMatch ? new Date(nextMatch.date) : null;
+
+  const ContextBanner = () => {
+    if (!nextMatch) return null;
+    const dateStr = format(nextMatchDate!, "EEEE, MMM d");
+    const markedYes =
+      nextMatchAvailability?.status === "AVAILABLE" ||
+      nextMatchAvailability?.status === "BACKUP";
+    if (!markedYes) {
+      return (
+        <div className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800 px-4 py-3 text-sm">
+          <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+          <div className="min-w-0">
+            <p className="font-medium text-amber-800 dark:text-amber-300 leading-snug">
+              Mark your availability for the next match
+            </p>
+            <p className="text-amber-700 dark:text-amber-400 mt-0.5 truncate">
+              vs {nextMatch.opponent} · {dateStr}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    const isBackup = nextMatchAvailability.status === "BACKUP";
+    return (
+      <div
+        className={`flex gap-3 rounded-lg border px-4 py-3 text-sm ${isBackup ? "border-blue-200 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-800" : "border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-800"}`}
+      >
+        <CheckCircle2
+          className={`h-4 w-4 mt-0.5 shrink-0 ${isBackup ? "text-blue-600 dark:text-blue-400" : "text-green-600 dark:text-green-400"}`}
+        />
+        <div className="min-w-0">
+          <p
+            className={`font-medium leading-snug ${isBackup ? "text-blue-800 dark:text-blue-300" : "text-green-800 dark:text-green-300"}`}
+          >
+            Upcoming match on {dateStr}
+          </p>
+          <p
+            className={`mt-0.5 truncate ${isBackup ? "text-blue-700 dark:text-blue-400" : "text-green-700 dark:text-green-400"}`}
+          >
+            vs {nextMatch.opponent} · You're marked as{" "}
+            <span className="font-medium">
+              {isBackup ? "backup" : "available"}
+            </span>
+          </p>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold tracking-tight">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold tracking-tight">
           Welcome, {player.name}
         </h1>
-        <p className="text-muted-foreground text-lg">
-          Please mark your availability for upcoming matches.
-        </p>
       </div>
 
       {activeSeason && (
@@ -49,6 +105,8 @@ export function PlayerDashboardClient({
           initialAvailability={seasonAvailability}
         />
       )}
+
+      <ContextBanner />
 
       {/* Upcoming Matches - Availability Section */}
       <div>

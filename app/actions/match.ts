@@ -4,6 +4,14 @@ import { firestore, COLLECTIONS } from "@/lib/db";
 import { createDoc, queryDocs, deleteDoc, toDate, serializeDoc } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
+function deriveReportingTime(timeStr: string): string {
+    const [h, m] = timeStr.split(":").map(Number);
+    const total = h * 60 + m - 30;
+    const rh = Math.floor(((total % 1440) + 1440) % 1440 / 60);
+    const rm = ((total % 1440) + 1440) % 1440 % 60;
+    return `${String(rh).padStart(2, "0")}:${String(rm).padStart(2, "0")}`;
+}
+
 export async function createMatch(formData: FormData) {
     const dateStr = formData.get("date") as string;
     const timeStr = formData.get("time") as string;
@@ -13,6 +21,7 @@ export async function createMatch(formData: FormData) {
     const seasonId = formData.get("seasonId") as string;
 
     const dateTime = new Date(`${dateStr}T${timeStr}`);
+    const reportingTime = deriveReportingTime(timeStr);
 
     try {
         await createDoc(COLLECTIONS.MATCHES, {
@@ -23,13 +32,43 @@ export async function createMatch(formData: FormData) {
             seasonId,
             status: "Scheduled",
             isLocked: false,
-            reportingTime: null,
+            matchTime: timeStr,
+            reportingTime,
         });
         revalidatePath("/admin/matches");
         return { success: true };
     } catch (error) {
         console.error("Failed to create match:", error);
         return { success: false, error: "Failed to create match" };
+    }
+}
+
+export async function updateMatch(id: string, formData: FormData) {
+    const dateStr = formData.get("date") as string;
+    const timeStr = formData.get("time") as string;
+    const opponent = formData.get("opponent") as string;
+    const location = formData.get("location") as string;
+    const type = formData.get("type") as string;
+
+    const dateTime = new Date(`${dateStr}T${timeStr}`);
+    const reportingTime = deriveReportingTime(timeStr);
+
+    try {
+        const { updateDoc } = await import("@/lib/firestore-helpers");
+        await updateDoc(COLLECTIONS.MATCHES, id, {
+            date: dateTime,
+            opponent,
+            location,
+            type,
+            matchTime: timeStr,
+            reportingTime,
+        });
+        revalidatePath("/admin/matches");
+        revalidatePath(`/admin/matches/${id}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to update match:", error);
+        return { success: false, error: "Failed to update match" };
     }
 }
 

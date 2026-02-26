@@ -17,10 +17,19 @@ interface Match {
   opponent: string;
   location: string;
   type: string;
+  reportingTime?: string | null;
+  matchTime?: string | null;
   myAvailability: {
     status: string;
     note: string | null;
   } | null;
+}
+
+function fmt12(t: string) {
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
 }
 
 export function AvailabilityCard({
@@ -101,7 +110,22 @@ export function AvailabilityCard({
         <div className="flex flex-col gap-1 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            {format(match.date, "h:mm a")} Reporting
+            <span>
+              {match.matchTime ? (
+                <>
+                  Match starts at {fmt12(match.matchTime)}
+                  {match.reportingTime && (
+                    <span className="ml-2">
+                      · Report by {fmt12(match.reportingTime)}
+                    </span>
+                  )}
+                </>
+              ) : match.reportingTime ? (
+                <>Report by {fmt12(match.reportingTime)}</>
+              ) : (
+                "Time TBD"
+              )}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />

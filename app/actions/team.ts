@@ -50,6 +50,7 @@ export async function getMatchForTeamSelection(matchId: string) {
                 status: match.status,
                 type: match.type,
                 reportingTime: match.reportingTime,
+                matchTime: match.matchTime,
             }),
             allPlayers: sortedPlayers.map(serializeDoc),
             availability: enrichedAvailability.map(serializeDoc),

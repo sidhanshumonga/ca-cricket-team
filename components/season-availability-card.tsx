@@ -77,117 +77,96 @@ export function SeasonAvailabilityCard({
     );
   };
 
-  return (
-    <Card className="border-2 border-primary/20">
-      <CardHeader className="pb-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Calendar className="h-5 w-5 flex-shrink-0" />
-            <span>Season Availability</span>
-          </CardTitle>
-          {availability && !isEditing ? (
-            <div className="flex items-center gap-2 flex-wrap">
-              {getStatusBadge(availability.status)}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsEditing(true)}
-                className="h-8"
-              >
-                <Edit2 className="h-4 w-4 mr-1" />
-                Change
-              </Button>
-            </div>
-          ) : (
-            <Badge variant="outline" className="w-fit">
-              Not Marked
-            </Badge>
+  if (isEditing) {
+    return (
+      <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium">
+            Season Availability — {season.name}
+          </p>
+          {availability && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setIsEditing(false);
+                setStatus(availability.status);
+                setNotes(availability.notes || "");
+              }}
+            >
+              Cancel
+            </Button>
           )}
         </div>
-      </CardHeader>
-      <CardContent>
-        {isEditing ? (
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Mark your availability for {season.name}
-            </p>
-            <div className="grid grid-cols-3 gap-2">
-              <Button
-                variant={status === "AVAILABLE" ? "default" : "outline"}
-                className={cn(
-                  "h-16 flex flex-col gap-1",
-                  status === "AVAILABLE" && "bg-green-600 hover:bg-green-700",
-                )}
-                onClick={() => handleSubmit("AVAILABLE")}
-                disabled={loading}
-              >
-                <Check className="h-5 w-5" />
-                <span className="text-xs font-medium">Available</span>
-              </Button>
-              <Button
-                variant={status === "BACKUP" ? "default" : "outline"}
-                className={cn(
-                  "h-16 flex flex-col gap-1",
-                  status === "BACKUP" && "bg-blue-600 hover:bg-blue-700",
-                )}
-                onClick={() => handleSubmit("BACKUP")}
-                disabled={loading}
-              >
-                <UserPlus className="h-5 w-5" />
-                <span className="text-xs font-medium">Backup</span>
-              </Button>
-              <Button
-                variant={status === "UNAVAILABLE" ? "default" : "outline"}
-                className={cn(
-                  "h-16 flex flex-col gap-1",
-                  status === "UNAVAILABLE" && "bg-red-600 hover:bg-red-700",
-                )}
-                onClick={() => handleSubmit("UNAVAILABLE")}
-                disabled={loading}
-              >
-                <X className="h-5 w-5" />
-                <span className="text-xs font-medium">Unavailable</span>
-              </Button>
-            </div>
-            <Textarea
-              placeholder="Add a note (optional)..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={2}
-              className="text-sm resize-none"
-            />
-            {availability && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setIsEditing(false);
-                  setStatus(availability.status);
-                  setNotes(availability.notes || "");
-                }}
-                className="w-full"
-              >
-                Cancel
-              </Button>
+        <div className="grid grid-cols-3 gap-2">
+          <Button
+            variant={status === "AVAILABLE" ? "default" : "outline"}
+            size="sm"
+            className={cn(
+              "gap-1",
+              status === "AVAILABLE" && "bg-green-600 hover:bg-green-700",
             )}
-          </div>
+            onClick={() => handleSubmit("AVAILABLE")}
+            disabled={loading}
+          >
+            <Check className="h-4 w-4" /> Available
+          </Button>
+          <Button
+            variant={status === "BACKUP" ? "default" : "outline"}
+            size="sm"
+            className={cn(
+              "gap-1",
+              status === "BACKUP" && "bg-blue-600 hover:bg-blue-700",
+            )}
+            onClick={() => handleSubmit("BACKUP")}
+            disabled={loading}
+          >
+            <UserPlus className="h-4 w-4" /> Backup
+          </Button>
+          <Button
+            variant={status === "UNAVAILABLE" ? "default" : "outline"}
+            size="sm"
+            className={cn(
+              "gap-1",
+              status === "UNAVAILABLE" && "bg-red-600 hover:bg-red-700",
+            )}
+            onClick={() => handleSubmit("UNAVAILABLE")}
+            disabled={loading}
+          >
+            <X className="h-4 w-4" /> Out
+          </Button>
+        </div>
+        <Textarea
+          placeholder="Add a note (optional)..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={2}
+          className="text-sm resize-none"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2 rounded-lg border bg-muted/20 px-4 py-2.5 text-sm">
+      <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
+      <div className="flex flex-1 min-w-0 items-center gap-2 flex-wrap">
+        <span className="text-muted-foreground truncate">{season.name}:</span>
+        {availability ? (
+          getStatusBadge(availability.status)
         ) : (
-          <div className="space-y-3 text-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-              <span className="font-medium text-foreground">Season:</span>
-              <span className="text-muted-foreground">{season.name}</span>
-            </div>
-            {availability.notes && (
-              <div className="flex flex-col gap-1">
-                <span className="font-medium text-foreground">Note:</span>
-                <p className="text-muted-foreground leading-relaxed">
-                  {availability.notes}
-                </p>
-              </div>
-            )}
-          </div>
+          <Badge variant="outline">Not marked</Badge>
         )}
-      </CardContent>
-    </Card>
+      </div>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsEditing(true)}
+        className="h-7 gap-1 text-xs shrink-0"
+      >
+        <Edit2 className="h-3 w-3" />
+        {availability ? "Change" : "Mark"}
+      </Button>
+    </div>
   );
 }

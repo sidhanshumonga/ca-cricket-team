@@ -34,6 +34,7 @@ export interface Match {
   location: string;
   type: string; // League, Friendly, Quarter Final, etc.
   reportingTime?: string | null;
+  matchTime?: string | null;
   seasonId: string;
   status: string; // Scheduled, Completed, Cancelled
   isLocked: boolean;
