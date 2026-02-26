@@ -319,12 +319,6 @@ export default function FieldingViewPage({
     }
 
     try {
-      console.log("Generate clicked", {
-        matchId,
-        selectedBowler,
-        batsmanType,
-        isPowerplay,
-      });
       const { generateFieldingSetup } = await import("@/app/actions/fielding");
       const result = await generateFieldingSetup(
         matchId,
