@@ -2,6 +2,7 @@
 
 import { AvailabilityCard } from "@/components/availability-card";
 import { SeasonAvailabilityCard } from "@/components/season-availability-card";
+import { SquadAvailabilitySheet } from "@/components/squad-availability-sheet";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +20,7 @@ import { Player } from "@/lib/types/models";
 interface PlayerDashboardClientProps {
   player: Player;
   allMatches: any[];
+  allPlayers: any[];
   activeSeason: any;
   seasonAvailability: any;
 }
@@ -26,6 +28,7 @@ interface PlayerDashboardClientProps {
 export function PlayerDashboardClient({
   player,
   allMatches,
+  allPlayers,
   activeSeason,
   seasonAvailability,
 }: PlayerDashboardClientProps) {
@@ -120,11 +123,14 @@ export function PlayerDashboardClient({
             </div>
           ) : (
             upcomingMatches.map((match: any) => (
-              <AvailabilityCard
-                key={match.id}
-                match={match}
-                playerId={player.id}
-              />
+              <div key={match.id} className="flex flex-col gap-2">
+                <AvailabilityCard match={match} playerId={player.id} />
+                <SquadAvailabilitySheet
+                  availability={match.matchAvailability || []}
+                  allPlayers={allPlayers}
+                  match={{ opponent: match.opponent, date: match.date }}
+                />
+              </div>
             ))
           )}
         </div>

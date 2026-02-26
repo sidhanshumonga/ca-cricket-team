@@ -10,7 +10,7 @@ export default async function PlayerDashboard({
 }) {
   const { playerId } = await params;
   const player = await getPlayer(playerId);
-  const allMatches = await getPlayerMatches(playerId);
+  const { matches: allMatches, allPlayers } = await getPlayerMatches(playerId);
   const activeSeason = await getActiveSeason();
   const seasonAvailability = activeSeason
     ? await getSeasonAvailability(playerId, activeSeason.id)
@@ -24,6 +24,7 @@ export default async function PlayerDashboard({
     <PlayerDashboardClient
       player={player}
       allMatches={allMatches}
+      allPlayers={allPlayers}
       activeSeason={activeSeason}
       seasonAvailability={seasonAvailability}
     />

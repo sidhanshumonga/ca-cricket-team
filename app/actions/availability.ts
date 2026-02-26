@@ -1,23 +1,34 @@
 "use server";
 
 import { firestore, COLLECTIONS } from "@/lib/db";
-import { queryDocs, getDocById, createDoc, toDate, serializeDoc } from "@/lib/firestore-helpers";
+import { queryDocs, getDocById, createDoc, toDate, serializeDoc, getAllDocs } from "@/lib/firestore-helpers";
 import { revalidatePath } from "next/cache";
 
 export async function getPlayerMatches(playerId: string) {
     const activeSeasons = await queryDocs(COLLECTIONS.SEASONS, 'isActive', '==', true);
-    if (activeSeasons.length === 0) return [];
+    if (activeSeasons.length === 0) return { matches: [], allPlayers: [] };
 
-    const matches = await queryDocs(COLLECTIONS.MATCHES, 'seasonId', '==', activeSeasons[0].id);
+    const seasonId = activeSeasons[0].id;
+    const [matches, myAvailability, allAvailabilitySnap, allPlayers] = await Promise.all([
+        queryDocs(COLLECTIONS.MATCHES, 'seasonId', '==', seasonId),
+        queryDocs(COLLECTIONS.AVAILABILITY, 'playerId', '==', playerId),
+        firestore.collection(COLLECTIONS.AVAILABILITY).get(),
+        getAllDocs(COLLECTIONS.PLAYERS),
+    ]);
 
-    // Get availability for this player
-    const availability = await queryDocs(COLLECTIONS.AVAILABILITY, 'playerId', '==', playerId);
+    const allAvailability: any[] = allAvailabilitySnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    // Map availability to matches and serialize
+    const byMatch: Record<string, any[]> = {};
+    for (const a of allAvailability) {
+        if (!byMatch[a.matchId]) byMatch[a.matchId] = [];
+        byMatch[a.matchId].push(a);
+    }
+
     const enrichedMatches = matches
         .map((match: any) => ({
             ...match,
-            myAvailability: availability.find((a: any) => a.matchId === match.id) || null,
+            myAvailability: myAvailability.find((a: any) => a.matchId === match.id) || null,
+            matchAvailability: byMatch[match.id] || [],
         }))
         .sort((a: any, b: any) => {
             const dateA = toDate(a.date);
@@ -25,7 +36,10 @@ export async function getPlayerMatches(playerId: string) {
             return dateA.getTime() - dateB.getTime();
         });
 
-    return enrichedMatches.map(serializeDoc);
+    return {
+        matches: enrichedMatches.map(serializeDoc),
+        allPlayers: allPlayers.map(serializeDoc),
+    };
 }
 
 export async function updateAvailability(

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { ScorecardActions } from "@/components/scorecard-actions";
 import { EditMatchDialog } from "@/components/edit-match-dialog";
+import { SquadAvailabilitySheet } from "@/components/squad-availability-sheet";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -67,6 +68,7 @@ export default function MatchDetailPage({
   const router = useRouter();
   const [matchId, setMatchId] = useState<string>("");
   const [match, setMatch] = useState<any>(null);
+  const [allPlayers, setAllPlayers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -95,6 +97,7 @@ export default function MatchDetailPage({
       };
 
       setMatch(matchData);
+      setAllPlayers(result.allPlayers || []);
       setLoading(false);
     } catch (error) {
       toast.error("Failed to load match details");
@@ -126,6 +129,10 @@ export default function MatchDetailPage({
   const backupPlayers = match.availability.filter(
     (a: any) => a.status.toUpperCase() === "BACKUP",
   );
+  const responseRate =
+    allPlayers.length > 0
+      ? Math.round((match.availability.length / allPlayers.length) * 100)
+      : 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,10 +203,19 @@ export default function MatchDetailPage({
 
         <Card>
           <CardHeader>
-            <CardTitle>Availability Summary</CardTitle>
-            <CardDescription>
-              {match.availability.length} players responded
-            </CardDescription>
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <CardTitle>Availability Summary</CardTitle>
+                <CardDescription>
+                  {match.availability.length} of {allPlayers.length} responded ·{" "}
+                  {responseRate}% response rate
+                </CardDescription>
+              </div>
+              <SquadAvailabilitySheet
+                availability={match.availability}
+                allPlayers={allPlayers}
+              />
+            </div>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
@@ -226,13 +242,14 @@ export default function MatchDetailPage({
 
       <Card>
         <CardHeader>
-          <CardTitle>Available Players ({availablePlayers.length})</CardTitle>
-          <CardDescription>
-            Players who marked themselves available
-          </CardDescription>
+          <CardTitle>
+            Available & Backup ({availablePlayers.length + backupPlayers.length}
+            )
+          </CardTitle>
+          <CardDescription>Players confirmed for this match</CardDescription>
         </CardHeader>
         <CardContent>
-          {availablePlayers.length > 0 ? (
+          {availablePlayers.length + backupPlayers.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {availablePlayers.map((availability: any) => (
                 <div
@@ -244,6 +261,19 @@ export default function MatchDetailPage({
                   </span>
                   <span className="text-xs text-muted-foreground">
                     • {availability.player.role}
+                  </span>
+                </div>
+              ))}
+              {backupPlayers.map((availability: any) => (
+                <div
+                  key={availability.id}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-blue-50 border-blue-200"
+                >
+                  <span className="text-sm font-medium">
+                    {availability.player.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    • Backup
                   </span>
                 </div>
               ))}
