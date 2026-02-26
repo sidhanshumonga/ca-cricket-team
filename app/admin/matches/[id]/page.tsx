@@ -203,8 +203,8 @@ export default function MatchDetailPage({
 
         <Card>
           <CardHeader>
-            <div className="flex items-start justify-between gap-2">
-              <div>
+            <div className="flex items-start justify-between gap-4">
+              <div className="column items-center gap-6">
                 <CardTitle>Availability Summary</CardTitle>
                 <CardDescription>
                   {match.availability.length} of {allPlayers.length} responded ·{" "}
@@ -214,6 +214,8 @@ export default function MatchDetailPage({
               <SquadAvailabilitySheet
                 availability={match.availability}
                 allPlayers={allPlayers}
+                match={{ opponent: match.opponent, date: match.date }}
+                triggerVariant="button"
               />
             </div>
           </CardHeader>
