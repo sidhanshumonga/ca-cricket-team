@@ -17,6 +17,7 @@ interface SquadAvailabilitySheetProps {
   allPlayers: any[];
   match?: { opponent: string; date: string | Date };
   triggerVariant?: "stats" | "button";
+  isAdmin?: boolean;
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
@@ -39,6 +40,7 @@ export function SquadAvailabilitySheet({
   allPlayers,
   match,
   triggerVariant = "stats",
+  isAdmin = false,
 }: SquadAvailabilitySheetProps) {
   // Build a map of playerId -> availability status
   const availMap: Record<string, any> = {};
@@ -143,7 +145,17 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
+                      {isAdmin && p.role && (
+                        <p className="text-xs text-muted-foreground">
+                          {p.role}
+                        </p>
+                      )}
                     </div>
+                    {isAdmin && availMap[p.id]?.note && (
+                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
+                        {availMap[p.id].note}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -163,7 +175,17 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
+                      {isAdmin && p.role && (
+                        <p className="text-xs text-muted-foreground">
+                          {p.role}
+                        </p>
+                      )}
                     </div>
+                    {isAdmin && availMap[p.id]?.note && (
+                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
+                        {availMap[p.id].note}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -183,7 +205,17 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
+                      {isAdmin && p.role && (
+                        <p className="text-xs text-muted-foreground">
+                          {p.role}
+                        </p>
+                      )}
                     </div>
+                    {isAdmin && availMap[p.id]?.note && (
+                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
+                        {availMap[p.id].note}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -205,6 +237,11 @@ export function SquadAvailabilitySheet({
                       <p className="text-sm font-medium text-muted-foreground">
                         {p.name}
                       </p>
+                      {isAdmin && p.role && (
+                        <p className="text-xs text-muted-foreground">
+                          {p.role}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}

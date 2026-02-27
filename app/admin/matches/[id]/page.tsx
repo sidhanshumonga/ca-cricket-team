@@ -216,6 +216,7 @@ export default function MatchDetailPage({
                 allPlayers={allPlayers}
                 match={{ opponent: match.opponent, date: match.date }}
                 triggerVariant="button"
+                isAdmin
               />
             </div>
           </CardHeader>
