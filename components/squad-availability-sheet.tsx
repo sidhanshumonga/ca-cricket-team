@@ -143,17 +143,7 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
-                      {p.role && (
-                        <p className="text-xs text-muted-foreground">
-                          {p.role}
-                        </p>
-                      )}
                     </div>
-                    {availMap[p.id]?.note && (
-                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
-                        {availMap[p.id].note}
-                      </p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -173,17 +163,7 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
-                      {p.role && (
-                        <p className="text-xs text-muted-foreground">
-                          {p.role}
-                        </p>
-                      )}
                     </div>
-                    {availMap[p.id]?.note && (
-                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
-                        {availMap[p.id].note}
-                      </p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -203,17 +183,7 @@ export function SquadAvailabilitySheet({
                   >
                     <div>
                       <p className="text-sm font-medium">{p.name}</p>
-                      {p.role && (
-                        <p className="text-xs text-muted-foreground">
-                          {p.role}
-                        </p>
-                      )}
                     </div>
-                    {availMap[p.id]?.note && (
-                      <p className="text-xs text-muted-foreground italic max-w-[120px] truncate">
-                        {availMap[p.id].note}
-                      </p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -235,11 +205,6 @@ export function SquadAvailabilitySheet({
                       <p className="text-sm font-medium text-muted-foreground">
                         {p.name}
                       </p>
-                      {p.role && (
-                        <p className="text-xs text-muted-foreground">
-                          {p.role}
-                        </p>
-                      )}
                     </div>
                   </div>
                 ))}
