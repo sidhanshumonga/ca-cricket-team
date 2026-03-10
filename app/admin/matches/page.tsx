@@ -101,12 +101,10 @@ export default async function MatchesPage() {
 
   // Separate upcoming and completed matches
   const now = new Date();
-  const upcomingMatches = allMatches.filter(
-    (m: any) => m.status !== "Completed" && toDate(m.date) >= now,
-  );
-  const completedMatches = allMatches.filter(
-    (m: any) => m.status === "Completed",
-  );
+  const upcomingMatches = allMatches.filter((m: any) => toDate(m.date) >= now);
+  const pastMatches = allMatches
+    .filter((m: any) => toDate(m.date) < now)
+    .reverse();
 
   return (
     <div className="flex flex-col gap-6">
@@ -365,13 +363,13 @@ export default async function MatchesPage() {
         </CardContent>
       </Card>
 
-      {/* Completed Matches Section */}
-      {completedMatches.length > 0 && (
+      {/* Past Matches Section */}
+      {pastMatches.length > 0 && (
         <Card className="hidden md:block">
           <CardHeader>
-            <CardTitle>Completed Matches</CardTitle>
+            <CardTitle>Past Matches</CardTitle>
             <CardDescription>
-              View past match results and scorecards.
+              All matches before today — update, view details, or delete.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -386,7 +384,7 @@ export default async function MatchesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {completedMatches.map((match: any) => (
+                {pastMatches.map((match: any) => (
                   <TableRow key={match.id}>
                     <TableCell>
                       <div className="flex flex-col">
@@ -420,6 +418,7 @@ export default async function MatchesPage() {
                             Scorecard
                           </Button>
                         </Link>
+                        <EditMatchDialog match={match} />
                         <DeleteMatchButton id={match.id} />
                       </div>
                     </TableCell>

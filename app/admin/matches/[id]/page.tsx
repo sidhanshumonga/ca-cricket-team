@@ -193,7 +193,7 @@ export default function MatchDetailPage({
                 {match.status}
               </span>
             </div>
-            {match.status?.toUpperCase() === "COMPLETED" && (
+            {new Date(match.date) < new Date() && (
               <div className="pt-4 mt-4 border-t">
                 <ScorecardActions matchId={matchId} />
               </div>
