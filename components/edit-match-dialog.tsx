@@ -32,6 +32,8 @@ interface EditMatchDialogProps {
     opponent: string;
     location: string;
     type: string;
+    result?: string | null;
+    resultSummary?: string | null;
   };
   onUpdated?: () => void;
 }
@@ -41,6 +43,8 @@ export function EditMatchDialog({ match, onUpdated }: EditMatchDialogProps) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [type, setType] = useState(match.type);
+  const [result, setResult] = useState(match.result || "");
+  const isPast = new Date(match.date) < new Date();
 
   const matchDate = new Date(match.date);
   const defaultDate = format(matchDate, "yyyy-MM-dd");
@@ -50,6 +54,7 @@ export function EditMatchDialog({ match, onUpdated }: EditMatchDialogProps) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     formData.set("type", type);
+    formData.set("result", result);
 
     startTransition(async () => {
       const result = await updateMatch(match.id, formData);
@@ -90,11 +95,23 @@ export function EditMatchDialog({ match, onUpdated }: EditMatchDialogProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="date">Date</Label>
-              <Input id="date" name="date" type="date" required defaultValue={defaultDate} />
+              <Input
+                id="date"
+                name="date"
+                type="date"
+                required
+                defaultValue={defaultDate}
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="time">Match Time</Label>
-              <Input id="time" name="time" type="time" required defaultValue={defaultTime} />
+              <Input
+                id="time"
+                name="time"
+                type="time"
+                required
+                defaultValue={defaultTime}
+              />
             </div>
           </div>
 
@@ -107,6 +124,34 @@ export function EditMatchDialog({ match, onUpdated }: EditMatchDialogProps) {
               defaultValue={match.location}
             />
           </div>
+
+          {isPast && (
+            <>
+              <div className="grid gap-2">
+                <Label>Result</Label>
+                <Select value={result} onValueChange={setResult}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select result" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Won">Won</SelectItem>
+                    <SelectItem value="Lost">Lost</SelectItem>
+                    <SelectItem value="Drew">Drew</SelectItem>
+                    <SelectItem value="No Result">No Result</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="resultSummary">Score / Summary</Label>
+                <Input
+                  id="resultSummary"
+                  name="resultSummary"
+                  placeholder="e.g. Won by 5 wickets"
+                  defaultValue={match.resultSummary || ""}
+                />
+              </div>
+            </>
+          )}
 
           <div className="grid gap-2">
             <Label>Match Type</Label>
@@ -124,7 +169,12 @@ export function EditMatchDialog({ match, onUpdated }: EditMatchDialogProps) {
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={isPending}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isPending}>

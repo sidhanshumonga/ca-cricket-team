@@ -36,6 +36,7 @@ export async function createMatch(formData: FormData) {
             reportingTime,
         });
         revalidatePath("/admin/matches");
+        revalidatePath("/", "layout");
         return { success: true };
     } catch (error) {
         console.error("Failed to create match:", error);
@@ -49,6 +50,8 @@ export async function updateMatch(id: string, formData: FormData) {
     const opponent = formData.get("opponent") as string;
     const location = formData.get("location") as string;
     const type = formData.get("type") as string;
+    const result = (formData.get("result") as string) || null;
+    const resultSummary = (formData.get("resultSummary") as string) || null;
 
     const dateTime = new Date(`${dateStr}T${timeStr}`);
     const reportingTime = deriveReportingTime(timeStr);
@@ -62,9 +65,12 @@ export async function updateMatch(id: string, formData: FormData) {
             type,
             matchTime: timeStr,
             reportingTime,
+            ...(result !== null && { result }),
+            ...(resultSummary !== null && { resultSummary }),
         });
         revalidatePath("/admin/matches");
         revalidatePath(`/admin/matches/${id}`);
+        revalidatePath("/", "layout");
         return { success: true };
     } catch (error) {
         console.error("Failed to update match:", error);
@@ -92,6 +98,7 @@ export async function deleteMatch(id: string) {
     try {
         await deleteDoc(COLLECTIONS.MATCHES, id);
         revalidatePath("/admin/matches");
+        revalidatePath("/", "layout");
         return { success: true };
     } catch (error) {
         return { success: false, error: "Failed to delete match" };

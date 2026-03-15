@@ -32,12 +32,14 @@ export function PlayerDashboardClient({
   activeSeason,
   seasonAvailability,
 }: PlayerDashboardClientProps) {
-  // Separate upcoming and completed matches
+  // Separate upcoming and past matches by date
+  const now = new Date();
   const upcomingMatches = allMatches.filter(
-    (m: any) => m.status !== "Completed",
+    (m: any) => new Date(m.date) >= now,
   );
-  const completedMatches = allMatches
-    .filter((m: any) => m.status === "Completed")
+  const pastMatches = allMatches
+    .filter((m: any) => new Date(m.date) < now)
+    .reverse()
     .slice(0, 5);
 
   // Next match context banner
@@ -137,7 +139,7 @@ export function PlayerDashboardClient({
       </div>
 
       {/* Recent Matches Section */}
-      {completedMatches.length > 0 && (
+      {pastMatches.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Recent Matches</h2>
@@ -148,7 +150,7 @@ export function PlayerDashboardClient({
             </Link>
           </div>
           <div className="space-y-3">
-            {completedMatches.map((match: any) => (
+            {pastMatches.map((match: any) => (
               <Link key={match.id} href={`/team/matches/${match.id}/scorecard`}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="p-4">
@@ -161,6 +163,20 @@ export function PlayerDashboardClient({
                           <Badge variant="secondary" className="text-xs">
                             {match.type}
                           </Badge>
+                          {match.result && (
+                            <Badge
+                              className="text-xs"
+                              variant={
+                                match.result === "Won"
+                                  ? "default"
+                                  : match.result === "Lost"
+                                    ? "destructive"
+                                    : "secondary"
+                              }
+                            >
+                              {match.result}
+                            </Badge>
+                          )}
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -173,6 +189,11 @@ export function PlayerDashboardClient({
                             <MapPin className="h-3 w-3" />
                             <span>{match.location}</span>
                           </div>
+                          {match.resultSummary && (
+                            <span className="italic">
+                              {match.resultSummary}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
