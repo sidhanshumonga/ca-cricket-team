@@ -8,6 +8,7 @@ import {
   User,
   LayoutDashboard,
   ArrowLeft,
+  Flag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -102,6 +103,21 @@ export default function PlayerLayout({
         >
           <User className="h-4 w-4" />
           My Profile
+        </Link>
+      )}
+      {selectedPlayer && (
+        <Link
+          href={`/player/${selectedPlayer.id}/umpiring`}
+          onClick={onNavigate}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+            pathname === `/player/${selectedPlayer.id}/umpiring`
+              ? "bg-accent text-accent-foreground"
+              : "text-muted-foreground",
+          )}
+        >
+          <Flag className="h-4 w-4" />
+          Umpiring
         </Link>
       )}
     </nav>

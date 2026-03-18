@@ -9,12 +9,14 @@ import {
   Calendar,
   Shield,
   Settings,
+  Flag,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/matches", icon: Calendar, label: "Matches & Teams" },
   { href: "/admin/players", icon: Users, label: "Players" },
+  { href: "/admin/umpiring", icon: Flag, label: "Umpiring" },
   { href: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 

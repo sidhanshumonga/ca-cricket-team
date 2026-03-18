@@ -38,4 +38,6 @@ export const COLLECTIONS = {
   SCORECARDS: 'scorecards',
   BATTING_PERFORMANCES: 'battingPerformances',
   BOWLING_PERFORMANCES: 'bowlingPerformances',
+  UMPIRING_MATCHES: 'umpiringMatches',
+  UMPIRING_ASSIGNMENTS: 'umpiringAssignments',
 } as const;
