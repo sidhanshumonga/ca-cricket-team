@@ -40,4 +40,5 @@ export const COLLECTIONS = {
   BOWLING_PERFORMANCES: 'bowlingPerformances',
   UMPIRING_MATCHES: 'umpiringMatches',
   UMPIRING_ASSIGNMENTS: 'umpiringAssignments',
+  WEATHER_CACHE: 'weatherCache',
 } as const;

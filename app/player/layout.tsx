@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { TabBar } from "@/components/dashboard/TabBar";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -69,8 +70,35 @@ export default function PlayerLayout({
     router.push("/player");
   };
 
+  // Player select page - no layout at all
   if (pathname === "/player") {
     return <>{children}</>;
+  }
+
+  // Player routes with new design - show TabBar but no header/sidebar
+  const isPlayerRoute = pathname?.match(/^\/player\/[^\/]+/);
+  if (isPlayerRoute) {
+    const playerId = pathname?.split("/")[2];
+    const currentTab = pathname?.includes("/umpiring")
+      ? "umpiring"
+      : pathname?.includes("/profile")
+        ? "profile"
+        : "dashboard";
+
+    const handleTabNav = (tab: string) => {
+      if (tab === "dashboard") {
+        router.push(`/player/${playerId}`);
+      } else {
+        router.push(`/player/${playerId}/${tab}`);
+      }
+    };
+
+    return (
+      <>
+        {children}
+        <TabBar active={currentTab} onNav={handleTabNav} />
+      </>
+    );
   }
 
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (

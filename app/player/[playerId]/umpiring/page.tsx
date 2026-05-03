@@ -1,400 +1,234 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Clock, CheckCircle2 } from "lucide-react";
-import { format } from "date-fns";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Icons } from "@/components/ui-new/icons";
+import "@/app/player-design.css";
 
-export default function PlayerUmpiringPage({
+// Mock data - replace with actual data fetching
+const MOCK_UMPIRING = [
+  {
+    id: "1",
+    match: "Cary Avengers vs Emperors HT",
+    date: "Sat, May 10",
+    time: "2:00 PM",
+    venue: "Cary High School",
+    role: "Umpire 1",
+    status: "confirmed",
+  },
+  {
+    id: "2",
+    match: "Cary Avengers vs Falcons",
+    date: "Sun, May 18",
+    time: "10:00 AM",
+    venue: "Green Hope HS",
+    role: "Umpire 2",
+    status: "confirmed",
+  },
+  {
+    id: "3",
+    match: "Cary Avengers vs Mavericks HT",
+    date: "Sat, May 24",
+    time: "4:00 PM",
+    venue: "Apex Friendship HS",
+    role: "Umpire 1",
+    status: "pending",
+  },
+];
+
+function StatTile({ big, label }: { big: number; label: string }) {
+  return (
+    <div className="card" style={{ padding: 14, textAlign: "center" }}>
+      <div className="serif" style={{ fontSize: 28, lineHeight: 1 }}>
+        {big}
+      </div>
+      <div style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4 }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function UmpiringCard({ u }: { u: any }) {
+  const confirmed = u.status === "confirmed";
+  return (
+    <div className="card" style={{ padding: 16 }}>
+      <div
+        className="row"
+        style={{ justifyContent: "space-between", marginBottom: 8 }}
+      >
+        <div className={`chip chip-${confirmed ? "teal" : "amber"}`}>
+          {confirmed ? "Confirmed" : "Pending"}
+        </div>
+        <div className="chip chip-gray">{u.role}</div>
+      </div>
+      <div
+        className="serif"
+        style={{ fontSize: 18, lineHeight: 1.15, marginBottom: 8 }}
+      >
+        {u.match}
+      </div>
+      <div className="row gap-14" style={{ flexWrap: "wrap" }}>
+        <div
+          className="row gap-4"
+          style={{ fontSize: 12, color: "var(--ink-3)" }}
+        >
+          <span style={{ opacity: 0.6 }}>{Icons.cal}</span>
+          {u.date}
+        </div>
+        <div
+          className="row gap-4"
+          style={{ fontSize: 12, color: "var(--ink-3)" }}
+        >
+          <span style={{ opacity: 0.6 }}>{Icons.clock}</span>
+          {u.time}
+        </div>
+        <div
+          className="row gap-4"
+          style={{ fontSize: 12, color: "var(--ink-3)" }}
+        >
+          <span style={{ opacity: 0.6 }}>{Icons.pin}</span>
+          {u.venue}
+        </div>
+      </div>
+      {!confirmed && (
+        <div className="row gap-8" style={{ marginTop: 14 }}>
+          <button
+            className="btn btn-teal pressable"
+            style={{ flex: 1, padding: 12, borderRadius: 12, fontSize: 13 }}
+          >
+            Accept
+          </button>
+          <button
+            className="btn btn-ghost pressable"
+            style={{ flex: 1, padding: 12, borderRadius: 12, fontSize: 13 }}
+          >
+            Decline
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function UmpiringPage({
   params,
 }: {
   params: Promise<{ playerId: string }>;
 }) {
+  const router = useRouter();
   const [playerId, setPlayerId] = useState<string>("");
-  const [myAssignments, setMyAssignments] = useState<any[]>([]);
-  const [availableSlots, setAvailableSlots] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [umpiring] = useState<any[]>(MOCK_UMPIRING);
 
   useEffect(() => {
     params.then(({ playerId: id }) => {
       setPlayerId(id);
-      loadAssignments(id);
     });
   }, [params]);
 
-  const loadAssignments = async (id: string) => {
-    try {
-      const { getPlayerUmpiringAssignments } =
-        await import("@/app/actions/umpiring");
-      const result = await getPlayerUmpiringAssignments(id);
-      if (result.success) {
-        setMyAssignments(result.myAssignments);
-        setAvailableSlots(result.availableSlots);
-      }
-      setLoading(false);
-    } catch (error) {
-      toast.error("Failed to load umpiring assignments");
-      setLoading(false);
-    }
-  };
-
-  const handleClaimSlot = async (matchId: string, slotNumber: 1 | 2) => {
-    const { claimUmpiringSlot } = await import("@/app/actions/umpiring");
-    const result = await claimUmpiringSlot(matchId, playerId, slotNumber);
-
-    if (result.success) {
-      toast.success("Slot claimed successfully!");
-      await loadAssignments(playerId);
-    } else {
-      toast.error(result.error || "Failed to claim slot");
-    }
-  };
-
-  const handleReleaseSlot = async (matchId: string) => {
-    if (!confirm("Release this umpiring assignment?")) return;
-
-    const { releaseUmpiringSlot } = await import("@/app/actions/umpiring");
-    const result = await releaseUmpiringSlot(matchId, playerId);
-
-    if (result.success) {
-      toast.success("Slot released");
-      await loadAssignments(playerId);
-    } else {
-      toast.error(result.error || "Failed to release slot");
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
+  const confirmed = umpiring.filter((u) => u.status === "confirmed").length;
+  const pending = umpiring.filter((u) => u.status === "pending").length;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Umpiring Assignments
-        </h1>
-        <p className="text-muted-foreground">
-          Claim umpiring slots for upcoming matches
-        </p>
+    <div className="screen">
+      <div className="screen-pad-top" />
+
+      <div
+        className="row"
+        style={{ padding: "6px 18px 0", justifyContent: "space-between" }}
+      >
+        <button
+          className="pressable"
+          onClick={() => router.push(`/player/${playerId}`)}
+          style={{
+            width: 38,
+            height: 38,
+            borderRadius: 12,
+            background: "var(--paper)",
+            border: "1px solid var(--line)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {Icons.arrow}
+        </button>
+        <div className="row gap-6">
+          <span style={{ color: "var(--ink-3)" }}>{Icons.whistle}</span>
+        </div>
       </div>
 
-      {/* My Assignments */}
-      {myAssignments.length > 0 && (
-        <Card className="border-0">
-          <CardHeader>
-            <CardTitle>My Assignments</CardTitle>
-            <CardDescription>
-              {myAssignments.length} upcoming assignment
-              {myAssignments.length !== 1 ? "s" : ""}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Mobile: Card layout */}
-            <div className="md:hidden space-y-3">
-              {myAssignments.map((match: any) => {
-                const mySlot = match.slot1PlayerId === playerId ? 1 : 2;
-                return (
-                  <div
-                    key={match.id}
-                    className="p-4 rounded-lg border bg-green-50/50 space-y-3"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
-                        <span className="font-medium truncate">
-                          {match.matchName}
-                        </span>
-                      </div>
-                      <Badge variant="secondary" className="shrink-0">
-                        Umpire {mySlot}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-3 w-3 text-muted-foreground" />
-                        <span>
-                          {format(new Date(match.date), "MMM d, yyyy")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-3 w-3 text-muted-foreground" />
-                        <span>{match.time}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span>{match.location}</span>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleReleaseSlot(match.id)}
-                      className="w-full"
-                    >
-                      Release Assignment
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
+      <div style={{ padding: "20px 22px 6px" }}>
+        <div className="eyebrow" style={{ marginBottom: 6 }}>
+          Your assignments
+        </div>
+        <div className="serif" style={{ fontSize: 38, lineHeight: 1.02 }}>
+          On the{" "}
+          <span className="serif-i" style={{ color: "var(--teal)" }}>
+            field
+          </span>
+          .
+        </div>
+        <div
+          style={{
+            marginTop: 10,
+            fontSize: 14,
+            color: "var(--ink-3)",
+            lineHeight: 1.5,
+          }}
+        >
+          {confirmed} confirmed, {pending} pending.
+        </div>
+      </div>
 
-            {/* Desktop: Table layout */}
-            <div className="hidden md:block">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Match</TableHead>
-                    <TableHead>Date & Time</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>My Slot</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {myAssignments.map((match: any) => {
-                    const mySlot = match.slot1PlayerId === playerId ? 1 : 2;
-                    return (
-                      <TableRow key={match.id} className="bg-green-50/50">
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-green-600" />
-                            {match.matchName}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col gap-1 text-sm">
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {format(new Date(match.date), "MMM d, yyyy")}
-                            </div>
-                            <div className="flex items-center gap-1 text-muted-foreground">
-                              <Clock className="h-3 w-3" />
-                              {match.time}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1 text-sm">
-                            <MapPin className="h-3 w-3" />
-                            {match.location}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">Umpire {mySlot}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleReleaseSlot(match.id)}
-                          >
-                            Release
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Stats strip */}
+      <div style={{ padding: "20px 18px 0" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 8,
+          }}
+        >
+          <StatTile big={umpiring.length} label="This season" />
+          <StatTile big={confirmed} label="Confirmed" />
+          <StatTile big={pending} label="Pending" />
+        </div>
+      </div>
 
-      {/* Available Slots */}
-      <Card className="border-0">
-        <CardHeader>
-          <CardTitle>Available Slots</CardTitle>
-          <CardDescription>
-            {availableSlots.length > 0
-              ? `${availableSlots.length} match${availableSlots.length !== 1 ? "es" : ""} with open slots`
-              : "No available slots at the moment"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {availableSlots.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              No available umpiring slots at the moment.
-            </div>
-          ) : (
-            <>
-              {/* Mobile: Card layout */}
-              <div className="md:hidden space-y-3">
-                {availableSlots.map((match: any) => {
-                  const slot1Available = !match.slot1PlayerId;
-                  const slot2Available = !match.slot2PlayerId;
-                  const alreadyClaimed =
-                    match.slot1PlayerId === playerId ||
-                    match.slot2PlayerId === playerId;
+      {/* Assignment list */}
+      <div style={{ padding: "24px 18px 0" }}>
+        <div
+          className="label-xs"
+          style={{ marginBottom: 12, padding: "0 4px" }}
+        >
+          Upcoming duties
+        </div>
+        <div className="col gap-12">
+          {umpiring.map((u) => (
+            <UmpiringCard key={u.id} u={u} />
+          ))}
+        </div>
+      </div>
 
-                  return (
-                    <div
-                      key={match.id}
-                      className="p-4 rounded-lg border space-y-3"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="font-medium flex-1">
-                          {match.matchName}
-                        </span>
-                        <div className="flex gap-1 shrink-0">
-                          {slot1Available && (
-                            <Badge variant="outline">Slot 1</Badge>
-                          )}
-                          {slot2Available && (
-                            <Badge variant="outline">Slot 2</Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-3 w-3 text-muted-foreground" />
-                          <span>
-                            {format(new Date(match.date), "MMM d, yyyy")}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-3 w-3 text-muted-foreground" />
-                          <span>{match.time}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-3 w-3 text-muted-foreground" />
-                          <span>{match.location}</span>
-                        </div>
-                      </div>
-                      {!alreadyClaimed && (
-                        <div className="flex gap-2">
-                          {slot1Available && (
-                            <Button
-                              size="sm"
-                              onClick={() => handleClaimSlot(match.id, 1)}
-                              className="flex-1"
-                            >
-                              Claim Slot 1
-                            </Button>
-                          )}
-                          {slot2Available && (
-                            <Button
-                              size="sm"
-                              onClick={() => handleClaimSlot(match.id, 2)}
-                              className="flex-1"
-                            >
-                              Claim Slot 2
-                            </Button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+      {/* Empty state */}
+      <div style={{ padding: "24px 18px 0" }}>
+        <div className="card" style={{ padding: 18, textAlign: "center" }}>
+          <div style={{ fontSize: 28, marginBottom: 6 }}>🏏</div>
+          <div
+            className="serif"
+            style={{ fontSize: 20, lineHeight: 1.1, marginBottom: 4 }}
+          >
+            That's all for now
+          </div>
+          <div style={{ fontSize: 13, color: "var(--ink-3)", lineHeight: 1.5 }}>
+            New umpiring slots open weekly. Captain will tag you when one comes
+            up.
+          </div>
+        </div>
+      </div>
 
-              {/* Desktop: Table layout */}
-              <div className="hidden md:block">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Match</TableHead>
-                      <TableHead>Date & Time</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Available Slots</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {availableSlots.map((match: any) => {
-                      const slot1Available = !match.slot1PlayerId;
-                      const slot2Available = !match.slot2PlayerId;
-                      const alreadyClaimed =
-                        match.slot1PlayerId === playerId ||
-                        match.slot2PlayerId === playerId;
-
-                      return (
-                        <TableRow key={match.id}>
-                          <TableCell className="font-medium">
-                            {match.matchName}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col gap-1 text-sm">
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-3 w-3" />
-                                {format(new Date(match.date), "MMM d, yyyy")}
-                              </div>
-                              <div className="flex items-center gap-1 text-muted-foreground">
-                                <Clock className="h-3 w-3" />
-                                {match.time}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1 text-sm">
-                              <MapPin className="h-3 w-3" />
-                              {match.location}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-1">
-                              {slot1Available && (
-                                <Badge variant="outline">Slot 1</Badge>
-                              )}
-                              {slot2Available && (
-                                <Badge variant="outline">Slot 2</Badge>
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {!alreadyClaimed && (
-                              <div className="flex gap-2 justify-end">
-                                {slot1Available && (
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleClaimSlot(match.id, 1)}
-                                  >
-                                    Claim Slot 1
-                                  </Button>
-                                )}
-                                {slot2Available && (
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleClaimSlot(match.id, 2)}
-                                  >
-                                    Claim Slot 2
-                                  </Button>
-                                )}
-                              </div>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
+      <div style={{ height: 200 }} />
     </div>
   );
 }

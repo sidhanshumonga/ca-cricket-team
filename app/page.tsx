@@ -1,281 +1,464 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Calendar, Trophy, Shield, CheckCircle2, Info } from "lucide-react";
 import { getActiveSeason } from "./actions/season";
-import { getCompletedMatches } from "./actions/match";
+import { getMatches } from "./actions/match";
+import { getWeatherForMatch } from "./actions/weather";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
 import { toDate } from "@/lib/firestore-helpers";
+import { Chip } from "@/components/ui-new/chip";
+import { Icons } from "@/components/ui-new/icons";
+import {
+  generateEditorialHeadline,
+  calculateSeasonWeek,
+  daysUntil,
+  getShortTeamName,
+  getShortVenueName,
+} from "@/lib/editorial";
 
-export default async function Home() {
+const TEAM = {
+  name: "Cary Avengers",
+  division: "Division 8",
+  season: "Spring 2026",
+};
+
+export default async function HomePage() {
   const activeSeason = await getActiveSeason();
-  const completedMatches = await getCompletedMatches(5);
 
-  // Get upcoming matches to determine what action to show
-  const { getMatches } = await import("./actions/match");
-  const allMatches = activeSeason ? await getMatches(activeSeason.id) : [];
-  const upcomingMatches = allMatches.filter(
-    (m: any) => toDate(m.date) > new Date() && m.status !== "Completed",
-  );
+  if (!activeSeason) {
+    return <NoSeasonView />;
+  }
+
+  const allMatches = await getMatches(activeSeason.id);
+  const now = new Date();
+
+  const upcomingMatches = allMatches
+    .filter((m: any) => toDate(m.date) >= now)
+    .sort(
+      (a: any, b: any) => toDate(a.date).getTime() - toDate(b.date).getTime(),
+    );
+
+  const pastMatches = allMatches
+    .filter((m: any) => toDate(m.date) < now)
+    .sort(
+      (a: any, b: any) => toDate(b.date).getTime() - toDate(a.date).getTime(),
+    );
+
   const nextMatch = upcomingMatches[0];
 
-  const seasonStarted =
-    activeSeason && new Date() >= toDate(activeSeason.startDate);
+  let weather = null;
+  if (nextMatch) {
+    try {
+      weather = await getWeatherForMatch(
+        nextMatch.location,
+        toDate(nextMatch.date),
+      );
+    } catch (error) {
+      console.error("Failed to fetch weather, continuing without it:", error);
+    }
+  }
 
-  // Determine what availability action to show
-  const now = new Date();
-  const daysUntilSeasonStart = activeSeason
-    ? Math.ceil(
-        (toDate(activeSeason.startDate).getTime() - now.getTime()) /
-          (1000 * 60 * 60 * 24),
-      )
-    : 0;
-  const daysUntilNextMatch = nextMatch
-    ? Math.ceil(
-        (toDate(nextMatch.date).getTime() - now.getTime()) /
-          (1000 * 60 * 60 * 24),
-      )
-    : Infinity;
+  const wins = pastMatches.filter((m: any) => m.result === "Won").length;
+  const losses = pastMatches.filter((m: any) => m.result === "Lost").length;
+  const ties = pastMatches.filter(
+    (m: any) => m.result === "Tied" || m.result === "Drew",
+  ).length;
+  const gamesRemaining = upcomingMatches.length;
 
-  const showSeasonAvailability = daysUntilSeasonStart > 10;
-  const showMatchAvailability = daysUntilNextMatch <= 7;
+  const headline = generateEditorialHeadline({
+    wins,
+    losses,
+    ties,
+    gamesRemaining,
+  });
+  const { currentWeek, totalWeeks } = calculateSeasonWeek(
+    toDate(activeSeason.startDate),
+    toDate(activeSeason.endDate),
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div>
-              <span className="text-xl font-bold block">Cary Avengers</span>
-              <span className="text-xs text-gray-600">Division 8</span>
+    <div className="screen no-tab">
+      <div className="screen-pad-top" />
+
+      {/* Hero */}
+      <div style={{ padding: "8px 18px 24px", position: "relative" }}>
+        <div
+          className="row"
+          style={{ justifyContent: "space-between", marginBottom: 18 }}
+        >
+          <div className="row gap-10">
+            {/* Team Mark Placeholder */}
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                background: "var(--orange-soft)",
+                color: "var(--orange-deep)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                fontSize: 14,
+              }}
+            >
+              CA
+            </div>
+            <div className="col">
+              <div
+                style={{ fontSize: 13, fontWeight: 600, letterSpacing: -0.01 }}
+              >
+                {TEAM.name}
+              </div>
+              <div className="eyebrow" style={{ fontSize: 9 }}>
+                {TEAM.division} · {TEAM.season}
+              </div>
             </div>
           </div>
           <Link href="/admin/login">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Shield className="h-4 w-4" />
+            <button
+              className="pressable"
+              style={{
+                padding: "8px 12px",
+                borderRadius: 999,
+                background: "var(--paper)",
+                border: "1px solid var(--line)",
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
               Admin
-            </Button>
+            </button>
           </Link>
         </div>
-      </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        {activeSeason ? (
-          <>
-            <Card className="mb-6 border-2 border-primary/20">
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                  <div>
-                    <CardTitle className="text-2xl mb-2">
-                      {activeSeason.name}
-                    </CardTitle>
-                    <CardDescription className="text-base">
-                      {format(toDate(activeSeason.startDate), "MMM d, yyyy")} -{" "}
-                      {format(toDate(activeSeason.endDate), "MMM d, yyyy")}
-                    </CardDescription>
-                  </div>
-                  <div
-                    className={`px-3 py-1 rounded-full text-sm font-medium self-start ${
-                      seasonStarted
-                        ? "bg-green-100 text-green-700"
-                        : "bg-blue-100 text-blue-700"
-                    }`}
-                  >
-                    {seasonStarted ? "In Progress" : "Upcoming"}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
-                  {showSeasonAvailability && !seasonStarted ? (
-                    <>
-                      <p className="text-sm font-medium mb-2">
-                        Season starts in {daysUntilSeasonStart} days
-                      </p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Players can now mark their availability for the season
-                      </p>
-                    </>
-                  ) : showMatchAvailability && nextMatch ? (
-                    <>
-                      <p className="text-sm font-medium mb-2">
-                        Next match in {daysUntilNextMatch} days
-                      </p>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        <span className="font-semibold">
-                          vs {nextMatch.opponent}
-                        </span>
-                      </p>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        {format(
-                          toDate(nextMatch.date),
-                          "EEEE, MMM d 'at' h:mm a",
-                        )}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium mb-2">
-                        Season in progress
-                      </p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        View upcoming matches and mark your availability
-                      </p>
-                    </>
-                  )}
-                  <Link href="/player">
-                    <Button className="w-full">Player Portal</Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+        {/* Big editorial headline */}
+        <div style={{ marginTop: 10 }}>
+          <div className="eyebrow" style={{ marginBottom: 8 }}>
+            <span className="live-dot" style={{ marginRight: 6 }} /> Season in
+            progress · Week {currentWeek} of {totalWeeks}
+          </div>
+          <div
+            className="serif"
+            style={{
+              fontSize: 46,
+              lineHeight: 0.96,
+              letterSpacing: "-0.025em",
+            }}
+          >
+            {headline.line1}
+            <br />
+            <span className="serif-i" style={{ color: "var(--orange)" }}>
+              {headline.line2}
+            </span>
+            <br />
+            {headline.line3}
+          </div>
+        </div>
+      </div>
 
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Info className="h-5 w-5" />
-                  League Structure
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">14</p>
-                    <p className="text-xs text-gray-600">Teams</p>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">13</p>
-                    <p className="text-xs text-gray-600">League Games</p>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">Top 6</p>
-                    <p className="text-xs text-gray-600">Playoffs</p>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <p className="text-2xl font-bold text-primary">4</p>
-                    <p className="text-xs text-gray-600">Min. Games*</p>
-                  </div>
-                </div>
+      {/* Featured next match */}
+      {nextMatch && (
+        <div style={{ padding: "0 18px 18px" }}>
+          <NextMatchHero match={nextMatch} weather={weather} />
+        </div>
+      )}
 
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold text-sm mb-3">
-                    Playoff Schedule
-                  </h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">QF</Badge>
-                        <span>Quarter Finals</span>
-                      </div>
-                      <span className="text-gray-600">Jun 27, 2026</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">SF</Badge>
-                        <span>Semi Finals</span>
-                      </div>
-                      <span className="text-gray-600">Jul 11, 2026</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">F</Badge>
-                        <span>Finals</span>
-                      </div>
-                      <span className="text-gray-600">Jul 18, 2026</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-3">
-                    * Players must play at least 4 league matches to be eligible
-                    for playoffs
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Playoff matches have backup day (next day). League games
-                    split points on washout.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {completedMatches.length > 0 && (
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                    Recent Matches
-                  </h2>
-                  <Link href="/team/matches">
-                    <Button variant="outline" size="sm">
-                      View All
-                    </Button>
-                  </Link>
-                </div>
-                <div className="space-y-3">
-                  {completedMatches.map((match: any) => (
-                    <Link
-                      key={match.id}
-                      href={`/team/matches/${match.id}/scorecard`}
-                    >
-                      <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <p className="font-semibold text-lg">
-                                vs {match.opponent}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {match.location}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm font-medium text-gray-900">
-                                {format(toDate(match.date), "MMM d")}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {match.type}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
+      {/* Player portal CTA */}
+      <div style={{ padding: "0 18px 22px" }}>
+        <Link href="/player">
+          <button
+            className="pressable"
+            style={{
+              width: "100%",
+              borderRadius: 22,
+              padding: 20,
+              background: "var(--ink)",
+              color: "#fff",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "none",
+            }}
+          >
+            <div className="col" style={{ alignItems: "flex-start", gap: 4 }}>
+              <div
+                style={{
+                  fontSize: 11,
+                  opacity: 0.6,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
+              >
+                For squad members
               </div>
-            )}
-          </>
-        ) : (
-          <div className="text-center py-12 space-y-6">
-            <div className="flex justify-center">
-              <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center">
-                <Trophy className="h-10 w-10 text-primary" />
+              <div className="serif" style={{ fontSize: 26 }}>
+                Open Player Portal
               </div>
             </div>
-
-            <div>
-              <h1 className="text-3xl font-bold mb-3">
-                Cricket Season Coming Soon!
-              </h1>
-              <p className="text-gray-600 max-w-md mx-auto mb-6">
-                The new season is just around the corner. Stay tuned for the
-                schedule announcement and get ready to mark your availability!
-              </p>
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 999,
+                background: "var(--orange)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {Icons.arrow}
             </div>
+          </button>
+        </Link>
+      </div>
 
-            <div className="pt-4">
-              <p className="text-sm text-gray-500 mb-4">
-                Admin can set up the season from the admin panel
-              </p>
+      {/* Recent results */}
+      {pastMatches.length > 0 && (
+        <div style={{ padding: "0 18px 28px" }}>
+          <div className="label-xs" style={{ marginBottom: 10 }}>
+            Recent results
+          </div>
+          <div className="col gap-10">
+            {pastMatches.map((m: any) => (
+              <RecentResultCard key={m.id} match={m} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NextMatchHero({
+  match,
+  weather,
+}: {
+  match: any;
+  weather: { icon: string; temp: number; condition: string } | null;
+}) {
+  const matchDate = toDate(match.date);
+  const daysAway = daysUntil(matchDate);
+  const opponentShort = getShortTeamName(match.opponent);
+  const venueShort = getShortVenueName(match.location);
+
+  return (
+    <div
+      className="card pop"
+      style={{
+        background: "linear-gradient(135deg, #297278 0%, #1F5A5F 100%)",
+        color: "#fff",
+        border: "none",
+        padding: 22,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* decorative crosshatch */}
+      <svg
+        style={{ position: "absolute", right: -20, top: -20, opacity: 0.1 }}
+        width="180"
+        height="180"
+        viewBox="0 0 100 100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="45"
+          stroke="#fff"
+          strokeWidth="0.5"
+          fill="none"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="30"
+          stroke="#fff"
+          strokeWidth="0.5"
+          fill="none"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="15"
+          stroke="#fff"
+          strokeWidth="0.5"
+          fill="none"
+        />
+      </svg>
+
+      <div
+        className="row"
+        style={{ justifyContent: "space-between", alignItems: "flex-start" }}
+      >
+        <div className="eyebrow" style={{ color: "rgba(255,255,255,0.7)" }}>
+          Next match · in {daysAway} {daysAway === 1 ? "day" : "days"}
+        </div>
+        <Chip tone="orange" dot>
+          {match.type}
+        </Chip>
+      </div>
+
+      <div
+        className="row"
+        style={{ marginTop: 16, gap: 14, alignItems: "center" }}
+      >
+        <div className="col" style={{ flex: 1 }}>
+          <div className="eyebrow" style={{ color: "rgba(255,255,255,0.6)" }}>
+            Cary
+          </div>
+          <div className="serif" style={{ fontSize: 26, lineHeight: 1 }}>
+            Avengers
+          </div>
+        </div>
+        <div className="serif-i" style={{ fontSize: 18, opacity: 0.7 }}>
+          vs
+        </div>
+        <div
+          className="col"
+          style={{ flex: 1, alignItems: "flex-end", textAlign: "right" }}
+        >
+          <div className="eyebrow" style={{ color: "rgba(255,255,255,0.6)" }}>
+            {match.opponent.split(" ").slice(0, -1).join(" ") || opponentShort}
+          </div>
+          <div className="serif" style={{ fontSize: 26, lineHeight: 1 }}>
+            {match.opponent.split(" ").slice(-1)[0]}
+          </div>
+        </div>
+      </div>
+
+      <div className="row" style={{ marginTop: 18, gap: 16, opacity: 0.95 }}>
+        <div className="row gap-6">
+          <span style={{ opacity: 0.7 }}>{Icons.cal}</span>
+          <span style={{ fontSize: 13 }}>{format(matchDate, "MMM d")}</span>
+        </div>
+        <div className="row gap-6">
+          <span style={{ opacity: 0.7 }}>{Icons.clock}</span>
+          <span style={{ fontSize: 13 }}>
+            {match.matchTime || format(matchDate, "h:mm a")}
+          </span>
+        </div>
+        <div className="row gap-6">
+          <span style={{ opacity: 0.7 }}>{Icons.pin}</span>
+          <span style={{ fontSize: 13 }}>{venueShort}</span>
+        </div>
+      </div>
+
+      {weather && (
+        <>
+          <div
+            className="hr"
+            style={{ background: "rgba(255,255,255,0.18)", margin: "16px 0" }}
+          />
+
+          <div
+            className="row"
+            style={{ justifyContent: "space-between", alignItems: "center" }}
+          >
+            <div className="row gap-8">
+              <div style={{ fontSize: 13, opacity: 0.7 }}>Weather</div>
+            </div>
+            <div className="row gap-6" style={{ fontSize: 13, opacity: 0.85 }}>
+              <span>{weather.icon}</span>
+              <span>{weather.temp}°</span>
             </div>
           </div>
-        )}
-      </main>
+        </>
+      )}
+    </div>
+  );
+}
+
+function RecentResultCard({ match }: { match: any }) {
+  const matchDate = toDate(match.date);
+  const won = match.result === "Won";
+  const tied = match.result === "Tied" || match.result === "Drew";
+  const tone = won ? "green" : tied ? "amber" : "red";
+  const colorVar = won ? "var(--green)" : tied ? "var(--amber)" : "var(--red)";
+
+  return (
+    <Link href={`/team/matches/${match.id}/scorecard`}>
+      <div
+        className="card pressable"
+        style={{
+          padding: 14,
+          display: "flex",
+          alignItems: "center",
+          gap: 14,
+          borderLeft: `3px solid ${colorVar}`,
+        }}
+      >
+        <div
+          className="col"
+          style={{ width: 46, alignItems: "center", gap: 0 }}
+        >
+          <div className="eyebrow" style={{ fontSize: 9 }}>
+            {format(matchDate, "EEE")}
+          </div>
+          <div className="serif" style={{ fontSize: 22, lineHeight: 1 }}>
+            {format(matchDate, "d")}
+          </div>
+          <div
+            className="eyebrow"
+            style={{ fontSize: 9, color: "var(--ink-3)" }}
+          >
+            {format(matchDate, "MMM")}
+          </div>
+        </div>
+        <div className="col" style={{ flex: 1, gap: 4 }}>
+          <div className="row" style={{ gap: 8 }}>
+            <Chip tone={tone}>{match.result || "Played"}</Chip>
+            <Chip tone="gray">{match.type}</Chip>
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 600 }}>
+            vs {match.opponent}
+          </div>
+          <div style={{ fontSize: 12, color: "var(--ink-3)" }}>
+            {match.resultSummary || match.location}
+          </div>
+        </div>
+        <div style={{ color: "var(--ink-4)" }}>{Icons.arrow}</div>
+      </div>
+    </Link>
+  );
+}
+
+function NoSeasonView() {
+  return (
+    <div
+      className="screen"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 32,
+      }}
+    >
+      <div style={{ textAlign: "center", maxWidth: 400 }}>
+        <div
+          className="serif"
+          style={{ fontSize: 36, color: "var(--ink-2)", marginBottom: 16 }}
+        >
+          Season Coming Soon
+        </div>
+        <p style={{ color: "var(--ink-3)", marginBottom: 24 }}>
+          The new cricket season is just around the corner. Stay tuned for the
+          schedule announcement!
+        </p>
+        <Link href="/admin/login">
+          <button
+            className="pressable"
+            style={{
+              padding: "12px 24px",
+              borderRadius: 16,
+              background: "var(--ink)",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: 14,
+            }}
+          >
+            Admin Login
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { getPlayer, getPlayerMatches } from "@/app/actions/availability";
 import { getActiveSeason, getSeasonAvailability } from "@/app/actions/season";
-import { PlayerDashboardClient } from "./player-dashboard-client";
+import { PlayerDashboardNew } from "./dashboard-new";
 import { notFound } from "next/navigation";
 
 export default async function PlayerDashboard({
@@ -21,7 +21,7 @@ export default async function PlayerDashboard({
   }
 
   return (
-    <PlayerDashboardClient
+    <PlayerDashboardNew
       player={player}
       allMatches={allMatches}
       allPlayers={allPlayers}
