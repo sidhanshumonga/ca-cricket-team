@@ -118,10 +118,17 @@ export function PlayerDashboardNew({
     const sortedPast = [...pastMatches].reverse(); // Reverse to get chronological order
     sortedPast.forEach((match) => {
       const isPlayoff = match.type?.toLowerCase().includes("playoff");
+      const hasResult = match.result && match.result !== "";
       const won = match.result === "Won";
       const tied = match.result === "Tied" || match.result === "Drew";
 
-      if (isPlayoff) {
+      if (!hasResult) {
+        // No result yet - show as yellow/played
+        pulse.push({
+          state: "played",
+          label: `vs ${match.opponent}`,
+        });
+      } else if (isPlayoff) {
         pulse.push({
           state: won ? "playoff-win" : "playoff-loss",
           label: `Playoff vs ${match.opponent}`,
@@ -312,6 +319,10 @@ export function PlayerDashboardNew({
                   background: "var(--red-soft)",
                   border: "1px solid var(--red)",
                 },
+                played: {
+                  background: "var(--amber-soft)",
+                  border: "1px solid var(--amber)",
+                },
                 next: {
                   background: "var(--orange)",
                   boxShadow:
@@ -332,29 +343,76 @@ export function PlayerDashboardNew({
                   border: "2px solid var(--red)",
                 },
               };
-              const isPast =
+
+              // Only show large width for 4 matches: 2 most recent played + 2 upcoming
+              // Playoff matches are only "past" if they have a result (playoff-win/playoff-loss)
+              const isPastMatch =
                 c.state === "past-win" ||
                 c.state === "past-loss" ||
+                c.state === "played" ||
                 c.state === "playoff-win" ||
                 c.state === "playoff-loss";
+
+              const isUpcomingMatch =
+                c.state === "next" ||
+                c.state === "upcoming" ||
+                c.state === "playoff";
+
+              // Count how many past matches come before this one
+              const pastMatchesBefore = seasonPulse
+                .slice(0, i)
+                .filter(
+                  (p) =>
+                    p.state === "past-win" ||
+                    p.state === "past-loss" ||
+                    p.state === "played" ||
+                    p.state === "playoff-win" ||
+                    p.state === "playoff-loss",
+                ).length;
+
+              // Count how many upcoming matches come before this one
+              const upcomingMatchesBefore = seasonPulse
+                .slice(0, i)
+                .filter(
+                  (p) =>
+                    p.state === "next" ||
+                    p.state === "upcoming" ||
+                    p.state === "playoff",
+                ).length;
+
+              // Show large width for: last 2 past matches + first 2 upcoming matches
+              const totalPastMatches = seasonPulse.filter(
+                (p) =>
+                  p.state === "past-win" ||
+                  p.state === "past-loss" ||
+                  p.state === "played" ||
+                  p.state === "playoff-win" ||
+                  p.state === "playoff-loss",
+              ).length;
+
+              const isRecentPast =
+                isPastMatch && pastMatchesBefore >= totalPastMatches - 2;
+              const isNextTwoUpcoming =
+                isUpcomingMatch && upcomingMatchesBefore < 2;
+              const shouldBeLarge = isRecentPast || isNextTwoUpcoming;
+
               return (
                 <div
                   key={i}
                   style={{
                     ...styles[c.state],
-                    width: isPast ? "28px" : undefined,
-                    flex: isPast ? "0 0 28px" : "1 0 auto",
+                    width: shouldBeLarge ? "28px" : undefined,
+                    flex: shouldBeLarge ? "0 0 28px" : "1 0 auto",
                     height: "28px",
                     borderRadius: "6px",
                   }}
-                  title={c.label}
                 />
               );
             })}
           </div>
           <div
             className="row"
-            style={{ marginTop: 12, gap: 12, flexWrap: "wrap" }}
+            style={{ gap: 12, marginTop: 12, flexWrap: "wrap" }}
           >
             <LegendDot color="var(--teal)" label="Won" />
             <LegendDot
@@ -529,14 +587,23 @@ export function PlayerDashboardNew({
           <div className="col gap-10">
             {pastMatches.map((m: any) => {
               const matchDate = toDate(m.date);
+              const hasResult = m.result && m.result !== "";
               const won = m.result === "Won";
               const tied = m.result === "Tied" || m.result === "Drew";
-              const tone = won ? "green" : tied ? "amber" : "red";
-              const colorVar = won
-                ? "var(--green)"
-                : tied
-                  ? "var(--amber)"
-                  : "var(--red)";
+              const tone = !hasResult
+                ? "gray"
+                : won
+                  ? "green"
+                  : tied
+                    ? "amber"
+                    : "red";
+              const colorVar = !hasResult
+                ? "var(--line)"
+                : won
+                  ? "var(--green)"
+                  : tied
+                    ? "var(--amber)"
+                    : "var(--red)";
 
               return (
                 <Link key={m.id} href={`/team/matches/${m.id}/scorecard`}>
